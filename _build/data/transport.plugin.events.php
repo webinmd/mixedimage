@@ -7,9 +7,7 @@ $events = array();
 
 $evs = array(
     'OnDocFormPrerender',
-    'OnFileManagerUpload',
-    'OnManagerPageBeforeRender',
-    'OnMODXInit',
+    'OnFileManagerUpload', 
     'OnTVInputPropertiesList',
     'OnTVInputRenderList',
     'OnTVOutputRenderList',

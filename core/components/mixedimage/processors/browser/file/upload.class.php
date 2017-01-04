@@ -34,14 +34,15 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         }
 
         // Ensure we have been passed the TV's id
-        if (!$this->getProperty('tvId')) {
-            return $this->failure('нету tvID');
+        if (!$this->getProperty('tv_id')) {
+            return $this->failure($this->modx->lexicon('mixedimage.error_tvid_ns'));
         }
 
         // Grab the TV object
-        $TV = $this->modx->getObject('modTemplateVar',$this->getProperty('tvId'));
+        $TV = $this->modx->getObject('modTemplateVar',$this->getProperty('tv_id'));
+
         if (! $TV instanceof modTemplateVar) {
-            return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$this->getProperty('tvId')."]");
+            return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$this->getProperty('tv_id')."]");
         }
 
         // Initialize and check perms for this mediasource
@@ -56,19 +57,20 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         $path = $this->preparePath($opts['path']);
 
         // Check the mine types
-        if(isset($opts['MIME'])){
+        if(!empty($opts['MIME'])){
+
             $checkmime_files = $_FILES;
             foreach ($checkmime_files as &$file) {
 
-                $mime = $opts['MIME'];
-
                 $mime_arr = array();
-                $mime_arr = explode(",",$mime);
+                $mime_arr = explode(",",$opts['MIME']);
+
                 $file_mime = $file['type'];
 
                 if (!in_array($file_mime, $mime_arr)) {
                     return $this->failure($this->modx->lexicon('mixedimage.err_file_mime'));
                 }
+
             }
         }
 
