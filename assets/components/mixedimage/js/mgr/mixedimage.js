@@ -31,15 +31,26 @@ mixedimage.panel = function(config) {
                     'select': function(data){
                         MODx.fireResourceFormChange();
                         Ext.get('tv'+config.tvId).dom.value = this.getValue();
-                        var d_name = Ext.get('mixedimage_name'+config.tvId);
-                        var d = Ext.get('tv-image-preview-'+config.tvId);
-                        if (Ext.isEmpty(data.url)) {
-                            d.update('');
-                            d_name.update('');
-                        } else {
-                            d_name.update(data.url);
-                            d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+data.url+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />');
+
+                        if(config.showPreview === true){
+                            var d = Ext.get('tv-image-preview-'+config.tvId);
+                            if (Ext.isEmpty(data.url)) {
+                                d.update('');
+                            } else {
+                                d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+data.url+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />');
+                            }
                         }
+
+                        if(config.showValue === true){
+                            var d_name = Ext.get('mixedimage_name'+config.tvId);
+                            if (Ext.isEmpty(data.url)) {
+                                d_name.update('');
+                            } else {
+                                d_name.update(data.url);
+                            }
+
+                        }
+
                     }
                 }
 
@@ -57,8 +68,15 @@ mixedimage.panel = function(config) {
                     Ext.get('tv'+config.tvId).dom.value = value;
                     Ext.get('mixedimage'+config.tvId).dom.value = value;
                     MODx.fireResourceFormChange();
-                    Ext.get('tv-image-preview-'+config.tvId).update('');
-                    Ext.get('mixedimage_name'+config.tvId).update('');
+
+                    if(config.showPreview === true){
+                        Ext.get('tv-image-preview-'+config.tvId).update('');
+                    }
+
+                    if(config.showValue === true){
+                        Ext.get('mixedimage_name'+config.tvId).update('');
+                    }
+
                 }
                 ,triggerConfig: [{
                     tag: 'span',
@@ -155,14 +173,23 @@ mixedimage.panel = function(config) {
         })
 
         var updatePreview = function(val){
-            var d = Ext.get('tv-image-preview-'+config.tvId);
-            var d_name = Ext.get('mixedimage_name'+config.tvId);
-            if (Ext.isEmpty(val)) {
-                d.update('');
-                d_name.update('');
-            } else {
-                d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />');
-                d_name.update(val);
+
+            if(config.showPreview === true){
+                var d = Ext.get('tv-image-preview-'+config.tvId);
+                if (Ext.isEmpty(val)) {
+                    d.update('');
+                } else {
+                    d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />');
+                }
+            }
+
+            if(config.showValue === true){
+                var d_name = Ext.get('mixedimage_name'+config.tvId);
+                if (Ext.isEmpty(val)) {
+                    d_name.update('');
+                } else {
+                    d_name.update(val);
+                }
             }
         }
 
