@@ -1,2 +1,2 @@
 # mixedimage
-mixedImage - custom modx tv  
+mixedImage - modx custom tv  
