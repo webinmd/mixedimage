@@ -1,5 +1,6 @@
 .mixedimage label{
 	padding: 0 !important;
+	display: none !important;
 }
 
 .x-form-field-trigger-wrap{
