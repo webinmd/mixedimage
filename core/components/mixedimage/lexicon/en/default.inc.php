@@ -1,9 +1,6 @@
 <?php
 
-
-$_lang['mixedimage'] = 'Fast File Input';
-
-
+$_lang['mixedimage'] = 'Mixed Image Input';
 
 // TV Input Properties
 $_lang['mixedimage.save_path'] = 'Save Path';
@@ -29,6 +26,7 @@ $_lang['mixedimage.error_tvid_invalid'] = 'SYSTEM ERROR: invalid modTemplateVar 
 
 $_lang['mixedimage.err_file_ns'] = 'Error: No File was uploaded';
 $_lang['mixedimage.err_save_resource'] = 'Before adding new items, you need to save this resource!';
+$_lang['mixedimage.err_file_mime'] = 'Error:  wrong file type';
 
 // Settings
 $_lang['setting_mixedimage.translit'] = 'Translit';
@@ -38,3 +36,8 @@ $_lang['setting_mixedimage.check_resid_desc'] = 'Recommended!';
 $_lang['setting_mixedimage.preview_width_max'] = 'Max width of the thumbnail';
 $_lang['setting_mixedimage.preview_height_max'] = 'Max height of the thumbnails';
 $_lang['setting_mixedimage.random_lenght'] = 'The length of the placeholder {rand}';
+
+// Trigger
+$_lang['mixedimage.trigger_from_file_manager'] = 'From file manager';
+$_lang['mixedimage.trigger_from_desktop'] = 'From your computer';
+$_lang['mixedimage.trigger_clear'] = 'Clear';

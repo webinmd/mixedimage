@@ -2,8 +2,6 @@
 
 $_lang['mixedimage'] = 'Смешанная загрузка файла';
 
-
-
 // TV Input Properties
 $_lang['mixedimage.save_path'] = 'Путь сохранения';
 $_lang['mixedimage.save_path_desc'] = 'Путь для сохранения относительно корня медиа-ресурса';
@@ -17,7 +15,7 @@ $_lang['mixedimage.show_preview'] = 'Показать изображение';
 $_lang['mixedimage.show_preview_desc'] = 'Отображать миниатюру изображений';
 $_lang['mixedimage.prefix_filename'] = 'Использовать префикс как имя файла';
 
-// TV Render 
+// TV Render
 $_lang['mixedimage.upload_file'] = 'Загрузить файл';
 $_lang['mixedimage.replace_file'] = 'Заменить файл';
 $_lang['mixedimage.clear_file'] = 'Удалить';
@@ -25,6 +23,7 @@ $_lang['mixedimage.clear_file'] = 'Удалить';
 // Errors
 $_lang['mixedimage.error_tvid_ns'] = 'Ошибка: modTemplateVar ID не обеспечивается';
 $_lang['mixedimage.error_tvid_invalid'] = 'Ошибка: неверное условие modTemplateVar';
+$_lang['mixedimage.err_file_mime'] = 'Ошибка: неверный тип файла';
 
 $_lang['mixedimage.err_file_ns'] = 'Ошибка: файл не был загружен';
 $_lang['mixedimage.err_save_resource'] = 'Перед добавлением новых элементов, вам необходимо сохранить этот ресурс!';
@@ -36,7 +35,6 @@ $_lang['setting_mixedimage.check_resid'] = 'Загружать только пр
 $_lang['setting_mixedimage.check_resid_desc'] = 'Пока ресурс не будет сохранен, файл не получится загрузить. Рекомендуется оставить включенным эту настройку. Иначе могут возникнуть проблемы при использовании плейсхолдеров {alias} и {palias} - у несохранных ресурсов они будут возвращать пустые значения.';
 
 // Trigger
-
 $_lang['mixedimage.trigger_from_file_manager'] = 'Из уже загруженных';
 $_lang['mixedimage.trigger_from_desktop'] = 'C вашего компьютера';
 $_lang['mixedimage.trigger_clear'] = 'Очистить';

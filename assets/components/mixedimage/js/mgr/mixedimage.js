@@ -7,41 +7,41 @@ mixedimage.panel = function(config) {
     if (!config.ctx) {config.ctx = 'web';}
 
     Ext.apply(config,{
-        border:false 
+        border:false
         ,listeners: {}
-        ,items:[{ 
+        ,items:[{
             xtype: 'container'
             ,border: false
             ,layout: 'form'
             ,labelAlign: 'top'
             ,labelSeparator: ''
             ,width:'98%'
-            ,id: 'mixedimage_form'+config.tvId 
+            ,id: 'mixedimage_form'+config.tvId
             ,anchorSize: {width:'98%', height:'auto'}
-            ,items: [{ 
+            ,items: [{
                 xtype: 'modx-combo-browser'
                 ,name: 'mixedimagefield'
-                ,id: 'mixedimage'+config.tvId 
+                ,id: 'mixedimage'+config.tvId
                 ,maxLength: 255
-                ,width:'100%' 
+                ,width:'100%'
                 ,value: config.value
                 ,browserEl: 'modx-browser'
                 ,source: config.source
-                ,listeners: { 
-                    'select': function(data){ 
-                        MODx.fireResourceFormChange(); 
+                ,listeners: {
+                    'select': function(data){
+                        MODx.fireResourceFormChange();
                         Ext.get('tv'+config.tvId).dom.value = this.getValue();
                         var d_name = Ext.get('mixedimage_name'+config.tvId);
                         var d = Ext.get('tv-image-preview-'+config.tvId);
                         if (Ext.isEmpty(data.url)) {
                             d.update('');
                             d_name.update('');
-                        } else { 
+                        } else {
                             d_name.update(data.url);
-                            d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+data.url+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />'); 
-                        }               
+                            d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+data.url+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />');
+                        }
                     }
-                }           
+                }
 
                 ,getTrigger: function(index) {
                     return this.triggers[index];
@@ -50,15 +50,15 @@ mixedimage.panel = function(config) {
                     this.onTriggerClick();
                 }
                 ,onTrigger2Click: function() {
-                   Ext.get('mixedimage_desktop'+config.tvId+'-file').dom.click(); 
+                    Ext.get('mixedimage_desktop'+config.tvId+'-file').dom.click();
                 }
                 ,onTrigger3Click: function() {
-                    var value = '';  
+                    var value = '';
                     Ext.get('tv'+config.tvId).dom.value = value;
                     Ext.get('mixedimage'+config.tvId).dom.value = value;
                     MODx.fireResourceFormChange();
                     Ext.get('tv-image-preview-'+config.tvId).update('');
-                    Ext.get('mixedimage_name'+config.tvId).update('');                      
+                    Ext.get('mixedimage_name'+config.tvId).update('');
                 }
                 ,triggerConfig: [{
                     tag: 'span',
@@ -94,16 +94,16 @@ mixedimage.panel = function(config) {
                         });
                         t.addClassOnOver('x-form-trigger-over');
                         t.addClassOnClick('x-form-trigger-click');
-                    }, this); 
+                    }, this);
                     this.triggers = ts.elements;
-                } 
-            }] 
-        }] 
+                }
+            }]
+        }]
     });
 
     mixedimage.panel.superclass.constructor.call(this,config);
 
-    Ext.onReady(function(){  
+    Ext.onReady(function(){
 
         var mixedfileform = new Ext.FormPanel({
             id: this.uploadFormInputId
@@ -113,7 +113,7 @@ mixedimage.panel = function(config) {
             ,fileUpload: true
             ,url: MODx.config.assets_url+'components/mixedimage/connector.php'
             ,baseParams: {
-                action: 'browser/file/upload' 
+                action: 'browser/file/upload'
                 ,tvId: config.tvId
                 ,prefixFilename: config.prefixFilename
                 ,res_id: config.res_id
@@ -122,53 +122,56 @@ mixedimage.panel = function(config) {
                 ,p_alias: config.p_alias
                 ,tv_id: config.tv_id
                 ,ms_id: config.ms_id
-                ,acceptedMIMEtypes: config.MIME_TYPES
+                ,acceptedMIMEtypes: config.acceptedMIMEtypes
                 ,lex: config.jsonlex
-            } 
+            }
             ,TV: this
             ,items: [{
-                xtype:'fileuploadfield' 
+                xtype:'fileuploadfield'
                 ,TV: this
-                ,id: 'mixedimage_desktop'+config.tvId 
+                ,id: 'mixedimage_desktop'+config.tvId
                 ,listeners: {
-                    'fileselected': {fn: 
-                        function(){ 
-                            var UploadField = mixedfileform.items.items[0]; 
+                    'fileselected': {fn:
+                        function(){
+                            var UploadField = mixedfileform.items.items[0];
                             mixedfileform.form.baseParams.file = UploadField.getValue();
                             mixedfileform.form.submit({
                                 waitMsg: 'Uploading...',
-                                success: function(fp, o){                                    
-                                    var value = o.result.message;  
+                                success: function(fp, o){
+                                    var value = o.result.message;
                                     Ext.get('tv'+config.tvId).dom.value = value;
                                     Ext.get('mixedimage'+config.tvId).dom.value = value;
                                     MODx.fireResourceFormChange();
-                                    updatePreview(value);    
+                                    updatePreview(value);
                                 }
-                            }); 
+                                ,failure: function(fp, o) {
+                                    Ext.Msg.alert(o.result.message);
+                                }
+                            });
                         }
-                    , scope:this }
+                        , scope:this }
                 }
             }]
-        }) 
+        })
 
-        var updatePreview = function(val){ 
+        var updatePreview = function(val){
             var d = Ext.get('tv-image-preview-'+config.tvId);
             var d_name = Ext.get('mixedimage_name'+config.tvId);
             if (Ext.isEmpty(val)) {
                 d.update('');
                 d_name.update('');
-            } else { 
-                d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />'); 
+            } else {
+                d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />');
                 d_name.update(val);
             }
-        } 
+        }
 
     });
 
 };
 
 Ext.extend(mixedimage.panel,Ext.Container,{
-//handler functions 
+//handler functions
 });
 
 
