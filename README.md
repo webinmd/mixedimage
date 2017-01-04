@@ -1,2 +1,2 @@
 # mixedimage
-MixedImage - modx component
+mixedImage - modx component
