@@ -55,3 +55,7 @@
 .x-form-field-wrap .x-form-trigger.x-field-trigger2-class:hover{
 	background-color: #3697CD;
 }
+
+.modx-tv-image-preview{
+	margin-bottom: 20px;
+}
