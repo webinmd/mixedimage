@@ -9,7 +9,7 @@
         <li><span>{palias}</span> - Алиас ресурса родителя</li>
         <li><span>{tid}</span>    - ID доп. поля (tv)</li>
         <li><span>{uid}</span>    - ID юзера</li>
-        <li><span>{rand}</span>   - Случайная строка из 6 символов</li>
+        <li><span>{rand}</span>   - Случайная строка (количество символов указывается в системынх настройках)</li>
         <li><span>{t}</span>      - Время в формате timestamp</li>
         <li><span>{y}</span>      - Год</li>
         <li><span>{m}</span>      - Месяц</li>

@@ -33,6 +33,7 @@ $_lang['setting_mixedimage.translit'] = 'Транслитерация файло
 $_lang['setting_mixedimage.translit_desc'] = 'При включенной настройке, имена всех загружаемых файлов будут написаны транслитом. Настройка работает только при установленном дополнении "translit"';
 $_lang['setting_mixedimage.check_resid'] = 'Загружать только при редактировании';
 $_lang['setting_mixedimage.check_resid_desc'] = 'Пока ресурс не будет сохранен, файл не получится загрузить. Рекомендуется оставить включенным эту настройку. Иначе могут возникнуть проблемы при использовании плейсхолдеров {alias} и {palias} - у несохранных ресурсов они будут возвращать пустые значения.';
+$_lang['setting_mixedimage.random_lenght'] = 'Длина строки для плейсхолдера {rand}';
 
 // Trigger
 $_lang['mixedimage.trigger_from_file_manager'] = 'Из уже загруженных';
