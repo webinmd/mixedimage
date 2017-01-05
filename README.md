@@ -2,7 +2,7 @@
 
 mixedImage - modx custom TV  
 
-![mixedImage](mixedImage-logo.png)
+![mixedImage](mixedImage-logo_small.png)
 
 
 
