@@ -1,6 +1,5 @@
 --------------------
-Extra: mixedImage
+Extra: mixedImage -  Custom TV
 --------------------
-
 # Version 1.0.0-beta
- :: Initial relise
+ :: initial release
