@@ -17,8 +17,9 @@ switch ($modx->event->name) {
     case 'OnTVOutputRenderPropertiesList':
         $modx->event->output($corePath.'elements/tv/properties/');
         break;
-    case 'OnManagerPageBeforeRender':
-        //$modx->controller->addLexiconTopic('mixedimage:default');
+    case 'OnDocFormPrerender': 
+        $modx->regClientStartupScript($assetsUrl.'js/mgr/mixedimage.js'); 
+        $modx->regClientCSS($assetsUrl.'css/mgr/mixedimage.css'); 
         break;
     case 'OnFileManagerUpload':
         if ((bool)$modx->getOption('mixedimage.translit', null, false))
