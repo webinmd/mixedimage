@@ -1,10 +1,11 @@
 mixedimage = {};
-
+ 
 mixedimage.panel = function(config) {
     config = config || {};
 
     if (!config.source) {config.source = MODx.config.default_media_source;}
     if (!config.ctx) {config.ctx = 'web';}
+
 
     Ext.apply(config,{
         border:false
@@ -27,10 +28,11 @@ mixedimage.panel = function(config) {
                 ,value: config.value
                 ,browserEl: 'modx-browser'
                 ,source: config.source
+                ,ctx_path: config.ctx_path
                 ,listeners: {
                     'select': function(data){
                         MODx.fireResourceFormChange();
-                        Ext.get('tv'+config.tvId).dom.value = this.getValue();
+                        Ext.get('tv'+config.tvId).dom.value = config.ctx_path+this.getValue();
 
                         if(config.showPreview === true){
                             var d = Ext.get('tv-image-preview-'+config.tvId);
@@ -142,6 +144,7 @@ mixedimage.panel = function(config) {
                 ,ms_id: config.ms_id
                 ,acceptedMIMEtypes: config.acceptedMIMEtypes
                 ,lex: config.jsonlex
+                ,ctx_path: config.ctx_path
             }
             ,TV: this
             ,items: [{
@@ -156,7 +159,7 @@ mixedimage.panel = function(config) {
                             mixedfileform.form.submit({
                                 waitMsg: 'Uploading...',
                                 success: function(fp, o){
-                                    var value = o.result.message;
+                                    var value = config.ctx_path+o.result.message;
                                     Ext.get('tv'+config.tvId).dom.value = value;
                                     Ext.get('mixedimage'+config.tvId).dom.value = value;
                                     MODx.fireResourceFormChange();
@@ -179,7 +182,7 @@ mixedimage.panel = function(config) {
                 if (Ext.isEmpty(val)) {
                     d.update('');
                 } else {
-                    d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'&wctx='+config.ctx+'&source='+config.source+'" alt="" />');
+                    d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'" alt="" />');
                 }
             }
 
@@ -201,5 +204,4 @@ Ext.extend(mixedimage.panel,Ext.Container,{
 //handler functions
 });
 
-
-Ext.reg('mixedimage-panel',mixedimage.panel);
+Ext.reg('mixedimage-panel',mixedimage.panel); 

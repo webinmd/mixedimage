@@ -46,6 +46,19 @@ if(!class_exists('MixedImageInputRender')) {
 
 			$tv = $this->tv;
 
+			$context = ($this->modx->resource->get('context_key')) ? $this->modx->resource->get('context_key') : 'web';
+			$this->setPlaceholder('context', $context );
+
+			$this->source = $tv->getSource($context); 
+			$source_properties = $this->source->getPropertyList();
+			if(($source_properties['basePath'] != '')){
+			    $source_path = $source_properties['basePath'];
+			}   else{
+				$source_path='';
+			}
+			$this->setPlaceholder('source_path', $source_path );
+
+
 			if(isset($params['MIME'])){
 				$MIME = $params['MIME'];
 			} else {
