@@ -45,8 +45,11 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$this->getProperty('tv_id')."]");
         }
 
+        $RES = $this->modx->getObject('modResource',$this->getProperty('res_id')); 
+        $context_key = ($RES->get('context_key')) ? $RES->get('context_key') : 'web'; 
+
         // Initialize and check perms for this mediasource
-        $this->source = $TV->getSource('web');
+        $this->source = $TV->getSource($context_key); //
         $this->source->initialize();
         if (!$this->source->checkPolicy('create')) {
             return $this->failure($this->modx->lexicon('permission_denied'));
