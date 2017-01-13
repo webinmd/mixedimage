@@ -14,6 +14,8 @@ $_lang['mixedimage.show_value_desc'] = 'Отображать путь к фай�
 $_lang['mixedimage.show_preview'] = 'Показать изображение';
 $_lang['mixedimage.show_preview_desc'] = 'Отображать миниатюру изображений';
 $_lang['mixedimage.prefix_filename'] = 'Использовать префикс как имя файла';
+$_lang['mixedimage.resize'] = 'Параметры для ресайза изображений';
+$_lang['mixedimage.resize_desc'] = 'Можно использовать параметры для phpthumb, например w=200&h=200&zc=1';
 
 // TV Render
 $_lang['mixedimage.upload_file'] = 'Загрузить файл';
@@ -39,3 +41,4 @@ $_lang['setting_mixedimage.random_lenght'] = 'Длина строки для п�
 $_lang['mixedimage.trigger_from_file_manager'] = 'Из уже загруженных';
 $_lang['mixedimage.trigger_from_desktop'] = 'C вашего компьютера';
 $_lang['mixedimage.trigger_clear'] = 'Очистить';
+

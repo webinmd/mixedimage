@@ -1,5 +1,5 @@
 mixedimage = {};
- 
+
 mixedimage.panel = function(config) {
     config = config || {};
 
@@ -145,6 +145,7 @@ mixedimage.panel = function(config) {
                 ,acceptedMIMEtypes: config.acceptedMIMEtypes
                 ,lex: config.jsonlex
                 ,ctx_path: config.ctx_path
+                //,resize: config.resize
             }
             ,TV: this
             ,items: [{
@@ -159,7 +160,7 @@ mixedimage.panel = function(config) {
                             mixedfileform.form.submit({
                                 waitMsg: 'Uploading...',
                                 success: function(fp, o){
-                                    var value = config.ctx_path+o.result.message;
+                                    var value = o.result.message;
                                     Ext.get('tv'+config.tvId).dom.value = value;
                                     Ext.get('mixedimage'+config.tvId).dom.value = value;
                                     MODx.fireResourceFormChange();

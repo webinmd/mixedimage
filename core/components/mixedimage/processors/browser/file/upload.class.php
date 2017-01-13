@@ -45,8 +45,8 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$this->getProperty('tv_id')."]");
         }
 
-        $RES = $this->modx->getObject('modResource',$this->getProperty('res_id')); 
-        $context_key = ($RES->get('context_key')) ? $RES->get('context_key') : 'web'; 
+        $RES = $this->modx->getObject('modResource',$this->getProperty('res_id'));
+        $context_key = ($RES->get('context_key')) ? $RES->get('context_key') : 'web';
 
         // Initialize and check perms for this mediasource
         $this->source = $TV->getSource($context_key); //
@@ -105,10 +105,45 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             }
         }
 
-        // Generate the file's url
+        $source_path = ($this->getProperty('ctx_path')) ? $this->getProperty('ctx_path') : '';
+
+        // Generate the file's url;
         $fName = array_shift($files);
-        $url = (empty($path)) ? $fName['name'] : $path.'/'.$fName['name'];
+        $url = (empty($path)) ? $source_path.$fName['name'] : $source_path.$path.'/'.$fName['name'];
         $url = preg_replace('/\/{2,}/','/',$url); // remove double symbol "/"
+
+
+        if($opts['resize']){
+
+            $params = explode("&", $opts['resize']);
+
+            if(count($params)<1){
+                $this->modx->log(modX::LOG_LEVEL_ERROR, 'Bad options for resize  '.$opts['resize']);
+                return;
+            }
+
+            // use modxPhpThumb
+            $phpThumb = $this->modx->getService('modphpthumb','modPhpThumb', MODX_CORE_PATH . 'model/phpthumb/', array());
+
+            // source image
+            $phpThumb->setSourceFilename(MODX_BASE_PATH.$url);
+
+            // set prametrs
+            foreach ($params as $v) {
+                $arr = explode("=", $v);
+                $phpThumb->setParameter($arr['0'], $arr['1']);
+            }
+
+            if ($phpThumb->GenerateThumbnail()) {
+                if (!$phpThumb->renderToFile(MODX_BASE_PATH.$url)) {
+                    $this->modx->log(modX::LOG_LEVEL_ERROR, 'Could not save rendered image to  '.$url);
+                }
+            }
+            else {
+                $this->modx->log(modX::LOG_LEVEL_ERROR, print_r($phpThumb->debugmessages, 1));
+            }
+
+        }
 
         return $this->success(stripslashes($url));
         /* stripslashes(json_encode( (object)array('success' => true, 'msg' => $url))); */

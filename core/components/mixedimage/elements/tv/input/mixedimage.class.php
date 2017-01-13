@@ -43,16 +43,17 @@ if(!class_exists('MixedImageInputRender')) {
 			$this->setPlaceholder('prefixFilename', ($opts['prefixFilename']==$this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('showPreview', ($opts['showPreview']==$this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('showValue', ($opts['showValue']==$this->modx->lexicon('yes') ? 'true' : 'false'));
+			//$this->setPlaceholder('resize', $opts['resize']);
 
 			$tv = $this->tv;
 
 			$context = ($this->modx->resource->get('context_key')) ? $this->modx->resource->get('context_key') : 'web';
 			$this->setPlaceholder('context', $context );
 
-			$this->source = $tv->getSource($context); 
+			$this->source = $tv->getSource($context);
 			$source_properties = $this->source->getPropertyList();
 			if(($source_properties['basePath'] != '')){
-			    $source_path = $source_properties['basePath'];
+				$source_path = $source_properties['basePath'];
 			}   else{
 				$source_path='';
 			}

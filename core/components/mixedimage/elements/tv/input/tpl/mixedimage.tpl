@@ -37,7 +37,7 @@
 		,lex: {$jsonlex}
 		,source: '{$tv->source}'
 		,showPreview: {$showPreview}
-		,showValue: {$showValue} 
+		,showValue: {$showValue}
 		,ctx_path: '{$source_path}'
 		{literal}
 	});

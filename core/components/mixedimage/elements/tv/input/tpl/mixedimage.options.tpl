@@ -118,6 +118,19 @@
             ,forId: 'inopt_MIME{/literal}{$tv}{literal}'
             ,html: __('mixedimage.show_value_desc')
             ,cls: 'desc-under'
+        },{
+            xtype: 'textfield',
+            fieldLabel: __('mixedimage.resize'),
+            name: 'inopt_resize',
+            id: 'inopt_resize{/literal}{$tv}{literal}',
+            value: params['resize'] || '',
+            anchors: '98%',
+            listeners: oc
+        },{
+            xtype: MODx.expandHelp ? 'label' : 'hidden'
+            ,forId: 'inopt_resize{/literal}{$tv}{literal}'
+            ,html: __('mixedimage.resize_desc')
+            ,cls: 'desc-under'
         }]
         ,renderTo: 'tv-input-properties-form{/literal}{$tv}{literal}'
     });

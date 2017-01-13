@@ -14,8 +14,10 @@ $_lang['mixedimage.show_value_desc'] = 'Display the URL to the file on TV';
 $_lang['mixedimage.show_preview'] = 'Show Preview';
 $_lang['mixedimage.show_preview_desc'] = 'Display an thumbnail preview of image files';
 $_lang['mixedimage.prefix_filename'] = 'Use prefix as the file name';
+$_lang['mixedimage.resize'] = 'Resize';
+$_lang['mixedimage.resize_desc'] = 'Set parametrs for phpthumb, example: w=200&h=200&zc=1';
 
-// TV Render 
+// TV Render
 $_lang['mixedimage.upload_file'] = 'Upload File...';
 $_lang['mixedimage.replace_file'] = 'Replace File...';
 $_lang['mixedimage.clear_file'] = 'Clear Value';
