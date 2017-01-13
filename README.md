@@ -49,11 +49,11 @@ mixedImage - modx custom TV
 
 **- Параметры для ресайза изображений** - параметры для modphpthumb.
 
-Примеры:
+*Примеры: <br>
 w=200&h=200&zc=1   <br>
 для наложения ватермарка:   <br>
 fltr=wmt|Hello|60|C|ff0000|   <br>
-fltr=wmi|/assets/wt.png|C|   <br>
+fltr=wmi|/assets/wt.png|C|   <br>*
 
 ------
 
