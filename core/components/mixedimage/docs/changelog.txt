@@ -4,7 +4,7 @@ Extra: mixedImage -  Custom TV
 # Version 1.1.0-beta
  :: Add resize options
  :: Fixed for MIGX
-  :: Fixed for media source path
+ :: Fixed for media source path
 
 --------------------
 # Version 1.0.0-beta
