@@ -15,7 +15,7 @@ $_lang['mixedimage.show_preview'] = 'Show Preview';
 $_lang['mixedimage.show_preview_desc'] = 'Display an thumbnail preview of image files';
 $_lang['mixedimage.prefix_filename'] = 'Use prefix as the file name';
 $_lang['mixedimage.resize'] = 'Resize';
-$_lang['mixedimage.resize_desc'] = 'Set parametrs for phpthumb, example: w=200&h=200&zc=1';
+$_lang['mixedimage.resize_desc'] = 'Set parametrs for phpthumb, example: w=200&h=200&zc=1 <br> for watermark: <br> <strong>fltr=wmt|Hello|60|C|ff0000| <br>fltr=wmi|/assets/wt.png|C|</strong>';
 
 // TV Render
 $_lang['mixedimage.upload_file'] = 'Upload File...';

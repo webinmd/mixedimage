@@ -146,7 +146,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         }
 
         return $this->success(stripslashes($url));
-        /* stripslashes(json_encode( (object)array('success' => true, 'msg' => $url))); */
     }
 
     /**
