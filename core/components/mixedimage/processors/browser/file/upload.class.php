@@ -175,6 +175,9 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         $fat = $this->modx->getOption('friendly_alias_translit');
         $friendly_alias_translit = (empty($fat) || $fat == 'none') ? false : true;
 
+        // add fix for russian filename
+        setlocale(LC_ALL, 'ru_RU.utf8');
+
         foreach ($files as &$file) {
             $pathInfo = pathinfo($file['name']);
             $ext = $pathInfo['extension'];
