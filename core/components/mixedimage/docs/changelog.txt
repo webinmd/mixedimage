@@ -1,5 +1,11 @@
 --------------------
 Extra: mixedImage -  Custom TV
+
+
+--------------------
+# Version 1.1.1-beta 
+ :: legiero: Fixed css 
+
 --------------------
 # Version 1.1.0-beta
  :: Add resize options
