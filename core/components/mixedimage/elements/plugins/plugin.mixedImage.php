@@ -17,9 +17,13 @@ switch ($modx->event->name) {
     case 'OnTVOutputRenderPropertiesList':
         $modx->event->output($corePath.'elements/tv/properties/');
         break;
-    case 'OnDocFormPrerender': 
-        $modx->regClientStartupScript($assetsUrl.'js/mgr/mixedimage.js'); 
-        $modx->regClientCSS($assetsUrl.'css/mgr/mixedimage.css'); 
+    case 'OnDocFormPrerender':
+        $modx->regClientStartupScript($assetsUrl.'js/mgr/mixedimage.js');
+        $modx->regClientCSS($assetsUrl.'css/mgr/mixedimage.css');
+        break;
+    case 'OnMODXInit':
+        $mTypes = $modx->getOption('manipulatable_url_tv_output_types',null,'image,file').',mixedimage';
+        $modx->setOption('manipulatable_url_tv_output_types', $mTypes);
         break;
     case 'OnFileManagerUpload':
         if ((bool)$modx->getOption('mixedimage.translit', null, false))

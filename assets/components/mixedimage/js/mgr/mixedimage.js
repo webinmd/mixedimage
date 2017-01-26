@@ -32,7 +32,7 @@ mixedimage.panel = function(config) {
                 ,listeners: {
                     'select': function(data){
                         MODx.fireResourceFormChange();
-                        Ext.get('tv'+config.tvId).dom.value = config.ctx_path+this.getValue();
+                        Ext.get('tv'+config.tvId).dom.value = this.getValue();
 
                         if(config.showPreview === true){
                             var d = Ext.get('tv-image-preview-'+config.tvId);
@@ -183,7 +183,7 @@ mixedimage.panel = function(config) {
                 if (Ext.isEmpty(val)) {
                     d.update('');
                 } else {
-                    d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'" alt="" />');
+                    d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=300&h=300&aoe=0&far=0&src='+val+'&source='+config.source+'" alt="" />');
                 }
             }
 

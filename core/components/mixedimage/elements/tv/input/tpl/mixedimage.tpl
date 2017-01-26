@@ -12,7 +12,7 @@
 {if $showPreview === "true"}
 	<div id="tv-image-preview-{$tv->id}" class="modx-tv-image-preview">
 		{if $tv->value}
-			<img src="{$_config.connectors_url}system/phpthumb.php?w=300&h=300&aoe=0&far=0&src={$tv->value}" alt="" />
+			<img src="{$_config.connectors_url}system/phpthumb.php?w=300&h=300&aoe=0&far=0&src={$tv->value}&source={$tv->source}" alt="" />
 		{/if}
 	</div>
 {/if}

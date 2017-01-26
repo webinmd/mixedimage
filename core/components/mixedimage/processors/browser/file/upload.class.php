@@ -109,7 +109,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
         // Generate the file's url;
         $fName = array_shift($files);
-        $url = (empty($path)) ? $source_path.$fName['name'] : $source_path.$path.'/'.$fName['name'];
+        $url = (empty($path)) ? $fName['name'] : $path.'/'.$fName['name'];
         $url = preg_replace('/\/{2,}/','/',$url); // remove double symbol "/"
 
 
@@ -126,7 +126,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             $phpThumb = $this->modx->getService('modphpthumb','modPhpThumb', MODX_CORE_PATH . 'model/phpthumb/', array());
 
             // source image
-            $phpThumb->setSourceFilename(MODX_BASE_PATH.$url);
+            $phpThumb->setSourceFilename(MODX_BASE_PATH.$source_path.$url);
 
             // set prametrs
             foreach ($params as $v) {
@@ -135,7 +135,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             }
 
             if ($phpThumb->GenerateThumbnail()) {
-                if (!$phpThumb->renderToFile(MODX_BASE_PATH.$url)) {
+                if (!$phpThumb->renderToFile(MODX_BASE_PATH.$source_path.$url)) {
                     $this->modx->log(modX::LOG_LEVEL_ERROR, 'Could not save rendered image to  '.$url);
                 }
             }

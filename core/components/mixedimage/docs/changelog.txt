@@ -1,6 +1,9 @@
 --------------------
 Extra: mixedImage -  Custom TV
 
+# Version 1.1.2-beta
+:: Fixed for media source path  (2)
+
 --------------------
 # Version 1.1.1-beta 
 :: legiero: Fixed css
