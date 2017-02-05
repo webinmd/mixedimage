@@ -1,6 +1,10 @@
 --------------------
 Extra: mixedImage -  Custom TV
 
+# Version 1.1.3-beta
+:: Fixed for media source path in context
+
+--------------------
 # Version 1.1.2-beta
 :: Fixed for media source path  (2)
 

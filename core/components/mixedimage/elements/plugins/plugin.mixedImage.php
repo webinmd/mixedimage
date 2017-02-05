@@ -21,7 +21,7 @@ switch ($modx->event->name) {
         $modx->regClientStartupScript($assetsUrl.'js/mgr/mixedimage.js');
         $modx->regClientCSS($assetsUrl.'css/mgr/mixedimage.css');
         break;
-    case 'OnMODXInit':
+    case 'OnLoadWebDocument':
         $mTypes = $modx->getOption('manipulatable_url_tv_output_types',null,'image,file').',mixedimage';
         $modx->setOption('manipulatable_url_tv_output_types', $mTypes);
         break;
