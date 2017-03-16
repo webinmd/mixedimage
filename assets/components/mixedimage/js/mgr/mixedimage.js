@@ -137,7 +137,7 @@ mixedimage.panel = function(config) {
                 ,tvId: config.tvId
                 ,prefixFilename: config.prefixFilename
                 ,res_id: config.res_id
-                ,res_alias: config.$res_alias
+                ,res_alias: config.res_alias
                 ,p_id: config.p_id
                 ,p_alias: config.p_alias
                 ,tv_id: config.tv_id
