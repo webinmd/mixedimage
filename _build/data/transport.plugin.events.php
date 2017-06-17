@@ -1,6 +1,6 @@
 <?php
 /**
- * @package tinymce
+ * @package mixedimage
  * @subpackage build
  */
 $events = array();
