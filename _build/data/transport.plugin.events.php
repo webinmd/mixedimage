@@ -12,7 +12,8 @@ $evs = array(
     'OnTVInputRenderList',
     'OnTVOutputRenderList',
     'OnTVOutputRenderPropertiesList',
-    'OnMODXInit'
+    'OnMODXInit',
+    'OnLoadWebDocument'
 );
 
 foreach ($evs as $ev) {
