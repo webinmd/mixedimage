@@ -13,6 +13,11 @@ $_lang['mixedimage.show_value'] = 'Show TV Value';
 $_lang['mixedimage.show_value_desc'] = 'Display the URL to the file on TV';
 $_lang['mixedimage.show_preview'] = 'Show Preview';
 $_lang['mixedimage.show_preview_desc'] = 'Display an thumbnail preview of image files';
+
+
+$_lang['mixedimage.remove_file'] = 'Remove file';
+$_lang['mixedimage.remove_file_desc'] = 'Atention! When you click the Clear button, it completely removes the file from the server';
+
 $_lang['mixedimage.prefix_filename'] = 'Use prefix as the file name';
 $_lang['mixedimage.resize'] = 'Resize';
 $_lang['mixedimage.resize_desc'] = 'Set parametrs for phpthumb, example: w=200&h=200&zc=1 <br> for watermark: <br> <strong>fltr=wmt|Hello|60|C|ff0000| <br>fltr=wmi|/assets/wt.png|C|</strong>';
@@ -29,6 +34,7 @@ $_lang['mixedimage.error_tvid_invalid'] = 'SYSTEM ERROR: invalid modTemplateVar 
 $_lang['mixedimage.err_file_ns'] = 'Error: No File was uploaded';
 $_lang['mixedimage.err_save_resource'] = 'Before adding new items, you need to save this resource!';
 $_lang['mixedimage.err_file_mime'] = 'Error:  wrong file type';
+$_lang['mixedimage.error_remove'] = 'Error removing (view console)';
 
 // Settings
 $_lang['setting_mixedimage.translit'] = 'Translit';
@@ -43,3 +49,8 @@ $_lang['setting_mixedimage.random_lenght'] = 'The length of the placeholder {ran
 $_lang['mixedimage.trigger_from_file_manager'] = 'From file manager';
 $_lang['mixedimage.trigger_from_desktop'] = 'From your computer';
 $_lang['mixedimage.trigger_clear'] = 'Clear';
+$_lang['mixedimage.trigger_remove'] = 'Clear and remove file from the server';
+
+
+// success
+$_lang['mixedimage.success_removed'] = 'File success removed';

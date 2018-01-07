@@ -1,14 +1,6 @@
 <input type="hidden" id="tv{$tv->id}" name="tv{$tv->id}" value="{$tv->value|escape}" />
 <div id="mixedimage{$tv->id}" class="mixedimage"></div>
 
-{if $showValue === "true"}
-	<div id="mixedimage_name{$tv->id}" class="mixedimge_name">
-		{if $tv->value}
-			{$tv->value}
-		{/if}
-	</div>
-{/if}
-
 {if $showPreview === "true"}
 	<div id="tv-image-preview-{$tv->id}" class="modx-tv-image-preview">
 		{if $tv->value}
@@ -37,8 +29,9 @@
 		,lex: {$jsonlex}
 		,source: '{$tv->source}'
 		,showPreview: {$showPreview}
-		,showValue: {$showValue}
+		,removeFile: {$removeFile}
 		,ctx_path: '{$source_path}'
+		,onlyEdit: {$onlyEdit}
 		{literal}
 	});
 	{/literal}

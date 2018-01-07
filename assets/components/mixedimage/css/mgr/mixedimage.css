@@ -1,10 +1,14 @@
+#mixedimage_container1{
+	position: relative;
+}
+
 .mixedimage label{
 	padding: 0 !important;
 	display: none !important;
 }
 
 .mixedimage .x-form-field-trigger-wrap{
-	width: 240px  !important;
+	width: 350px  !important;
 	margin-bottom: 10px;
 }
 
@@ -16,7 +20,7 @@
 .x-field-trigger0-class,
 .x-field-trigger1-class,
 .x-field-trigger2-class{
-	width: 80px !important;
+	width: 30px !important;
 	background-color: #fff;
 	text-align: center;
 	border-left: 1px solid #e4e4e4 !important;
@@ -31,14 +35,14 @@
 .x-field-trigger0-class::before,
 .x-field-trigger1-class::before,
 .x-field-trigger2-class::before{
-	right: 25px !important;
+	right: 0px !important;
 }
 
-.x-field-trigger0-class { right: 161px !important; border-radius: 0 !important; }
+.x-field-trigger0-class { right: 61px !important; border-radius: 0 !important; }
 .x-field-trigger0-class:before {content: '\f00d' !important; }
 .x-field-trigger0-class:hover {border-radius: 0;}
 
-.x-field-trigger1-class { right: 80px !important;}
+.x-field-trigger1-class { right: 30px !important;}
 .x-field-trigger1-class:before {content: '\f1c5' !important;}
 .x-field-trigger1-class:hover {border-radius: 0;}
 
@@ -58,4 +62,8 @@
 
 .modx-tv-image-preview{
 	margin-bottom: 20px;
+}
+
+.mixedimage.x-form-focus{
+	border: none !important;
 }

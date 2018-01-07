@@ -23,10 +23,9 @@ switch ($modx->event->name) {
         $modx->controller->addLexiconTopic('mixedimage:default');
         break;
     case 'OnMODXInit':
-    case 'OnLoadWebDocument':
         $mTypes = $modx->getOption('manipulatable_url_tv_output_types',null,'image,file').',mixedimage';
         $modx->setOption('manipulatable_url_tv_output_types', $mTypes);
-        break; 
+        break;
     case 'OnFileManagerUpload':
         if ((bool)$modx->getOption('mixedimage.translit', null, false))
         {

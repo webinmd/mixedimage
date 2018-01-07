@@ -40,20 +40,23 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
         // Grab the TV object
         $TV = $this->modx->getObject('modTemplateVar',$this->getProperty('tv_id'));
-
-        if (! $TV instanceof modTemplateVar) {
+ 
+        if (! $TV instanceof modTemplateVar) { 
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$this->getProperty('tv_id')."]");
         }
 
-        $RES = $this->modx->getObject('modResource',$this->getProperty('res_id'));
-        $context_key = ($RES->get('context_key')) ? $RES->get('context_key') : 'web';
-
+        if($RES = $this->modx->getObject('modResource',$this->getProperty('res_id'))){
+            $context_key = ($RES->get('context_key')) ? $RES->get('context_key') : 'web';   
+        }else{
+            $context_key = 'web';
+        }          
+ 
         // Initialize and check perms for this mediasource
         $this->source = $TV->getSource($context_key); //
         $this->source->initialize();
         if (!$this->source->checkPolicy('create')) {
             return $this->failure($this->modx->lexicon('permission_denied'));
-        }
+        }  
 
         // Grab the path option & prepare path
         $opts = unserialize($TV->input_properties);

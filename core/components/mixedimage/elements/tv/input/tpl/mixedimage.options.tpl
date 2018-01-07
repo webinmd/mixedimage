@@ -107,16 +107,16 @@
             ,cls: 'desc-under'
         },{
             xtype: 'modx-combo-boolean',
-            fieldLabel: __('mixedimage.show_value'),
-            name: 'inopt_showValue',
-            id: 'inopt_showValue{/literal}{$tv}{literal}',
-            value: params['showValue'] || 1,
+            fieldLabel: __('mixedimage.remove_file'),
+            name: 'inopt_removeFile',
+            id: 'inopt_removeFile{/literal}{$tv}{literal}',
+            value: params['removeFile'] || 0,
             anchors: '98%',
             listeners: oc
         },{
             xtype: MODx.expandHelp ? 'label' : 'hidden'
-            ,forId: 'inopt_MIME{/literal}{$tv}{literal}'
-            ,html: __('mixedimage.show_value_desc')
+            ,forId: 'inopt_removeFile{/literal}{$tv}{literal}'
+            ,html: __('mixedimage.remove_file_desc')
             ,cls: 'desc-under'
         },{
             xtype: 'textfield',
