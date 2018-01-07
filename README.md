@@ -4,7 +4,7 @@ mixedImage - modx custom TV
 
 
 
-## version 2.*.*
+## version 2.-.-
 
 ##### Скриншот v2
 ![mixedImage](mixedimage2.png)
@@ -23,7 +23,7 @@ mixedImage - modx custom TV
 --------------------------------------
 
 
-## version 1.*.*
+## version 1.-.-
 
 ##### Скриншот v1
 ![mixedImage](mixedImage.png)
