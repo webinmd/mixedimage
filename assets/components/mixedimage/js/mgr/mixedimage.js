@@ -33,6 +33,7 @@ mixedimage.panel = function(config) {
 	                ,id: 'mixedimage_media'+config.tvId
 	                ,source: config.source
 	                ,ctx_path: config.ctx_path
+                    ,openTo: config.openPath
 	                ,listeners: {
 	                    'select': function(data){
 	                    	var value = this.getValue();  
@@ -217,7 +218,7 @@ mixedimage.panel = function(config) {
                 }
             }
  
-        }
+        } 
  
     });
 

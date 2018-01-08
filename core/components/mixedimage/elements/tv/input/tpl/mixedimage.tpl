@@ -1,4 +1,4 @@
-<input type="hidden" id="tv{$tv->id}" name="tv{$tv->id}" value="{$tv->value|escape}" />
+<input type="hidden" id="tv{$tv->id}" name="tv{$tv->id}" value="{$tv->value|escape}" /> 
 <div id="mixedimage{$tv->id}" class="mixedimage"></div>
 
 {if $showPreview === "true"}
@@ -32,6 +32,7 @@
 		,removeFile: {$removeFile}
 		,ctx_path: '{$source_path}'
 		,onlyEdit: {$onlyEdit}
+		,openPath: '{$openPath}'
 		{literal}
 	});
 	{/literal}
