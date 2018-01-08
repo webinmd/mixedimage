@@ -30,7 +30,7 @@ mixedImage - modx custom TV
 * Создаю TV (например slider) с типом **migx** и в конфигурации (Вкладки формы) для поля с изображением пишу такие строки для каждой необходимой картинки
 
 ```json
- {"field":"image","caption":"Изображение 1","inputTV":"migx_img"}б
+ {"field":"image","caption":"Изображение 1","inputTV":"migx_img"},
  {"field":"image2","caption":"Изображение 2","inputTV":"migx_img"}
 ```
 

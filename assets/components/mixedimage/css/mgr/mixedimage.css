@@ -12,6 +12,10 @@
 	margin-bottom: 10px;
 }
 
+.mixedimage .x-form-field-trigger-wrap input[type="text"]{
+	width: 245px  !important; 
+}
+
 .mixedimge_name{
 	color: #777;
 	font-size: 12px;
