@@ -14,6 +14,8 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             'source' => 1,
             'path' => false,
         ));
+        $this->properties = $this->getProperties();
+        if(isset($this->properties['formdata']))$this->formdata=$this->modx->fromJSON($this->properties['formdata']);
         return true;
     }
 
@@ -44,13 +46,10 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         if (! $TV instanceof modTemplateVar) { 
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$this->getProperty('tv_id')."]");
         }
+        
+        $context_key=$this->formdata['context_key'];
+        $RES = $this->modx->getObject('modResource',$this->getProperty('res_id'));
 
-        if($RES = $this->modx->getObject('modResource',$this->getProperty('res_id'))){
-            $context_key = ($RES->get('context_key')) ? $RES->get('context_key') : 'web';   
-        }else{
-            $context_key = 'web';
-        }          
- 
         // Initialize and check perms for this mediasource
         $this->source = $TV->getSource($context_key); //
         $this->source->initialize();
@@ -155,11 +154,15 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
      * Prepare the save path using the TV's defined pathing string
      */
     private function preparePath($pathStr) {
+        
+        if(!empty($_REQUEST['custompath'])){
+            return $_REQUEST['custompath'];
+        }
 
         // If the pathStr starts '@SNIPPET ' then run the snippet to get path
         if (strpos($pathStr,'@SNIPPET ') !== false) {
             $snippet = str_replace('@SNIPPET ','',$pathStr);
-            return $this->modx->runSnippet($snippet, $this->getProperties());
+            return $this->modx->runSnippet($snippet,array('data'=>$this->formdata,'tv'=>$this->getProperty('tv_id'),'source'=>$this->source->id));
         }
 
         // Parse path string and return it
@@ -225,6 +228,10 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             '{i}' => date('i'), // Minute
             '{s}' => date('s'), // Second
         );
+        
+        $tags=explode('$|$','[[+'.implode(']]$|$[[+',array_keys($this->formdata)).']]');
+        $str = str_replace($tags,array_values($this->formdata),$str);
+        
         return str_replace(array_keys($bits), $bits, $str);
     }
 }
