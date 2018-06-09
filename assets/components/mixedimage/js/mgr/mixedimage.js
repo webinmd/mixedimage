@@ -203,6 +203,8 @@ mixedimage.trigger = function(config){
     config.triggerWidth=config.triggerWidth||30;
     config.triggerConfig=this.getTriggerConfig(config);
     config.width=(config.width||350)+config.triggerConfig.rightOffset;
+    config.style=config.style||{};
+    config.style.paddingRight=config.triggerConfig.rightOffset+'px';
     
     Ext.applyIf(config,{
         
