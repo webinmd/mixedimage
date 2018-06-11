@@ -1,6 +1,17 @@
 --------------------
 Extra: mixedImage -  Custom TV
 
+# Version 2.0.1-beta 
+-- By SintezCode
+:: Rewrite extjs part for extending and overriding by another components.
+:: Triggers now may configured by triggerConfig.
+:: Triggers handlers may extending or overriding.
+:: Input width now depended by triggers count and its width.
+:: In css now not needed triggers width and positions
+:: Add ability to set custom upload path by another components or by extending or overriding
+:: Uploader now send all resource-panel fields in processor and may used to get upload path by placeholders or in snippet
+
+--------------------
 # Version 2.0.0-beta
 :: Change TV view
 :: Fix upload for unsaved resource
