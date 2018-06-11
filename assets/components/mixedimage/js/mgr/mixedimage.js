@@ -84,8 +84,9 @@ Ext.extend(mixedimage.panel,Ext.Container,{
     ,onFileUploadSuccess:function(r){
         
     }
-    ,onBrowserSelect:function(data,field){
-        var value = field.getValue();
+    ,onBrowserSelect:function(data,field){ 
+        //var value = field.getValue();
+        var value = data.url;
         this.setValue(value);
     }
     ,setValue:function(value){
