@@ -8,59 +8,45 @@
 }
 
 .mixedimage .x-form-field-trigger-wrap{
-	width: 350px  !important;
 	margin-bottom: 10px;
 }
 
-.mixedimage .x-form-field-trigger-wrap input[type="text"]{
-	width: 245px  !important; 
-}
 
 .mixedimge_name{
 	color: #777;
 	font-size: 12px;
 }
 
-.x-field-trigger0-class,
-.x-field-trigger1-class,
-.x-field-trigger2-class{
-	width: 30px !important;
+.mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger{
 	background-color: #fff;
 	text-align: center;
 	border-left: 1px solid #e4e4e4 !important;
 }
 
-.x-field-trigger0-class:hover,
-.x-field-trigger1-class:hover,
-.x-field-trigger2-class:hover{
+.mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger:hover{
 	border-left-color: transparent !important;
 }
 
-.x-field-trigger0-class::before,
-.x-field-trigger1-class::before,
-.x-field-trigger2-class::before{
+.mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger::before{
 	right: 0px !important;
 }
 
-.x-field-trigger0-class { right: 61px !important; border-radius: 0 !important; }
+.mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger:first-child{
+	border-radius: 0 !important;
+}
+.mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger:not(:last-child):hover{
+	border-radius: 0;
+}
+
 .x-field-trigger0-class:before {content: '\f00d' !important; }
-.x-field-trigger0-class:hover {border-radius: 0;}
-
-.x-field-trigger1-class { right: 30px !important;}
 .x-field-trigger1-class:before {content: '\f1c5' !important;}
-.x-field-trigger1-class:hover {border-radius: 0;}
-
 .x-field-trigger2-class:before {content: '\f108' !important;}
 
-.x-form-field-wrap .x-form-trigger.x-field-trigger0-class,
-.x-form-field-wrap .x-form-trigger.x-field-trigger1-class,
-.x-form-field-wrap .x-form-trigger.x-field-trigger2-class{
+.mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger{
 	background-color: #fff;
 }
 
-.x-form-field-wrap .x-form-trigger.x-field-trigger0-class:hover,
-.x-form-field-wrap .x-form-trigger.x-field-trigger1-class:hover,
-.x-form-field-wrap .x-form-trigger.x-field-trigger2-class:hover{
+.mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger:hover{
 	background-color: #3697CD;
 }
 
