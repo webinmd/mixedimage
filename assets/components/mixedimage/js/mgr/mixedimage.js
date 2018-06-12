@@ -69,9 +69,9 @@ Ext.extend(mixedimage.panel,Ext.Container,{
             ,ctx_path: config.ctx_path
             ,removeFile: config.removeFile
             ,listeners:{
-                change: function(data){
-                    this.saveValue(data.el.getValue());
-                }
+                change:{fn:function(data){
+                    this.setValue(data.el.getValue());
+                },scope:this}
             }
         };
     }
@@ -261,26 +261,6 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     ,handleTrigger__pc:function(field,el){
     	Ext.get('mixedimage_desktop'+this.tvId+'-file').dom.click();
     }
-    ,saveValue: function(value){  
-        Ext.getCmp('mixedimage_input'+this.tvId).setValue(value); 
-        Ext.get('tv'+this.tvId).dom.value = value;
-        Ext.get('mixedimage'+this.tvId).dom.value = value;
-        MODx.fireResourceFormChange(); 
-        this.updateView();
-    }
-    ,updateView: function(){   
-        var value = Ext.get('tv'+this.tvId).dom.value;
-
-        if(this.showPreview === true){
-            var d = Ext.get('tv-image-preview-'+this.tvId);
-            if (Ext.isEmpty(value)) {
-                d.update('');
-            } else {
-                d.update('<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w=200&h=100&f=png&src='+value+'&source='+this.source+'" alt="" />');
-            }
-        } 
-
-    }
     ,clearField: function(){  
         var value = Ext.get('tv'+this.tvId).dom.value;
 
@@ -301,12 +281,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                 ,params: { value: value, action: 'removeFile' }
             });
         } 
-        Ext.getCmp('mixedimage_input'+this.tvId).setValue(''); 
-        Ext.get('tv'+this.tvId).dom.value = '';
-        Ext.get('mixedimage'+this.tvId).dom.value = '';
-
-        MODx.fireResourceFormChange(); 
-        this.updateView();
+		
+        this.setValue('');
+        this.fireEvent('change',this);
     }
 });
 Ext.reg('mixedimage-trigger',mixedimage.trigger);
