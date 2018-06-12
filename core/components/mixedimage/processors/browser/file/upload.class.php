@@ -176,7 +176,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     private function prepareFiles($prefix) {
         $files = $_FILES;
 
-        $fastuploadtv_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false);
+        $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false);
 
         $fat = $this->modx->getOption('friendly_alias_translit');
         $friendly_alias_translit = (empty($fat) || $fat == 'none') ? false : true;
@@ -191,7 +191,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             $filename = ($this->getProperty('prefixFilename') == 'true') ? $prefix : $prefix.$pathInfo['filename'];
             $filename = $this->parsePlaceholders($filename);
 
-            if ($fastuploadtv_translit) {
+            if ($mixedimage_translit) {
                 $filename = modResource::filterPathSegment($this->modx, $filename); // cleanAlias (translate)
                 if ($friendly_alias_translit) {
                     $filename = preg_replace('/[^A-Za-z0-9_-]/', '', $filename); // restrict segment to alphanumeric characters only
