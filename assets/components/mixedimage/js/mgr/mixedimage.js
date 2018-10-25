@@ -128,7 +128,8 @@ Ext.extend(mixedimage.panel,Ext.Container,{
 Ext.reg('mixedimage-panel',mixedimage.panel); 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 mixedimage.fileform = function(config){
     config = config||{};
     Ext.applyIf(config,{
@@ -197,7 +198,8 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
 });
 Ext.reg('mixedimage-fileform',mixedimage.fileform);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 mixedimage.trigger = function(config){
     config = config||{};
     
@@ -251,37 +253,36 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
         }
     }
     ,handleTrigger__clear:function(field,el){
-    	this.clearField();
+        this.clearField();
     }
     ,handleTrigger__manager:function(field,el){
-    	var parent = Ext.get('mixedimage_media_container'+this.tvId);
+        var parent = Ext.get('mixedimage_media_container'+this.tvId);
         var elems = parent.select(".x-form-file-trigger").elements; 
         elems[0].click();
     }
     ,handleTrigger__pc:function(field,el){
-    	Ext.get('mixedimage_desktop'+this.tvId+'-file').dom.click();
+        Ext.get('mixedimage_desktop'+this.tvId+'-file').dom.click();
     }
-    ,clearField: function(){  
-        var value = Ext.get('tv'+this.tvId).dom.value;
-
-        if(this.ctx_path){
-            value = this.ctx_path+value;
-        }
+    ,clearField: function(){     
 
         if(this.removeFile){
-            Ext.Ajax.request({
-                url: MODx.config.assets_url+'components/mixedimage/connector.php',
-                success: function(data){                                
+            Ext.Ajax.request({ 
+                url: MODx.config.connector_url
+                ,params: { 
+                     file: this.value 
+                    ,action: 'browser/file/remove' 
+                    ,source: this.source
+                }
+                ,success: function(data){                                
                     Ext.Msg.alert('Remove', _('mixedimage.success_removed'));
                 }
                 ,failure: function(data) {
                     Ext.Msg.alert('Error', _('mixedimage.error_remove'));                                
                     console.log(data);
                 }
-                ,params: { value: value, action: 'removeFile' }
             });
         } 
-		
+        
         this.setValue('');
         this.fireEvent('change',this);
     }

@@ -11,21 +11,6 @@ $modx->lexicon->load('mixedimage:default');
 require_once $modx->getOption('core_path').'model/modx/modprocessor.class.php';
 require_once $modx->getOption('core_path').'model/modx/processors/browser/file/upload.class.php';
 
-
-if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')){
-	if($_REQUEST['action'] == 'removeFile'){
-
-		if($_REQUEST['value']){
-			if (unlink(MODX_BASE_PATH.$_REQUEST['value'])) { 
-				return true; 
-			} else {  
-				return false; 
-			}
-		} 
-	}
-}
-
- 
 /* handle request */
 $path = $corePath.'processors/';
 $modx->request->handleRequest(array(
