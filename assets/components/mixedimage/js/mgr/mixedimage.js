@@ -143,6 +143,7 @@ mixedimage.fileform = function(config){
     });
     mixedimage.fileform.superclass.constructor.call(this,config);
 };
+
 Ext.extend(mixedimage.fileform,Ext.FormPanel,{
 
     getBaseParams:function(config){  
@@ -200,7 +201,9 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
 });
 Ext.reg('mixedimage-fileform',mixedimage.fileform);
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 mixedimage.trigger = function(config){
     config = config||{};
@@ -216,10 +219,9 @@ mixedimage.trigger = function(config){
     });
     mixedimage.trigger.superclass.constructor.call(this,config);
 };
+
 Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     getTriggerConfig: function(config){  
- 
-
 
         var btn_remove = config.removeFile?_('mixedimage.trigger_remove'):_('mixedimage.trigger_clear');
         var __triggerConfig={
@@ -227,10 +229,11 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
             cls: 'x-field-combo-btns',
             cn: []
         };
-
  
         var triggers = JSON.parse(config.triggerlist);  
         var trList = [];
+
+        // clear field button
         if(triggers.clear != undefined){
             trList.push({
                 tag: 'div', 
@@ -240,6 +243,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
             });
         }
 
+        // select from file manager 
         if(triggers.manager != undefined){
             trList.push({
                 tag: 'div', 
@@ -249,6 +253,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
             });
         }
 
+        // select from user desktop
         if(triggers.pc != undefined){
             trList.push({
                 tag: 'div', 
@@ -258,6 +263,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
             });
         } 
 
+        // get file from url
         if(triggers.url != undefined){
             trList.push({
                 tag: 'div', 
@@ -266,8 +272,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                 title: _('mixedimage.trigger_from_url')
             });
         } 
- 
-      
+       
         var triggerConfig = config.triggerConfig||{};
         triggerConfig.cn = trList||[];
         triggerConfig.rightOffset=0;
@@ -304,6 +309,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     ,handleTrigger__pc:function(field,el){
         Ext.get('mixedimage_desktop'+this.tvId+'-file').dom.click();
     }
+    ,handleTrigger__url:function(field,el){
+        this.getFromUrl();
+    }
     ,clearField: function(){     
 
         if(this.removeFile){
@@ -327,5 +335,73 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
         this.setValue('');
         this.fireEvent('change',this);
     }
+
+    ,getFromUrl: function(){
+
+        if (!this.window) {
+            this.window= MODx.load({
+                xtype: 'mixedimage-window-getfromurl',
+                id: Ext.id(),
+                listeners: {
+                    success: {
+                        fn: function () {
+                            this.refresh();
+                        }, scope: this
+                    }
+                }
+            });
+        }
+
+        this.window.reset();
+        this.window.setValues({active: true});
+        this.window.show();
+
+    }
 });
 Ext.reg('mixedimage-trigger',mixedimage.trigger);
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+mixedimage.window = function (config) {
+    config = config || {};
+
+    Ext.applyIf(config, {
+        title: _('mixedimage.window_url'),
+        url: MODx.config.assets_url+'components/mixedimage/connector.php',
+        action: 'mgr/comment/update',
+        fields: this.getFields(config),
+        keys: this.getKeys(config),
+        width: 400, 
+        layout: 'anchor',
+        autoHeight: false, 
+    });
+    mixedimage.window.superclass.constructor.call(this, config);
+};
+
+Ext.extend(mixedimage.window, MODx.Window, {
+
+    getKeys: function () {
+        return [{
+            key: Ext.EventObject.ENTER,
+            shift: true,
+            fn: this.submit,
+            scope: this
+        }];
+    },
+
+    getFields: function (config) {
+        return [{
+            xtype: 'hidden',
+            name: 'id',
+        }, {
+            xtype: 'textfield',
+            fieldLabel: _('mixedimage.link'),
+            name: 'url',
+            anchor: '99% -210'
+        }];
+    }
+
+});
+Ext.reg('mixedimage-window-getfromurl', mixedimage.window);

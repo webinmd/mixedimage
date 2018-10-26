@@ -58,6 +58,10 @@ $_lang['mixedimage.trigger_btn_file_url'] = 'С URL';
 
 $_lang['mixedimage.triggerlist_desc'] = 'Укажите какие из кнопок-триггеров будут выводиться при рендере поля';
 
+// url
+$_lang['mixedimage.window_url'] = 'Укажите ссылку'; 
+$_lang['mixedimage.link'] = 'Ссылка';  
+
 
 // success
 $_lang['mixedimage.success_removed'] = 'Файл успешно удален';
