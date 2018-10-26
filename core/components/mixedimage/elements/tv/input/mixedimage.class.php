@@ -45,8 +45,9 @@ if(!class_exists('MixedImageInputRender')) {
 			$this->setPlaceholder('showValue', ($opts['showValue']==$this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('removeFile', ($opts['removeFile']==$this->modx->lexicon('yes') ? 'true' : 'false'));			
 			$this->setPlaceholder('onlyEdit', $this->modx->getOption('mixedimage.check_resid'));
-			$this->setPlaceholder('openPath', $opts['path']);
-			//$this->setPlaceholder('resize', $opts['resize']);
+			$this->setPlaceholder('openPath', $opts['path']);   
+			$this->setPlaceholder('triggerlist', json_encode($opts['triggerlist']));  
+ 
 
 			$tv = $this->tv;
 

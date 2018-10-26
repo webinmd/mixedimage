@@ -25,11 +25,17 @@
 <script type="text/javascript">
     // <![CDATA[
     var params = {
-        {/literal}{foreach from=$params key=k item=v name='p'}
-        '{$k}': '{$v|escape:"javascript"}'{if NOT $smarty.foreach.p.last},{/if}
+        {/literal}{foreach from=$params key=k item=v name='p'}  
+        {if $v|is_array}
+        {foreach from=$v key=i item=j name='dd'}
+        '{$i}': '{$j}',
+        {/foreach}
+        {else}
+            '{$k}': '{$v|escape:"javascript"}'{if NOT $smarty.foreach.p.last},{/if}
+        {/if}        
         {/foreach}{literal}
     };
-    var oc = {'change':{fn:function(){Ext.getCmp('modx-panel-tv').markDirty();},scope:this}};
+    var oc = {'change':{fn:function(){Ext.getCmp('modx-panel-tv').markDirty();},scope:this}};  
 
     {/literal}
     MixedImageLex = {$tveulex};
@@ -87,7 +93,7 @@
         },{
             xtype: 'modx-combo-boolean',
             fieldLabel: __('mixedimage.prefix_filename'),
-            name: 'inopt_prefixFilename',
+            name: 'inopt_prefixFilename',  
             id: 'inopt_prefixFilename{/literal}{$tv}{literal}',
             value: params['prefixFilename'] || 0,
             anchors: '98%',
@@ -95,7 +101,7 @@
         },{
             xtype: 'modx-combo-boolean',
             fieldLabel: __('mixedimage.show_preview'),
-            name: 'inopt_showPreview',
+            name: 'inopt_showPreview',  
             id: 'inopt_showPreview{/literal}{$tv}{literal}',
             value: params['showPreview'] || 1,
             anchors: '98%',
@@ -130,6 +136,44 @@
             xtype: MODx.expandHelp ? 'label' : 'hidden'
             ,forId: 'inopt_resize{/literal}{$tv}{literal}'
             ,html: __('mixedimage.resize_desc')
+            ,cls: 'desc-under'
+        },{
+            xtype: 'checkboxgroup',
+            fieldLabel: __('mixedimage.triggerlist'),
+            id: 'inopt_triggerlist{/literal}{$tv}{literal}', 
+            anchors: '98%',
+            listeners: oc,
+            columns: 1,
+            items: [
+                {
+                    boxLabel: __('mixedimage.trigger_clear'), 
+                    name: 'inopt_triggerlist[clear]', 
+                    value: 'clear', 
+                    checked: params['clear'] 
+                },
+                {
+                    boxLabel: __('mixedimage.trigger_btn_file_manager'), 
+                    name: 'inopt_triggerlist[manager]', 
+                    value: 'manager', 
+                    checked: params['manager']
+                },
+                {
+                    boxLabel: __('mixedimage.trigger_btn_file_desktop'), 
+                    name: 'inopt_triggerlist[pc]', 
+                    value: 'pc', 
+                    checked: params['pc']
+                },
+                {
+                    boxLabel: __('mixedimage.trigger_btn_file_url'), 
+                    name: 'inopt_triggerlist[url]', 
+                    value: 'url', 
+                    checked: params['url']
+                }
+            ]
+        },{
+            xtype: MODx.expandHelp ? 'label' : 'hidden'
+            ,forId: 'inopt_triggerlist{/literal}{$tv}{literal}'
+            ,html: __('mixedimage.triggerlist_desc')
             ,cls: 'desc-under'
         }]
         ,renderTo: 'tv-input-properties-form{/literal}{$tv}{literal}'

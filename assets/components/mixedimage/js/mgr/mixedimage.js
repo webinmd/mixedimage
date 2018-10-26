@@ -56,7 +56,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
             }]
         };
     }
-    ,getDefaultTriggerConfig:function(config){
+    ,getDefaultTriggerConfig:function(config){ 
         return{
             xtype: 'mixedimage-trigger' 
             ,name: 'mixedimage_input'+config.tvId
@@ -68,6 +68,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
             ,showPreview: config.showPreview
             ,ctx_path: config.ctx_path
             ,removeFile: config.removeFile
+            ,triggerlist: config.triggerlist
             ,listeners:{
                 change:{fn:function(data){
                     this.setValue(data.el.getValue());
@@ -143,7 +144,8 @@ mixedimage.fileform = function(config){
     mixedimage.fileform.superclass.constructor.call(this,config);
 };
 Ext.extend(mixedimage.fileform,Ext.FormPanel,{
-    getBaseParams:function(config){
+
+    getBaseParams:function(config){  
         return {
             action: 'browser/file/upload'
             ,tvId: config.TV.tvId
@@ -156,7 +158,7 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
             ,ms_id: config.TV.ms_id
             ,acceptedMIMEtypes: config.TV.acceptedMIMEtypes
             ,lex: config.TV.jsonlex
-            ,ctx_path: config.TV.ctx_path
+            ,ctx_path: config.TV.ctx_path 
             //,resize: config.resize
         };
     }
@@ -202,7 +204,7 @@ Ext.reg('mixedimage-fileform',mixedimage.fileform);
 
 mixedimage.trigger = function(config){
     config = config||{};
-    
+
     config.triggerWidth=config.triggerWidth||30;
     config.triggerConfig=this.getTriggerConfig(config);
     config.width=(config.width||350)+config.triggerConfig.rightOffset;
@@ -215,22 +217,61 @@ mixedimage.trigger = function(config){
     mixedimage.trigger.superclass.constructor.call(this,config);
 };
 Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
-    getTriggerConfig: function(config){
+    getTriggerConfig: function(config){  
+ 
+
+
         var btn_remove = config.removeFile?_('mixedimage.trigger_remove'):_('mixedimage.trigger_clear');
         var __triggerConfig={
             tag: 'span',
             cls: 'x-field-combo-btns',
-            cn: [
-                {tag: 'div', cls: 'x-form-trigger x-field-trigger0-class', trigger: 'clear', title: btn_remove},
-                {tag: 'div', cls: 'x-form-trigger x-field-trigger1-class', trigger: 'manager', title: _('mixedimage.trigger_from_file_manager')},
-                {tag: 'div', cls: 'x-form-trigger x-field-trigger2-class', trigger: 'pc', title: _('mixedimage.trigger_from_desktop')}
-            ]
+            cn: []
         };
+
+ 
+        var triggers = JSON.parse(config.triggerlist);  
+        var trList = [];
+        if(triggers.clear != undefined){
+            trList.push({
+                tag: 'div', 
+                cls: 'x-form-trigger x-field-trigger0-class', 
+                trigger: 'clear', 
+                title: btn_remove
+            });
+        }
+
+        if(triggers.manager != undefined){
+            trList.push({
+                tag: 'div', 
+                cls: 'x-form-trigger x-field-trigger1-class', 
+                trigger: 'manager', 
+                title: _('mixedimage.trigger_from_file_manager')
+            });
+        }
+
+        if(triggers.pc != undefined){
+            trList.push({
+                tag: 'div', 
+                cls: 'x-form-trigger x-field-trigger2-class', 
+                trigger: 'pc', 
+                title: _('mixedimage.trigger_from_desktop')
+            });
+        } 
+
+        if(triggers.url != undefined){
+            trList.push({
+                tag: 'div', 
+                cls: 'x-form-trigger x-field-trigger3-class', 
+                trigger: 'url', 
+                title: _('mixedimage.trigger_from_url')
+            });
+        } 
+ 
+      
         var triggerConfig = config.triggerConfig||{};
-        triggerConfig.cn = triggerConfig.cn||[];
+        triggerConfig.cn = trList||[];
         triggerConfig.rightOffset=0;
-        
-        triggerConfig.cn = __triggerConfig.cn.concat(triggerConfig.cn);
+        triggerConfig.cn = __triggerConfig.cn.concat(triggerConfig.cn); 
         Ext.applyIf(triggerConfig,__triggerConfig);
 
         for(var i=triggerConfig.cn.length-1;i>=0;i--){

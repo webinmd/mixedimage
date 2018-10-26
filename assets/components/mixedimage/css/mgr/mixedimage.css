@@ -41,6 +41,7 @@
 .x-field-trigger0-class:before {content: '\f00d' !important; }
 .x-field-trigger1-class:before {content: '\f1c5' !important;}
 .x-field-trigger2-class:before {content: '\f108' !important;}
+.x-field-trigger3-class:before {content: '\f0c1' !important;}
 
 .mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger{
 	background-color: #fff;

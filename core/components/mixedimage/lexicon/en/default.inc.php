@@ -50,6 +50,14 @@ $_lang['mixedimage.trigger_from_file_manager'] = 'From file manager';
 $_lang['mixedimage.trigger_from_desktop'] = 'From your computer';
 $_lang['mixedimage.trigger_clear'] = 'Clear';
 $_lang['mixedimage.trigger_remove'] = 'Clear and remove file from the server';
+$_lang['mixedimage.trigger_from_url'] = 'From external url';
+
+$_lang['mixedimage.triggerlist'] = 'Trigger list';
+$_lang['mixedimage.trigger_btn_file_manager'] = 'File manager';
+$_lang['mixedimage.trigger_btn_file_desktop'] = 'From computer';
+$_lang['mixedimage.trigger_btn_file_url'] = 'From external url'; 
+
+$_lang['mixedimage.triggerlist_desc'] = 'Specify which of the trigger buttons will be displayed when rendering the field';
 
 
 // success

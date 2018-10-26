@@ -49,6 +49,14 @@ $_lang['mixedimage.trigger_from_file_manager'] = 'Из уже загруженн
 $_lang['mixedimage.trigger_from_desktop'] = 'C вашего компьютера';
 $_lang['mixedimage.trigger_clear'] = 'Очистить';
 $_lang['mixedimage.trigger_remove'] = 'Очистить и удалить файл с сервера';
+$_lang['mixedimage.trigger_from_url'] = 'Со стороннего url';
+
+$_lang['mixedimage.triggerlist'] = 'Список кнопок';
+$_lang['mixedimage.trigger_btn_file_manager'] = 'Файловый менеджер';
+$_lang['mixedimage.trigger_btn_file_desktop'] = 'С компьютера';
+$_lang['mixedimage.trigger_btn_file_url'] = 'С URL'; 
+
+$_lang['mixedimage.triggerlist_desc'] = 'Укажите какие из кнопок-триггеров будут выводиться при рендере поля';
 
 
 // success
