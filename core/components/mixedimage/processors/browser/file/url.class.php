@@ -7,23 +7,27 @@
  * @package mixedimage
  * @subpackage processors.browser.file
  */
-class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor {
+class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor 
+{
 
      
-    public function initialize() {         
+    public function initialize() 
+    {         
         $this->properties = $this->getProperties();
         if(isset($this->properties['formdata']))$this->formdata=$this->modx->fromJSON($this->properties['formdata']);
         
         return true;
     }
 
-    public function getLanguageTopics() {
+    public function getLanguageTopics() 
+    {
         $langs = parent::getLanguageTopics();
         $langs[] = 'mixedimage';
         return $langs;
     }
 
-    public function process() {
+    public function process() 
+    {
 
         if (!$this->getSource()) {
             return $this->failure($this->modx->lexicon('permission_denied'));
@@ -66,7 +70,7 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor {
         $file_name = pathinfo($properties['url'], PATHINFO_FILENAME); 
 
         // Check the mine types
-        if(!empty($opts['MIME'])){
+        if(!empty($opts['MIME'])) {
 
             $mime_arr = array();
             $mime_arr = explode(",",$opts['MIME']);
@@ -142,7 +146,8 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor {
     } 
 
     
-    private function preparePath($pathStr) {
+    private function preparePath($pathStr) 
+    {
         
         if(!empty($_REQUEST['custompath'])){
             return $_REQUEST['custompath'];
@@ -162,7 +167,8 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor {
     /**
      * Prepare file name (prevent accidental overwrites)
      */
-    private function prepareFile($prefix, $url) { 
+    private function prepareFile($prefix, $url) 
+    { 
 
         $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false);
 
@@ -197,7 +203,8 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor {
     /**
      * Parse placeholders in input fields
      */
-    private function parsePlaceholders($str) {
+    private function parsePlaceholders($str) 
+    {
         $random_lenght = (int)$this->modx->getOption('mixedimage.random_lenght', null, 6, true);
         $fields = $this->formdata;
  

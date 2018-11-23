@@ -8,9 +8,11 @@
  * @subpackage processors.browser.file
  */
 
-class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor {
+class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor 
+{
 
-    public function initialize() {
+    public function initialize() 
+    {
         $this->setDefaultProperties(array(
             'source' => 1,
             'path' => false,
@@ -20,13 +22,15 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         return true;
     }
 
-    public function getLanguageTopics() {
+    public function getLanguageTopics() 
+    {
         $langs = parent::getLanguageTopics();
         $langs[] = 'mixedimage';
         return $langs;
     }
 
-    public function process() {
+    public function process() 
+    {
         if (!$this->getSource()) {
             return $this->failure($this->modx->lexicon('permission_denied'));
         }
@@ -154,7 +158,8 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     /**
      * Prepare the save path using the TV's defined pathing string
      */
-    private function preparePath($pathStr) {
+    private function preparePath($pathStr) 
+    {
         
         if(!empty($_REQUEST['custompath'])){
             return $_REQUEST['custompath'];
@@ -174,7 +179,8 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     /**
      * Prepare file name (prevent accidental overwrites)
      */
-    private function prepareFiles($prefix) {
+    private function prepareFiles($prefix) 
+    {
         $files = $_FILES;
 
         $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false);
@@ -211,7 +217,8 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     /**
      * Parse placeholders in input fields
      */
-    private function parsePlaceholders($str) {
+    private function parsePlaceholders($str) 
+    {
         $random_lenght = (int)$this->modx->getOption('mixedimage.random_lenght', null, 6, true);
         $bits = array(
             '{id}'      => $this->getProperty('res_id'),    // Resource ID
