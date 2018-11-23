@@ -7,6 +7,7 @@
  * @package mixedimage
  * @subpackage processors.browser.file
  */
+
 class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor {
 
     public function initialize() {
@@ -45,9 +46,9 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
  
         if (! $TV instanceof modTemplateVar) { 
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$this->getProperty('tv_id')."]");
-        }
+        } 
         
-        $context_key=$this->formdata['context_key'];
+        $context_key = $this->formdata['context_key'];
         $RES = $this->modx->getObject('modResource',$this->getProperty('res_id'));
 
         // Initialize and check perms for this mediasource

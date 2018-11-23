@@ -129,7 +129,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
 Ext.reg('mixedimage-panel',mixedimage.panel); 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 mixedimage.fileform = function(config){
     config = config||{};
@@ -181,7 +181,7 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
         this.form.baseParams.file = field.getValue();
         
         var params = {};
-        params.custompath=this.TV.getCustomPath()||'';
+        params.custompath = this.TV.getCustomPath()||'';
         params.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues()||{});
         
         this.form.submit({
@@ -202,7 +202,7 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
 Ext.reg('mixedimage-fileform',mixedimage.fileform);
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 
 
 mixedimage.trigger = function(config){
@@ -230,47 +230,16 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
             cn: []
         };
  
-        var triggers = JSON.parse(config.triggerlist);  
+        var triggers = config.triggerlist.split(",");   
         var trList = [];
 
-        // clear field button
-        if(triggers.clear != undefined){
-            trList.push({
+        for (var i = 0; i < triggers.length; i++) { 
+           trList.push({
                 tag: 'div', 
-                cls: 'x-form-trigger x-field-trigger0-class', 
-                trigger: 'clear', 
-                title: btn_remove
-            });
-        }
-
-        // select from file manager 
-        if(triggers.manager != undefined){
-            trList.push({
-                tag: 'div', 
-                cls: 'x-form-trigger x-field-trigger1-class', 
-                trigger: 'manager', 
-                title: _('mixedimage.trigger_from_file_manager')
-            });
-        }
-
-        // select from user desktop
-        if(triggers.pc != undefined){
-            trList.push({
-                tag: 'div', 
-                cls: 'x-form-trigger x-field-trigger2-class', 
-                trigger: 'pc', 
-                title: _('mixedimage.trigger_from_desktop')
-            });
-        } 
-
-        // get file from url
-        if(triggers.url != undefined){
-            trList.push({
-                tag: 'div', 
-                cls: 'x-form-trigger x-field-trigger3-class', 
-                trigger: 'url', 
-                title: _('mixedimage.trigger_from_url')
-            });
+                cls: 'x-form-trigger x-field-trigger-'+triggers[i]+'-class', 
+                trigger: triggers[i], 
+                title:  _('mixedimage.trigger_btn_'+triggers[i])
+            }); 
         } 
        
         var triggerConfig = config.triggerConfig||{};
@@ -299,18 +268,18 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
         }
     }
     ,handleTrigger__clear:function(field,el){
-        this.clearField();
+    	this.clearField();
     }
     ,handleTrigger__manager:function(field,el){
-        var parent = Ext.get('mixedimage_media_container'+this.tvId);
+    	var parent = Ext.get('mixedimage_media_container'+this.tvId);
         var elems = parent.select(".x-form-file-trigger").elements; 
         elems[0].click();
     }
     ,handleTrigger__pc:function(field,el){
-        Ext.get('mixedimage_desktop'+this.tvId+'-file').dom.click();
+    	Ext.get('mixedimage_desktop'+this.tvId+'-file').dom.click();
     }
     ,handleTrigger__url:function(field,el){
-        this.getFromUrl();
+        this.getFromUrl(field,el);
     }
     ,clearField: function(){     
 
@@ -331,21 +300,48 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                 }
             });
         } 
-        
+		
         this.setValue('');
         this.fireEvent('change',this);
     }
 
-    ,getFromUrl: function(){
+    ,getFromUrl: function(btn, e){ 
+
+    	this.previewTpl=new Ext.XTemplate('<tpl for=".">'
+	            +'<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source='+this.source+'" alt="" />'
+	        +'</tpl>', {
+	        compiled: true
+	    });
 
         if (!this.window) {
             this.window= MODx.load({
-                xtype: 'mixedimage-window-getfromurl',
-                id: Ext.id(),
-                listeners: {
+                 xtype: 'mixedimage-window-getfromurl'
+                ,id: Ext.id()
+                ,title: _('mixedimage.window_url')
+                ,saveBtnText:  _('mixedimage.upload_file')  
+                ,params: btn            
+                ,listeners: {
                     success: {
-                        fn: function () {
-                            this.refresh();
+                        fn: function (data) {  
+
+			                var value = data.a.result.message;
+
+			                var input = btn.input||Ext.getCmp('mixedimage_input'+btn.tvId);
+			                input.setValue(value);
+
+			                var tvfield = btn.tvfield||Ext.get('tv'+this.tvId);
+			                tvfield.dom.value = value;
+			                btn.el.dom.value = value;
+
+			                if(btn.showPreview === true){ 
+					            var d = btn.preview||Ext.get('tv-image-preview-'+btn.tvId);
+					            var content = '';
+					            if(!Ext.isEmpty(value))content = this.previewTpl.apply({width:200,height:100,value:value});
+					            d.update(content);
+					        } 
+
+			                MODx.fireResourceFormChange();  
+                            this.window.hide();
                         }, scope: this
                     }
                 }
@@ -354,35 +350,36 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
 
         this.window.reset();
         this.window.setValues({active: true});
-        this.window.show();
-
+        this.window.show(e.target);
     }
 });
 Ext.reg('mixedimage-trigger',mixedimage.trigger);
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 
 mixedimage.window = function (config) {
-    config = config || {};
+    config = config || {}; 
+ 
+    config.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues()||{}); 
 
+     
     Ext.applyIf(config, {
-        title: _('mixedimage.window_url'),
-        url: MODx.config.assets_url+'components/mixedimage/connector.php',
-        action: 'mgr/comment/update',
-        fields: this.getFields(config),
-        keys: this.getKeys(config),
-        width: 400, 
-        layout: 'anchor',
-        autoHeight: false, 
+         url: MODx.config.assets_url+'components/mixedimage/connector.php'  
+        ,fields: this.getFields(config)
+        ,keys: this.getKeys(config)
+        ,width: 400
+        ,layout: 'anchor'
+        ,autoHeight: false 
+        ,baseParams:this.getBaseParams(config) 
     });
     mixedimage.window.superclass.constructor.call(this, config);
 };
 
 Ext.extend(mixedimage.window, MODx.Window, {
 
-    getKeys: function () {
+    getKeys: function (config) {
         return [{
             key: Ext.EventObject.ENTER,
             shift: true,
@@ -393,14 +390,33 @@ Ext.extend(mixedimage.window, MODx.Window, {
 
     getFields: function (config) {
         return [{
-            xtype: 'hidden',
-            name: 'id',
-        }, {
             xtype: 'textfield',
             fieldLabel: _('mixedimage.link'),
             name: 'url',
             anchor: '99% -210'
         }];
+    },
+
+    getBaseParams:function(config){  
+
+
+    	/// сделать чтобы передавался p_alias
+    	var fields = window['mixedimage'+config.params.tvId];   
+
+        return {
+            action: 'browser/file/url'
+            ,tv_id: fields.tvId
+            ,prefixFilename: fields.prefixFilename
+            ,res_id: fieldsres_id
+            ,res_alias: fields.res_alias
+            ,p_id: fields.p_id
+            ,p_alias: fields.p_alias 
+            ,ms_id: fields.ms_id
+            ,acceptedMIMEtypes: fields.acceptedMIMEtypes
+            ,lex: fields.jsonlex
+            ,ctx_path: fields.ctx_path 
+            ,formdata: config.formdata
+        };
     }
 
 });

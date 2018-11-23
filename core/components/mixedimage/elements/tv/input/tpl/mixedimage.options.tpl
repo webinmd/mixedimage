@@ -44,6 +44,8 @@
     };
     {literal}
 
+    console.log(params); 
+
     MODx.load({
         xtype: 'panel'
         ,layout: 'form'
@@ -138,38 +140,13 @@
             ,html: __('mixedimage.resize_desc')
             ,cls: 'desc-under'
         },{
-            xtype: 'checkboxgroup',
+            xtype: 'textfield',
             fieldLabel: __('mixedimage.triggerlist'),
             id: 'inopt_triggerlist{/literal}{$tv}{literal}', 
             anchors: '98%',
-            listeners: oc,
-            columns: 1,
-            items: [
-                {
-                    boxLabel: __('mixedimage.trigger_clear'), 
-                    name: 'inopt_triggerlist[clear]', 
-                    value: 'clear', 
-                    checked: params['clear'] 
-                },
-                {
-                    boxLabel: __('mixedimage.trigger_btn_file_manager'), 
-                    name: 'inopt_triggerlist[manager]', 
-                    value: 'manager', 
-                    checked: params['manager']
-                },
-                {
-                    boxLabel: __('mixedimage.trigger_btn_file_desktop'), 
-                    name: 'inopt_triggerlist[pc]', 
-                    value: 'pc', 
-                    checked: params['pc']
-                },
-                {
-                    boxLabel: __('mixedimage.trigger_btn_file_url'), 
-                    name: 'inopt_triggerlist[url]', 
-                    value: 'url', 
-                    checked: params['url']
-                }
-            ]
+            name: 'inopt_triggerlist',
+            value: params['triggerlist'] || 'clear,manager,pc,url',
+            listeners: oc
         },{
             xtype: MODx.expandHelp ? 'label' : 'hidden'
             ,forId: 'inopt_triggerlist{/literal}{$tv}{literal}'
