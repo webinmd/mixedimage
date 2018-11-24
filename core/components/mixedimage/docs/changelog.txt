@@ -1,6 +1,15 @@
 --------------------
+
 Extra: mixedImage -  Custom TV
 
+--------------------
+# Version 2.0.2-beta 
+:: Add download by external url
+:: Move removing file in modx processor
+:: Control buttons for each tv field
+:: Fix css
+
+--------------------
 # Version 2.0.1-beta 
 -- By SintezCode
 :: Rewrite extjs part for extending and overriding by another components.
