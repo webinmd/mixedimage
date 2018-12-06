@@ -212,8 +212,8 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
         $bits = array(
             '{id}'      => $this->getProperty('res_id'),    // Resource ID
             '{pid}'     => $this->getProperty('p_id'),      // Resource Parent ID
-            '{alias}'   => $this->getProperty('res_alias'), // Resource Alias
-            '{palias}'  => $this->getProperty('p_alias'),   // Resource Parent Alias
+            '{alias}'   => $this->modx->sanitizeString($this->getProperty('res_alias')), // Resource Alias
+            '{palias}'  => $this->modx->sanitizeString($this->getProperty('p_alias')),   // Resource Parent Alias
             '{tid}'     => $this->getProperty('tv_id'),     // TV ID
             '{uid}'     => $this->modx->user->get('id'),    // User ID
             '{rand}'    => substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyz', ceil($random_lenght/strlen($x)) )),1,$random_lenght), // Random string
