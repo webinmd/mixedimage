@@ -145,7 +145,7 @@
             id: 'inopt_triggerlist{/literal}{$tv}{literal}', 
             anchors: '98%',
             name: 'inopt_triggerlist',
-            value: params['triggerlist'] || 'clear,manager,pc,url',
+            value: params['triggerlist'] || 'clear,manager,pc',
             listeners: oc
         },{
             xtype: MODx.expandHelp ? 'label' : 'hidden'
