@@ -1,5 +1,22 @@
-#mixedimage_container1{
+.mixedimage{
 	position: relative;
+	overflow: hidden;
+}
+
+.mixedimage div,
+.mixedimage input{
+	max-width: 100% !important;
+}
+ 
+.mixedimage .x-form-field-wrap,
+.mixedimage .x-column-layout-ct{
+    width: 100% !important; 
+    box-sizing: border-box;
+}
+
+.mixedimage input{ 
+    height: 32px !important;
+    box-sizing: border-box;
 }
 
 .mixedimage label{
@@ -10,6 +27,7 @@
 .mixedimage .x-form-field-trigger-wrap{
 	margin-bottom: 10px;
 	margin-left: 0 !important;
+	max-width: 100%;
 }
 
 
