@@ -407,7 +407,7 @@ Ext.extend(mixedimage.window, MODx.Window, {
             action: 'browser/file/url'
             ,tv_id: fields.tvId
             ,prefixFilename: fields.prefixFilename
-            ,res_id: fieldsres_id
+            ,res_id: fields.res_id
             ,res_alias: fields.res_alias
             ,p_id: fields.p_id
             ,p_alias: fields.p_alias 
