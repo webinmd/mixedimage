@@ -45,12 +45,20 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('mixedimage.url_empty'));
         }  
 
+        $tv_id = $this->getProperty('tv_id');
+
+        if (strpos($tv_id, 'inp') !== false) {
+            $id_arr = explode("_", $tv_id);
+            $tv_id = $id_arr[2];
+        }
+
         // Grab the TV object
-        $TV = $this->modx->getObject('modTemplateVar',$this->getProperty('tv_id'));
+        $TV = $this->modx->getObject('modTemplateVar',$tv_id);
  
         if (! $TV instanceof modTemplateVar) { 
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$properties['tv_id']."]");
         }
+        
         
         $context_key = $this->formdata['context_key'];
         $RES = $this->modx->getObject('modResource',$this->formdata['id']);
@@ -104,6 +112,7 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('mixedimage.err_file_url_download'));
         }
         //\\ end download file 
+
         
 
         $url = (empty($path)) ? $file : $path.'/'.$file;
@@ -137,7 +146,7 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
                     $this->modx->log(modX::LOG_LEVEL_ERROR, 'Could not save rendered image to  '.$url);
                 }
             }
-            else {
+            else { 
                 $this->modx->log(modX::LOG_LEVEL_ERROR, print_r($phpThumb->debugmessages, 1));
             } 
         }  

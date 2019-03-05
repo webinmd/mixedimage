@@ -5,6 +5,7 @@ Extra: mixedImage -  Custom TV
 --------------------
 # Version 2.0.3-beta  
 :: Fix css for modx-resource-main-right position
+:: Fix js bug on url upload
 
 --------------------
 # Version 2.0.2-beta 
