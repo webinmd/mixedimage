@@ -3,8 +3,12 @@
 mixedImage - modx custom TV  
 
 
-
 ## version 2.-.-
+
+### 2.0.4 
+ 
+* Исправлен баг с загрузкой по url для migx полей
+
 
 ### 2.0.3 
 

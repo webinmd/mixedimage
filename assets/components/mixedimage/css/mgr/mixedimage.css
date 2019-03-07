@@ -8,13 +8,13 @@
 	max-width: 100% !important;
 }
  
-.mixedimage .x-form-field-wrap,
-.mixedimage .x-column-layout-ct{
+#modx-resource-main-right .mixedimage .x-form-field-wrap,
+#modx-resource-main-right .mixedimage .x-column-layout-ct{
     width: 100% !important; 
     box-sizing: border-box;
 }
 
-.mixedimage input{ 
+#modx-resource-main-right .mixedimage input{ 
     height: 30px !important;
     box-sizing: border-box;
 }

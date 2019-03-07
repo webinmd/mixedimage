@@ -45,6 +45,9 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_ns'));
         }
 
+
+        $this->modx->log(1,'Line  --- '.print_r($this->getProperty('tv_id'), 1));
+
         // Grab the TV object
         $TV = $this->modx->getObject('modTemplateVar',$this->getProperty('tv_id'));
  

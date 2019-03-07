@@ -37,8 +37,8 @@ if(!class_exists('MixedImageInputRender')) {
 			$rootTv = $this->modx->getObject('modTemplateVar',array(
 				'name' => $this->tv->get('name')
 			));
-			$this->setPlaceholder('tv_id',$rootTv->get('id'));
-
+			$this->setPlaceholder('tv_id',$rootTv->get('id')); 
+ 
 			$opts = unserialize($rootTv->input_properties);
 			$this->setPlaceholder('prefixFilename', ($opts['prefixFilename']==$this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('showPreview', ($opts['showPreview']==$this->modx->lexicon('yes') ? 'true' : 'false'));
@@ -47,8 +47,6 @@ if(!class_exists('MixedImageInputRender')) {
 			$this->setPlaceholder('onlyEdit', $this->modx->getOption('mixedimage.check_resid'));
 			$this->setPlaceholder('openPath', $opts['path']);   
 			$this->setPlaceholder('triggerlist', $opts['triggerlist']);  
-
-			//$this->modx->log(xPDO::LOG_LEVEL_ERROR,'Opts ++++'.print_r($opts, true));
  
 
 			$tv = $this->tv;

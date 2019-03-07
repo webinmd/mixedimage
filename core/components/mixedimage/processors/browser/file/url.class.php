@@ -36,7 +36,7 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
         $properties = $this->properties;
 
         // Ensure we have been passed the TV's id
-        if (!$properties['tv_id']) {
+        if (!$properties['tvId']) {
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_ns'));
         }    
 
@@ -45,20 +45,14 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('mixedimage.url_empty'));
         }  
 
-        $tv_id = $this->getProperty('tv_id');
-
-        if (strpos($tv_id, 'inp') !== false) {
-            $id_arr = explode("_", $tv_id);
-            $tv_id = $id_arr[2];
-        }
+        $tv_id = $this->getProperty('tvId'); 
 
         // Grab the TV object
         $TV = $this->modx->getObject('modTemplateVar',$tv_id);
  
         if (! $TV instanceof modTemplateVar) { 
-            return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$properties['tv_id']."]");
-        }
-        
+            return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid')."<br />\n[".$properties['tvId']."]");
+        }        
         
         $context_key = $this->formdata['context_key'];
         $RES = $this->modx->getObject('modResource',$this->formdata['id']);
@@ -86,15 +80,24 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
             if (!in_array($file_ext, $mime_arr)) {
                 return $this->failure($this->modx->lexicon('mixedimage.err_file_mime'));
             } 
+
+        } else {
+
+            $option_upload_files = $this->modx->getOption('upload_files');
+            $mime_arr = array();
+            $mime_arr = explode(",",$option_upload_files);
+            if (!in_array($file_ext, $mime_arr)) {
+                return $this->failure($this->modx->lexicon('mixedimage.err_file_mime'));
+            } 
+
         }
 
         $this->source->createContainer($path,'');
 
         // Prepare file names (prevent duplicate overwrites)
-        $prefix = (empty($opts['prefix'])) ? '' : $opts['prefix'];
-        $file = $this->prepareFile($prefix, $properties['url']);
-
-        $bases = $this->source->getBases($path);
+        $prefix = (empty($opts['prefix'])) ? '' : $opts['prefix']; // prefix from TV settings 
+        $file = $this->prepareFile($prefix, $properties['url']); 
+        $bases = $this->source->getBases($path); 
  
         //Local path of image - where will we save the image
         $file_output = fopen($bases['pathAbsoluteWithPath'].$file, 'wb');
@@ -113,7 +116,6 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
         }
         //\\ end download file 
 
-        
 
         $url = (empty($path)) ? $file : $path.'/'.$file;
         $url = preg_replace('/\/{2,}/','/',$url);
@@ -145,12 +147,11 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
                 if (!$phpThumb->renderToFile(MODX_BASE_PATH.$source_path.$url)) {
                     $this->modx->log(modX::LOG_LEVEL_ERROR, 'Could not save rendered image to  '.$url);
                 }
-            }
-            else { 
+            } else { 
                 $this->modx->log(modX::LOG_LEVEL_ERROR, print_r($phpThumb->debugmessages, 1));
             } 
-        }  
-
+        }   
+        
         return $this->success($url); 
     } 
 

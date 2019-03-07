@@ -28,13 +28,13 @@ $_lang['mixedimage.replace_file'] = 'Replace File...';
 $_lang['mixedimage.clear_file'] = 'Clear Value';
 
 // Errors
-$_lang['mixedimage.error_tvid_ns'] = 'SYSTEM ERROR: modTemplateVar ID not provided';
-$_lang['mixedimage.error_tvid_invalid'] = 'SYSTEM ERROR: invalid modTemplateVar provided';
+$_lang['mixedimage.error_tvid_ns'] = 'mixedImage: modTemplateVar ID not provided';
+$_lang['mixedimage.error_tvid_invalid'] = 'mixedImage: invalid TV id ';
 
-$_lang['mixedimage.err_file_ns'] = 'Error: No File was uploaded';
+$_lang['mixedimage.err_file_ns'] = 'mixedImage: No File was uploaded';
 $_lang['mixedimage.err_save_resource'] = 'Before adding new items, you need to save this resource!';
-$_lang['mixedimage.err_file_mime'] = 'Error:  wrong file type';
-$_lang['mixedimage.error_remove'] = 'Error removing (view console)';
+$_lang['mixedimage.err_file_mime'] = 'mixedImage:  wrong file type';
+$_lang['mixedimage.error_remove'] = 'mixedImage removing (view console)';
 
 // Settings
 $_lang['setting_mixedimage.translit'] = 'Translit';

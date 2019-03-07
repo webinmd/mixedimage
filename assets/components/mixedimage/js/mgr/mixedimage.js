@@ -205,6 +205,73 @@ Ext.reg('mixedimage-fileform',mixedimage.fileform);
 /////////////////////////////////////////////////////////////////////////////
 
 
+mixedimage.window = function (config) {
+    config = config || {}; 
+ 
+    config.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues()||{}); 
+
+    Ext.applyIf(config, {
+         url: MODx.config.assets_url+'components/mixedimage/connector.php'  
+        ,fields: this.getFields(config)
+        ,keys: this.getKeys(config)
+        ,width: 400
+        ,layout: 'anchor'
+        ,autoHeight: false 
+        ,baseParams:this.getBaseParams(config) 
+    });
+    mixedimage.window.superclass.constructor.call(this, config);
+};
+
+
+
+Ext.extend(mixedimage.window, MODx.Window, {
+
+    getKeys: function (config) {
+        return [{
+            key: Ext.EventObject.ENTER,
+            shift: true,
+            fn: this.submit,
+            scope: this
+        }];
+    },
+
+    getFields: function (config) {
+        return [{
+            xtype: 'textfield',
+            fieldLabel: _('mixedimage.link'),
+            name: 'url',
+            anchor: '99% -210'
+        }];
+    },
+
+    getBaseParams:function(config){   
+
+        /// сделать чтобы передавался p_alias
+        var fields = window['mixedimage'+config.params.tvId];  
+
+        return {
+            action: 'browser/file/url'
+            ,tv_id: fields.tvId  
+            ,tvId: fields.tv_id  
+            ,prefixFilename: fields.prefixFilename
+            ,res_id: fields.res_id
+            ,res_alias: fields.res_alias
+            ,p_id: fields.p_id
+            ,p_alias: fields.p_alias 
+            ,ms_id: fields.ms_id
+            ,acceptedMIMEtypes: fields.acceptedMIMEtypes
+            ,lex: fields.jsonlex
+            ,ctx_path: fields.ctx_path 
+            ,formdata: config.formdata
+        };
+    }
+
+});
+Ext.reg('mixedimage-window-getfromurl', mixedimage.window);
+
+
+//////////////////////////////////////////////////////////////////////////////////
+
 mixedimage.trigger = function(config){
     config = config||{};
 
@@ -357,67 +424,3 @@ Ext.reg('mixedimage-trigger',mixedimage.trigger);
 
 
 //////////////////////////////////////////////////////////////////////////////////
-
-
-mixedimage.window = function (config) {
-    config = config || {}; 
- 
-    config.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues()||{}); 
-
-     
-    Ext.applyIf(config, {
-         url: MODx.config.assets_url+'components/mixedimage/connector.php'  
-        ,fields: this.getFields(config)
-        ,keys: this.getKeys(config)
-        ,width: 400
-        ,layout: 'anchor'
-        ,autoHeight: false 
-        ,baseParams:this.getBaseParams(config) 
-    });
-    mixedimage.window.superclass.constructor.call(this, config);
-};
-
-Ext.extend(mixedimage.window, MODx.Window, {
-
-    getKeys: function (config) {
-        return [{
-            key: Ext.EventObject.ENTER,
-            shift: true,
-            fn: this.submit,
-            scope: this
-        }];
-    },
-
-    getFields: function (config) {
-        return [{
-            xtype: 'textfield',
-            fieldLabel: _('mixedimage.link'),
-            name: 'url',
-            anchor: '99% -210'
-        }];
-    },
-
-    getBaseParams:function(config){  
-
-
-    	/// сделать чтобы передавался p_alias
-    	var fields = window['mixedimage'+config.params.tvId];   
-
-        return {
-            action: 'browser/file/url'
-            ,tv_id: fields.tvId
-            ,prefixFilename: fields.prefixFilename
-            ,res_id: fields.res_id
-            ,res_alias: fields.res_alias
-            ,p_id: fields.p_id
-            ,p_alias: fields.p_alias 
-            ,ms_id: fields.ms_id
-            ,acceptedMIMEtypes: fields.acceptedMIMEtypes
-            ,lex: fields.jsonlex
-            ,ctx_path: fields.ctx_path 
-            ,formdata: config.formdata
-        };
-    }
-
-});
-Ext.reg('mixedimage-window-getfromurl', mixedimage.window);
