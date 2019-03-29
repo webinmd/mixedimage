@@ -321,7 +321,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
             var style = 'right: '+triggerConfig.rightOffset+'px !important;';
             style += 'width:'+width+'px;';
             triggerConfig.cn[i].style=style;
-            triggerConfig.rightOffset += width+1;
+            triggerConfig.rightOffset += width + 2;
         }
 
         return triggerConfig;

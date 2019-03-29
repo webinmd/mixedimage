@@ -19,6 +19,10 @@
     box-sizing: border-box;
 }
 
+.mixedimage .x-form-field-wrap{
+	overflow: hidden;
+}
+
 .mixedimage label{
 	padding: 0 !important;
 	display: none !important;
