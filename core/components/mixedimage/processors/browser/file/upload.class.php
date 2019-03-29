@@ -43,10 +43,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         // Ensure we have been passed the TV's id
         if (!$this->getProperty('tv_id')) {
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_ns'));
-        }
-
-
-        $this->modx->log(1,'Line  --- '.print_r($this->getProperty('tv_id'), 1));
+        } 
 
         // Grab the TV object
         $TV = $this->modx->getObject('modTemplateVar',$this->getProperty('tv_id'));
@@ -154,6 +151,13 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             }
 
         }
+ 
+        // check if is external source 
+        if($source_url = $this->source->getBaseUrl()){
+            if (!filter_var($source_url, FILTER_VALIDATE_URL) === false) {
+                $url = $source_url.$url; 
+            } 
+        }
 
         return $this->success(stripslashes($url));
     }
@@ -228,6 +232,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             '{pid}'     => $this->getProperty('p_id'),      // Resource Parent ID
             '{alias}'   => $this->modx->sanitizeString($this->getProperty('res_alias')), // Resource Alias
             '{palias}'  => $this->modx->sanitizeString($this->getProperty('p_alias')),   // Resource Parent Alias
+            '{context}'	=> $this->formdata['context_key'], // context_key
             '{tid}'     => $this->getProperty('tv_id'),     // TV ID
             '{uid}'     => $this->modx->user->get('id'),    // User ID
             '{rand}'    => substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyz', ceil($random_lenght/strlen($x)) )),1,$random_lenght), // Random string

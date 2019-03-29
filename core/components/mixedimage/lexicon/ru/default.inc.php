@@ -30,7 +30,7 @@ $_lang['mixedimage.clear_file'] = 'Удалить';
 // Errors
 $_lang['mixedimage.error_tvid_ns'] = 'mixedImage: modTemplateVar ID не найден';
 $_lang['mixedimage.error_tvid_invalid'] = 'mixedImage: TV id не верный';
-$_lang['mixedimage.err_file_mime'] = 'mixedImage: неверный тип файла';
+$_lang['mixedimage.err_file_mime'] = 'mixedImage: неверный MIME тип файла';
 
 $_lang['mixedimage.error_remove'] = 'Ошибка при удалении (смотрите console)';
 

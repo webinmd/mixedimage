@@ -7,6 +7,7 @@
         <li><span>{pid}</span>    - ID ресурса родителя</li>
         <li><span>{alias}</span>  - Алиас ресурса</li>
         <li><span>{palias}</span> - Алиас ресурса родителя</li>
+        <li><span>{context}</span>- Ключ контекста (context_key)</li>
         <li><span>{tid}</span>    - ID доп. поля (tv)</li>
         <li><span>{uid}</span>    - ID юзера</li>
         <li><span>{rand}</span>   - Случайная строка (количество символов указывается в системынх настройках)</li>

@@ -192,8 +192,8 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
                 this.TV.setValue(value);
                 this.fireEvent('onFileUploadSuccess',o.result);
             }
-            ,failure: function(fp, o) { 
-                Ext.Msg.alert('Error', _('mixedimage.err_save_resource'));
+            ,failure: function(fp, o) {  
+                MODx.msg.alert('Error', o.result.message);
             }
             ,scope:this
         });
@@ -298,7 +298,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
         };
  
         var triggers = config.triggerlist.split(",");   
-        var trList = [];
+        var trList = []; 
 
         for (var i = 0; i < triggers.length; i++) { 
            trList.push({
@@ -321,7 +321,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
             var style = 'right: '+triggerConfig.rightOffset+'px !important;';
             style += 'width:'+width+'px;';
             triggerConfig.cn[i].style=style;
-            triggerConfig.rightOffset += width+2;
+            triggerConfig.rightOffset += width+1;
         }
 
         return triggerConfig;
@@ -359,10 +359,10 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                     ,source: this.source
                 }
                 ,success: function(data){                                
-                    Ext.Msg.alert('Remove', _('mixedimage.success_removed'));
+                    MODx.msg.alert('Remove', _('mixedimage.success_removed'));
                 }
                 ,failure: function(data) {
-                    Ext.Msg.alert('Error', _('mixedimage.error_remove'));                                
+                    MODx.msg.alert('Error', _('mixedimage.error_remove'));                                
                     console.log(data);
                 }
             });

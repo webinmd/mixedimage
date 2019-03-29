@@ -7,6 +7,7 @@
         <li><span>{pid}</span>    - Resource Parent ID</li>
         <li><span>{alias}</span>  - Resource Alias</li>
         <li><span>{palias}</span> - Resource Parent Alias</li>
+        <li><span>{context}</span>- Context_key</li>
         <li><span>{tid}</span>    - TV ID</li>
         <li><span>{uid}</span>    - User ID</li>
         <li><span>{rand}</span>   - Random string</li>

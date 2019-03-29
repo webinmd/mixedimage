@@ -33,7 +33,7 @@ $_lang['mixedimage.error_tvid_invalid'] = 'mixedImage: invalid TV id ';
 
 $_lang['mixedimage.err_file_ns'] = 'mixedImage: No File was uploaded';
 $_lang['mixedimage.err_save_resource'] = 'Before adding new items, you need to save this resource!';
-$_lang['mixedimage.err_file_mime'] = 'mixedImage:  wrong file type';
+$_lang['mixedimage.err_file_mime'] = 'mixedImage:  wrong file MIME type';
 $_lang['mixedimage.error_remove'] = 'mixedImage removing (view console)';
 
 // Settings

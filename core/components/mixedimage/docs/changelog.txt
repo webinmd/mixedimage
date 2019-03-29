@@ -3,6 +3,10 @@
 Extra: mixedImage -  Custom TV
 
 --------------------
+# Version 2.0.5-beta  
+:: Bugfix  
+
+--------------------
 # Version 2.0.4-beta  
 :: Fix url upload on migx  
 
