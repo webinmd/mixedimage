@@ -80,3 +80,7 @@
 .mixedimage.x-form-focus{
 	border: none !important;
 }
+
+.mixedimage .x-form-field-trigger-dd {
+	background: #E4E9EE;
+}
