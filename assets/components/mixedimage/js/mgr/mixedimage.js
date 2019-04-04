@@ -118,6 +118,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
         }
     }
     ,loadFileForm:function(){
+        this.uploadFormInputId = 'mixedimage_fileform'+this.tvId;
         this.fileform=new mixedimage.fileform({
             id: this.uploadFormInputId
             ,renderTo: 'modx-content'
@@ -196,6 +197,43 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
                 MODx.msg.alert('Error', o.result.message);
             }
             ,scope:this
+        });
+    }
+    ,ajaxUpload: function(file) {
+        var fp = this;
+        var params = {};
+        Ext.apply(params,this.baseParams);
+        params.custompath = this.TV.getCustomPath()||'';
+        params.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues()||{});
+        params.HTTP_MODAUTH = MODx.siteId;
+
+        FileAPI.upload({
+            url: this.url
+            ,data: params
+            ,files: { file: file }
+            ,beforeupload: function () {
+                Ext.MessageBox.wait('Uploading...')
+            }
+            ,complete: function(err, xhr){
+                Ext.MessageBox.updateProgress(1);
+                Ext.MessageBox.hide();
+                if( !err ){
+                    var response = Ext.util.JSON.decode(xhr.response);
+                    if(response.success){
+                        var value = response.message;
+                        fp.TV.setValue(value);
+                        fp.fireEvent('onFileUploadSuccess',response);
+                        fp.form.reset();
+                    }
+                    else{
+                        MODx.msg.alert('Error', response.message);
+                    }
+                }
+                else if(xhr.status !== 401){
+                    MODx.msg.alert('Error', err);
+                }
+
+            }
         });
     }
 });
@@ -285,6 +323,10 @@ mixedimage.trigger = function(config){
         
     });
     mixedimage.trigger.superclass.constructor.call(this,config);
+
+    this.on('afterrender',function(){
+        this.initDD();
+    },this);
 };
 
 Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
@@ -418,6 +460,40 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
         this.window.reset();
         this.window.setValues({active: true});
         this.window.show(e.target);
+    }
+    ,initDD: function () {
+        if(!this._initializedDD) {
+            this.el.on('drag', this.onDDrag, this);
+            this.el.on('dragstart', this.onDDrag, this);
+            this.el.on('dragend', this.onDDrag, this);
+            this.el.on('dragover', this.onDDrag, this);
+            this.el.on('dragenter', this.onDDrag, this);
+            this.el.on('dragleave', this.onDDrag, this);
+            this.el.on('drop', this.onDDrop, this);
+            this._initializedDD = true;
+        }
+
+    }
+    ,onDDrag: function (event) {
+        event && event.preventDefault();
+        if(event.type == "dragover") {
+            if(!this.el.hasClass('x-form-field-trigger-dd')) this.addClass('x-form-field-trigger-dd');
+        } else {
+            if(this.el.hasClass('x-form-field-trigger-dd')) this.removeClass('x-form-field-trigger-dd');
+        }
+
+    }
+    ,onDDrop: function (event) {
+        event && event.preventDefault();
+        if(this.el.hasClass('x-form-field-trigger-dd')) this.removeClass('x-form-field-trigger-dd');
+        var dt = event.browserEvent.dataTransfer;
+        var files = dt.files;
+        if(files.length) {
+            var form = Ext.getCmp('mixedimage_fileform'+this.tvId);
+            if(form) {
+                form.ajaxUpload(files[0]);
+            }
+        }
     }
 });
 Ext.reg('mixedimage-trigger',mixedimage.trigger);
