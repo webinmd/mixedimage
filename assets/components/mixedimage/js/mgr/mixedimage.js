@@ -324,7 +324,7 @@ mixedimage.trigger = function(config){
     });
     mixedimage.trigger.superclass.constructor.call(this,config);
 
-    Ext.onReady(function(){
+    this.on('afterrender',function(){
         this.initDD();
     },this);
 };
