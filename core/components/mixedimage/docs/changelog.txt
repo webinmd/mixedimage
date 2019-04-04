@@ -3,6 +3,11 @@
 Extra: mixedImage -  Custom TV
 
 --------------------
+# Version 2.0.6-beta  
+-- By DeNomad
+:: Added drag&drop   
+
+--------------------
 # Version 2.0.5-beta  
 :: Bugfix  
 
