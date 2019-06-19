@@ -3,9 +3,18 @@
 
 {if $showPreview === "true"}
 	<div id="tv-image-preview-{$tv->id}" class="modx-tv-image-preview">
-		{if $tv->value}
-			<img src="{$_config.connectors_url}system/phpthumb.php?w=300&h=300&aoe=0&far=0&src={$tv->value}&source={$tv->source}" alt="" />
-		{/if}
+		{if $isVideo} 
+		    {if $tv->value}
+			    <video controls>
+				  <source src="../{$source_path}{$tv->value}" type="{$current_mime}"> 
+					Your browser does not support the video tag.
+				</video> 
+			{/if}
+		{else}
+		    {if $tv->value}
+				<img src="{$_config.connectors_url}system/phpthumb.php?w=300&h=300&aoe=0&far=0&src={$tv->value}&source={$tv->source}" alt="" />
+			{/if}
+		{/if} 
 	</div>
 {/if}
 

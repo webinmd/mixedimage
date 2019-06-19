@@ -5,6 +5,12 @@ mixedImage - modx custom TV
 
 ## version 2.-.-
 
+
+### 2.0.7
+ 
+* Добавлена поддержка Видео предпросмотра 
+
+
 ### 2.0.6
 
 By [DeNomad](https://github.com/DeNomad)

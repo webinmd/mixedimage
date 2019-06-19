@@ -63,7 +63,22 @@ if(!class_exists('MixedImageInputRender')) {
 			}
 			$this->setPlaceholder('source_path', $source_path );
 
+			// get base path from source		
+			$this->source->initialize();
+			$basePath = $this->source->getBasePath();
 
+			$video_mime_array = array('video/mp4','video/ogg', 'video/mpeg');
+			$current_mime = mime_content_type ($basePath.$value);
+
+			$this->setPlaceholder('current_mime', $current_mime); 
+
+			if (in_array($current_mime, $video_mime_array)) {
+			    $this->setPlaceholder('isVideo', true);
+			} else {
+				$this->setPlaceholder('isVideo', false);
+			}
+
+			// set MIME params
 			if(isset($params['MIME'])){
 				$MIME = $params['MIME'];
 			} else {

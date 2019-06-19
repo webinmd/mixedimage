@@ -77,6 +77,11 @@
 	margin-bottom: 20px;
 }
 
+.modx-tv-image-preview video{
+	width: 100%;
+	max-width: 500px;
+}
+
 .mixedimage.x-form-focus{
 	border: none !important;
 }
