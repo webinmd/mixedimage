@@ -16,7 +16,7 @@ $_lang['mixedimage.remove_file'] = 'Удалять файл';
 $_lang['mixedimage.remove_file_desc'] = 'ВНИМАНИЕ! При нажатии на кнопку Удалить - полностью удаляет файл с сервера';
 
 
-$_lang['mixedimage.show_preview'] = 'Показать изображение';
+$_lang['mixedimage.show_preview'] = 'Показать превью';
 $_lang['mixedimage.show_preview_desc'] = 'Отображать миниатюру изображений';
 $_lang['mixedimage.prefix_filename'] = 'Использовать префикс как имя файла';
 $_lang['mixedimage.resize'] = 'Параметры для ресайза изображений';

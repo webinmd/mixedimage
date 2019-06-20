@@ -22,66 +22,6 @@ mixedimage.panel = function(config) {
 
     mixedimage.panel.superclass.constructor.call(this,config);
 
-    /*
-    if(this.isVideo){
-
-        if(this.$ctx_path){
-            var path = this.$ctx_path;
-        }else{
-            var path = '';
-        }
-
-        this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                +'<video controls>'
-                +'<source src="../'+path+this.source+'" type="'+this.current_mime+'">'
-                + '</video>'
-            +'</tpl>', {
-            compiled: true
-        });
-
-    }else{
-        this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                +'<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source='+this.source+'" alt="" />'
-            +'</tpl>', {
-            compiled: true
-        });
-    } 
-    */
-/*
-    if(value && !mime_type){
-                     
-        var ext = value.split('.').pop(); 
-        if(ext == 'mp4'){
-            var mime_type = 'video/mp4'
-        }
-        if(ext == 'ogg'){
-            var mime_type = 'video/ogg'
-        }
-        
-    }
-
-
-    if(isVideo || ext == 'mp4' || ext = 'ogg'){
-
-        if(this.$ctx_path){
-            var path = this.$ctx_path;
-        }else{
-            var path = '';
-        }
-
-        this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                +'<video controls>'
-                +'<source src="../'+path+'{value}" type="'+mime_type+'">'
-                + '</video>'
-            +'</tpl>', {
-            compiled: true
-        });
-
-
-    }else{    */
-        
-    /*}*/
-
     
     Ext.onReady(function(){this.loadFileForm();},this);
     
