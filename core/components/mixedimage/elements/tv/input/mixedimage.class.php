@@ -67,6 +67,7 @@ if(!class_exists('MixedImageInputRender')) {
 			$this->source->initialize();
 			$basePath = $this->source->getBasePath();
 
+			// get mime types
 			$video_mime_array = array('video/mp4','video/ogg', 'video/mpeg');
 			$current_mime = mime_content_type ($basePath.$value);
 

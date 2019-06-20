@@ -21,7 +21,6 @@ mixedimage.panel = function(config) {
     });
 
     mixedimage.panel.superclass.constructor.call(this,config);
-
     
     Ext.onReady(function(){this.loadFileForm();},this);
     
@@ -156,9 +155,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
                     });
                 } 
 
-
                 content = this.previewTpl.apply({width:200,height:100,value:value});  
-
 
             }     
             d.update(content);
@@ -177,7 +174,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
 Ext.reg('mixedimage-panel',mixedimage.panel); 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 mixedimage.fileform = function(config){
     config = config||{};
@@ -287,7 +284,7 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
 Ext.reg('mixedimage-fileform',mixedimage.fileform);
 
 
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 
 mixedimage.window = function (config) {
@@ -354,7 +351,7 @@ Ext.extend(mixedimage.window, MODx.Window, {
 Ext.reg('mixedimage-window-getfromurl', mixedimage.window);
 
 
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 mixedimage.trigger = function(config){
     config = config||{};
@@ -586,4 +583,4 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
 Ext.reg('mixedimage-trigger',mixedimage.trigger);
 
 
-//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////

@@ -17,7 +17,7 @@ $_lang['mixedimage.remove_file_desc'] = 'ВНИМАНИЕ! При нажатии
 
 
 $_lang['mixedimage.show_preview'] = 'Показать превью';
-$_lang['mixedimage.show_preview_desc'] = 'Отображать миниатюру изображений';
+$_lang['mixedimage.show_preview_desc'] = 'Отображать миниатюру изображений или видео';
 $_lang['mixedimage.prefix_filename'] = 'Использовать префикс как имя файла';
 $_lang['mixedimage.resize'] = 'Параметры для ресайза изображений';
 $_lang['mixedimage.resize_desc'] = 'Можно использовать параметры для phpthumb, например w=200&h=200&zc=1 <br> для наложения ватермарка: <br> <strong>fltr=wmt|Hello|60|C|ff0000| <br>fltr=wmi|/assets/wt.png|C|</strong>';

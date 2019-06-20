@@ -12,7 +12,7 @@ $_lang['mixedimage.mime_types_desc'] = 'Optional comma-separated list of accepte
 $_lang['mixedimage.show_value'] = 'Show TV Value';
 $_lang['mixedimage.show_value_desc'] = 'Display the URL to the file on TV';
 $_lang['mixedimage.show_preview'] = 'Show preview';
-$_lang['mixedimage.show_preview_desc'] = 'Display an thumbnail preview of image files';
+$_lang['mixedimage.show_preview_desc'] = 'Display an thumbnail preview of image files or video player';
 
 
 $_lang['mixedimage.remove_file'] = 'Remove file';
