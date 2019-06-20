@@ -19,7 +19,7 @@
 {/if}
 
 <script type="text/javascript">
-
+ 
 	mixedimage{$tv->id} = MODx.load{literal}({
 		{/literal}
 		xtype: 'mixedimage-panel'
@@ -43,6 +43,8 @@
 		,ctx_path: '{$source_path}'
 		,onlyEdit: {$onlyEdit}
 		,openPath: '{$openPath}'
+		,isVideo: '{$isVideo}'
+		,current_mime: '{$current_mime}'
 		{literal}
 	});
 	{/literal}
