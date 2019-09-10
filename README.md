@@ -5,6 +5,10 @@ mixedImage - modx custom TV
 
 ## version 2.-.-
 
+### 2.0.8
+ 
+* Исправлено отображение в MIGX CMP
+
 
 ### 2.0.7
  

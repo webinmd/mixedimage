@@ -18,6 +18,7 @@ switch ($modx->event->name) {
         $modx->event->output($corePath.'elements/tv/properties/');
         break;
     case 'OnDocFormPrerender':
+    case 'OnManagerPageBeforeRender':
         $modx->regClientStartupScript($assetsUrl.'js/mgr/mixedimage.js');
         $modx->regClientCSS($assetsUrl.'css/mgr/mixedimage.css');
         $modx->controller->addLexiconTopic('mixedimage:default');
