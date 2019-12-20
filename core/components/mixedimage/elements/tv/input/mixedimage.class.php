@@ -1,4 +1,5 @@
 <?php
+use MODX\Revolution\modTemplateVarInputRender;
 if(!class_exists('MixedImageInputRender')) {
 	class MixedImageInputRender extends modTemplateVarInputRender {
 

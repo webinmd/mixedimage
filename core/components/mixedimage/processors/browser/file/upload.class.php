@@ -8,7 +8,9 @@
  * @subpackage processors.browser.file
  */
 
-class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor 
+use \MODX\Revolution\Processors\Browser\File\Upload;
+
+class mixedimageBrowserFileUploadProcessor extends Upload
 {
 
     public function initialize() 

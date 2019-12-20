@@ -7,7 +7,11 @@
  * @package mixedimage
  * @subpackage processors.browser.file
  */
-class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor 
+
+use MODX\Revolution\Processors\Browser\File\Upload;
+
+
+class mixedimageBrowserFileUrlProcessor extends Upload
 {
 
      
