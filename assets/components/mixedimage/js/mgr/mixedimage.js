@@ -206,6 +206,7 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
             ,lex: config.TV.jsonlex
             ,ctx_path: config.TV.ctx_path 
             //,resize: config.resize
+            ,source: config.TV.ms_id
         };
     }
     ,getItems:function(config){
