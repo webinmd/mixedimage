@@ -4,6 +4,10 @@ Extra: mixedImage -  Custom TV
 
   
 --------------------
+# Version 2.0.9-beta  
+:: Fix Access Denied in MODx 2.8.0
+  
+--------------------
 # Version 2.0.8-beta  
 :: Fix MIGX CMP  
 
