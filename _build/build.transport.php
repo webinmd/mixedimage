@@ -1,4 +1,6 @@
 <?php
+    header('Content-Type: text/html; charset=utf-8');
+    
     require_once 'tools/build.tools.php';
     require_once 'build.config.php';
 
