@@ -18,7 +18,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             'path' => false,
         ));
         $this->properties = $this->getProperties();
-        if(isset($this->properties['formdata']))$this->formdata=$this->modx->fromJSON($this->properties['formdata']);
+        if(isset($this->properties['formdata'])) $this->formdata = $this->modx->fromJSON($this->properties['formdata']);
         return true;
     }
 

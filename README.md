@@ -5,6 +5,12 @@ mixedImage - modx custom TV
 
 ## version 2.-.-
 
+### 2.1.0
+* Удалено дублирование кода
+* Поддержма MODx 3.0
+* Косметические правки
+
+
 ### 2.0.9
 By [shatov](https://github.com/shatov)
 * Исправлен баг с Доступ запрещен в MODx 2.8.0

@@ -176,6 +176,7 @@ Ext.reg('mixedimage-panel',mixedimage.panel);
 
 //////////////////////////////////////////////////////////
 
+
 mixedimage.fileform = function(config){
     config = config||{};
     Ext.applyIf(config,{
@@ -323,6 +324,7 @@ Ext.extend(mixedimage.window, MODx.Window, {
             xtype: 'textfield',
             fieldLabel: _('mixedimage.link'),
             name: 'url',
+            allowBlank: false,
             anchor: '99% -210'
         }];
     },
@@ -332,7 +334,7 @@ Ext.extend(mixedimage.window, MODx.Window, {
         var fields = window['mixedimage'+config.params.tvId];  
 
         return {
-            action: 'browser/file/url'
+            action: 'browser/file/upload'
             ,tv_id: fields.tvId  
             ,tvId: fields.tv_id  
             ,prefixFilename: fields.prefixFilename
@@ -353,6 +355,7 @@ Ext.reg('mixedimage-window-getfromurl', mixedimage.window);
 
 
 //////////////////////////////////////////////////////////
+
 
 mixedimage.trigger = function(config){
     config = config||{};
