@@ -66,51 +66,62 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         $opts = unserialize($TV->input_properties);
         $path = $this->preparePath($opts['path']);
 
-        // Check the mine types
-        if(!empty($opts['MIME'])){
+        $checkedExt = false;
 
-            $checkmime_files = $_FILES;
-            foreach ($checkmime_files as &$file) {
-
-                $mime_arr = array();
-                $mime_arr = explode(",",$opts['MIME']);
-
-                $file_mime = $file['type'];
-
-                if (!in_array($file_mime, $mime_arr)) {
-                    return $this->failure($this->modx->lexicon('mixedimage.err_file_mime'));
-                }
-
-            }
+        // check extension for url file
+        if ($file_url = $properties['url']) { 
+            $checkedExt = $this->checkFileUrlExtension($file_url, $opts)); 
+        } else {
+            $checkedExt = $this->checkFilesExtension($opts);             
+        } 
+ 
+        if(!$checkedExt) {
+            return $this->failure($this->modx->lexicon('mixedimage.err_file_mime'));
         }
+
 
         // Ensure save path exists (and create it if not)
         $this->source->createContainer($path,'');
 
         // Prepare file names (prevent duplicate overwrites)
         $prefix = (empty($opts['prefix'])) ? '' : $opts['prefix'];
-        $files = $this->prepareFiles($prefix);
 
-        // Do the upload
-        $success = $this->source->uploadObjectsToContainer($path, $files);
 
-        // Check for upload errors
-        if (empty($success)) {
-            $msg = '';
-            $errors = $this->source->getErrors();
+        if ($file_url) {
 
-            // Remove 'directory already exists' error
-            if (isset($errors['name'])) {
-                unset($errors['name']);
-            }
+            if(!$file = $this->prepareFile($prefix, $file_url)){
+                return $this->failure($this->modx->lexicon('mixedimage.err_file_url_download'));
+            } 
+            $url = $this->downloadFromUrl($file, $path);
 
-            if (count($errors) > 0) {
-                foreach ($errors as $k => $msg) {
-                    $this->modx->error->addField($k,$msg);
+        } else {
+            $files = $this->prepareFiles($prefix);
+            // Do the upload to container
+            $success = $this->source->uploadObjectsToContainer($path, $files); 
+
+            // Check for upload errors
+            if (empty($success)) {
+                $msg = '';
+                $errors = $this->source->getErrors();
+
+                // Remove 'directory already exists' error
+                if (isset($errors['name'])) {
+                    unset($errors['name']);
                 }
-                return $this->failure($msg);
+
+                if (count($errors) > 0) {
+                    foreach ($errors as $k => $msg) {
+                        $this->modx->error->addField($k,$msg);
+                    }
+                    return $this->failure($msg);
+                }
             }
         }
+
+
+
+
+
 
         $source_path = ($this->getProperty('ctx_path')) ? $this->getProperty('ctx_path') : '';
 
@@ -162,6 +173,81 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         return $this->success(stripslashes($url));
     }
 
+
+
+    /**
+     * Check mime type for uploading from url
+     */
+    private checkFileUrlExtension($file_url, $opts){
+        $file_ext = pathinfo($file_url, PATHINFO_EXTENSION);
+        $file_name = pathinfo($file_url, PATHINFO_FILENAME); 
+        $mime_arr = [];
+
+        // Check the mine types
+        if(!empty($opts['MIME'])) {            
+            $mime_arr = explode(",",$opts['MIME']);            
+        } else {
+            $option_upload_files = $this->modx->getOption('upload_files');
+            $mime_arr = explode(",",$option_upload_files);            
+        }
+
+        if (!in_array($file_ext, $mime_arr)) {
+            return false;
+        } 
+
+        return true;
+    }
+
+
+    /**
+     * Check mime type for uploading from form
+     * array S_FILES
+     */
+    private checkFilesExtension($opts){ 
+        $mime_arr = [];
+
+        if(!empty($opts['MIME'])){
+ 
+            $mime_arr = explode(",",$opts['MIME']); 
+            $checkmime_files = $_FILES;
+
+            foreach ($checkmime_files as &$file) {
+                $file_mime = $file['type'];
+                if (!in_array($file_mime, $mime_arr)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    private downloadFromUrl($file, $path) {
+
+        $bases = $this->source->getBases($path); 
+
+        //Local path of image - where will we save the image
+        $file_output = fopen($bases['pathAbsoluteWithPath'].$file, 'wb');
+
+        //\\ Download and save image
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $properties['url']);
+        curl_setopt($ch, CURLOPT_FILE, $file_output);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        $resultStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if($resultStatus != 200){
+            return false;
+        }
+        //\\ end download file 
+
+        return $file;
+    }
+
+
     /**
      * Prepare the save path using the TV's defined pathing string
      */
@@ -186,10 +272,9 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     /**
      * Prepare file name (prevent accidental overwrites)
      */
-    private function prepareFiles($prefix) 
+    private function prepareFiles($prefix, $file_url = false) 
     {
         $files = $_FILES;
-
         $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false);
 
         $fat = $this->modx->getOption('friendly_alias_translit');
@@ -220,6 +305,8 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         }
         return $files;
     }
+
+
 
     /**
      * Parse placeholders in input fields

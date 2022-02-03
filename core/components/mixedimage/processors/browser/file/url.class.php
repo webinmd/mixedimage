@@ -117,6 +117,9 @@ class mixedimageBrowserFileUrlProcessor extends modBrowserFileUploadProcessor
         //\\ end download file 
 
 
+
+        
+
         $url = (empty($path)) ? $file : $path.'/'.$file;
         $url = preg_replace('/\/{2,}/','/',$url);
 

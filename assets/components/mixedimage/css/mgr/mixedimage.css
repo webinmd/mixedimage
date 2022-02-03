@@ -89,3 +89,7 @@
 .mixedimage .x-form-field-trigger-dd {
 	background: #E4E9EE;
 }
+
+input[name="inopt_resize"]{
+	width: 300px;
+}
