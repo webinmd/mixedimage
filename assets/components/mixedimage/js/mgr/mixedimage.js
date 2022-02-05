@@ -451,8 +451,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                     MODx.msg.alert('Remove', _('mixedimage.success_removed'));
                 }
                 ,failure: function(data) {
-                    MODx.msg.alert('Error', _('mixedimage.error_remove'));                                
-                    console.log(data);
+                    MODx.msg.alert('Error', _('mixedimage.error_remove'));              
                 }
             });
         } 
@@ -540,6 +539,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                             MODx.fireResourceFormChange();  
                             this.window.hide();
                         }, scope: this
+                    }
+                    ,failure: function(fp, o) {  
+                        MODx.msg.alert('Error', o.result.message);
                     }
                 }
             });

@@ -1,4 +1,13 @@
 {literal}
+<ul style="margin-top: -15px">
+    <li><span>clear</span>    - field cleaning. If the "Delete file" parameter is specified, then in addition to clearing the field, the file is deleted from the server</li>
+    <li><span>manager</span>  - allows you to select a file from the MODx file managerx</li>
+    <li><span>pc</span>  - allows you to upload a file immediately from the user's computer, bypassing the MODx file manager</li>
+    <li><span>url</span> - allows you to download a file from a link</li>
+</ul>
+
+<br><br>
+
 <h3>Dynamic routing options</h3>
 <h4>Using Placeholders</h4>
 <p>Both the file save path and the optional filename prefix can be customized dynamically with several placeholders:
