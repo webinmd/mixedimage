@@ -65,4 +65,4 @@ $_lang['mixedimage.url_empty'] = 'Укажите url';
 $_lang['mixedimage.err_file_url_download'] = 'Ошибка при загрузке файла из url';  
 
 // success
-$_lang['mixedimage.success_removed'] = 'Файл успешно удален';
+$_lang['mixedimage.success_removed'] = 'Файл безвозвратно удален';

@@ -9,12 +9,18 @@
  * @subpackage processors.browser.file
  */
 
+if (!class_exists('\MODX\Revolution\modX')) {
+    require_once MODX_CORE_PATH.'model/modx/modprocessor.class.php';
+    require_once MODX_CORE_PATH.'model/modx/processors/browser/file/upload.class.php';
+} else {
+    class_alias(\MODX\Revolution\Processors\Browser\File\Upload::class, \modBrowserFileUploadProcessor::class);
+} 
+
 class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 {
 
     public function initialize()
     {
-
         $this->setDefaultProperties(array(
             'source' => 1,
             'path' => false
@@ -27,6 +33,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         return true;
     }
 
+
     public function getLanguageTopics()
     {
         $langs = parent::getLanguageTopics();
@@ -34,24 +41,18 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         return $langs;
     }
 
+
     public function process()
     {
-        if (!$this->getSource()) {
-            return $this->failure($this->modx->lexicon('permission_denied'));
-        }
 
-        // Check a file has been uploaded
         if (count($_FILES) < 1 && !$this->getProperty('url')) {
             return $this->failure($this->modx->lexicon('mixedimage.err_file_ns'));
         }
 
-
-        // Ensure we have been passed the TV's id
         if (!$this->getProperty('tv_id')) {
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_ns'));
         }
 
-        // Grab the TV object
         $TV = $this->modx->getObject('modTemplateVar', $this->getProperty('tv_id'));
 
         if (!$TV instanceof modTemplateVar) {
@@ -59,7 +60,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         }
 
         $context_key = $this->formdata['context_key'];
-        $RES = $this->modx->getObject('modResource', $this->getProperty('res_id'));
 
         // Initialize and check perms for this mediasource
         $this->source = $TV->getSource($context_key); //
@@ -68,7 +68,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('permission_denied'));
         }
 
-        // Grab the path option & prepare path
         $opts = unserialize($TV->input_properties);
         $path = $this->preparePath($opts['path']);
 
@@ -87,8 +86,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
         // Ensure save path exists (and create it if not)
         $this->source->createContainer($path, '');
-
-        // Prepare file names (prevent duplicate overwrites)
         $prefix = (empty($opts['prefix'])) ? '' : $opts['prefix'];
 
 
@@ -271,6 +268,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
         // Parse path string and return it
         $path = $this->parsePlaceholders($pathStr);
+
         return $path;
     }
 
@@ -280,10 +278,8 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     private function prepareFiles($prefix, $file_url = false)
     {
 
-        $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false);
-
-        $fat = $this->modx->getOption('friendly_alias_translit');
-        $friendly_alias_translit = (empty($fat) || $fat == 'none') ? false : true;
+        $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false); // modx 2
+        $system_translit = (bool)$this->modx->getOption('upload_translit', null, false); // modx 3
 
         // add fix for russian filename
         setlocale(LC_ALL, 'ru_RU.utf8');
@@ -296,28 +292,21 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             $files = $_FILES;
         }
 
-
         foreach ($files as &$file) {
             $pathInfo = pathinfo($file['name']);
             $ext = $pathInfo['extension'];
 
-
             $filename = ($this->getProperty('prefixFilename') == 'true') ? $prefix : $prefix . $pathInfo['filename'];
             $filename = $this->parsePlaceholders($filename);
 
-            if ($mixedimage_translit) {
-                $filename = modResource::filterPathSegment($this->modx, $filename); // cleanAlias (translate)
-                if ($friendly_alias_translit) {
-                    $filename = preg_replace('/[^A-Za-z0-9_-]/', '', $filename); // restrict segment to alphanumeric characters only
-                }
-                $filename = preg_replace('/-{2,}/', '-', $filename); // remove double symbol "-"
-                $filename = trim($filename, '-'); // remove first symbol "-"
-
+            if ($mixedimage_translit || $system_translit) {
+                $filename = modResource::filterPathSegment($this->modx, $filename);
                 $ext = strtolower($ext);
             }
 
             $file['name'] = $filename . '.' . $ext;
         }
+
         return $files;
     }
 

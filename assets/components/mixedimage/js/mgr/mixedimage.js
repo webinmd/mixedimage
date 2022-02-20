@@ -194,7 +194,7 @@ Ext.extend(mixedimage.fileform,Ext.FormPanel,{
 
     getBaseParams:function(config){  
         return {
-            action: 'browser/file/upload'
+            action: 'file/upload'
             ,tvId: config.TV.tvId
             ,prefixFilename: config.TV.prefixFilename
             ,res_id: config.TV.res_id
@@ -334,7 +334,7 @@ Ext.extend(mixedimage.window, MODx.Window, {
         var fields = window['mixedimage'+config.params.tvId];  
 
         return {
-            action: 'browser/file/upload'
+            action: 'file/upload'
             ,tv_id: fields.tvId  
             ,tvId: fields.tv_id  
             ,prefixFilename: fields.prefixFilename
@@ -441,10 +441,10 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
 
         if(this.removeFile){
             Ext.Ajax.request({ 
-                url: MODx.config.connector_url
+                url: MODx.config.assets_url+'components/mixedimage/connector.php'
                 ,params: { 
                      file: this.value 
-                    ,action: 'browser/file/remove' 
+                    ,action: 'file/remove' 
                     ,source: this.source
                 }
                 ,success: function(data){                                
