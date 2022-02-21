@@ -4,9 +4,9 @@ Extra: mixedImage -  Custom TV
 
 --------------------
 ### 2.1.0
-* Удалено дублирование кода
-* Поддержка MODx 3.0
-* Косметические правки
+* Refactoring
+* Support MODx 3.0
+* CSS Fix
   
 --------------------
 # Version 2.0.9-beta  
