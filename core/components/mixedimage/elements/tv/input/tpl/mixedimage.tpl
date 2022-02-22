@@ -36,7 +36,6 @@
 		,acceptedMIMEtypes: {$MIME_TYPES}
 		,prefixFilename: {$prefixFilename}
 		,triggerlist: '{$triggerlist}'
-		,lex: {$jsonlex}
 		,source: '{$tv->source}'
 		,showPreview: {$showPreview}
 		,removeFile: {$removeFile}

@@ -17,7 +17,6 @@ if(!class_exists('MixedImageInputRender')) {
 			$this->setPlaceholder('res_id',$this->modx->resource->get('id'));
 			$this->setPlaceholder('ms_id',$this->tv->source);
 			$this->setPlaceholder('jsonlex',json_encode($this->modx->lexicon->fetch('mixedimage.',true)));
-			$this->setPlaceholder('lex',(object)$this->modx->lexicon->fetch('mixedimage.',true));
 
 			// Resource Alias
 			$resource_alias = ($this->modx->resource->get('alias')) ? $this->modx->resource->get('alias') : '';
