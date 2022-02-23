@@ -9,6 +9,7 @@ mixedImage - modx custom TV
 * Refactoring
 * Support MODx 3.0
 * CSS Fix
+* Drag from tree
 
 
 ### 2.0.9

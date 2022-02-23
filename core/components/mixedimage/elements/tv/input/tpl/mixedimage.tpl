@@ -47,5 +47,11 @@
 		{literal}
 	});
 	{/literal}
+	var field = mixedimage{$tv->id}
+	MODx.makeDroppable(field, function(v){  
+		var newValue = v.replace('{$source_path}', '');
+		field.setValue(newValue);
+		field.fireEvent('select',{ relativeUrl:newValue });
+	});
 
 </script>
