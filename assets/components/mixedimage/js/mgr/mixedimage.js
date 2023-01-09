@@ -63,6 +63,9 @@ Ext.extend(mixedimage.panel,Ext.Container,{
             ,ctx_path: config.ctx_path
             ,removeFile: config.removeFile
             ,triggerlist: config.triggerlist
+            ,crop_width: config.crop_width
+            ,crop_height: config.crop_height
+            ,crop_ratio: config.crop_ratio
             ,listeners:{
                 change:{fn:function(data){
                     this.setValue(data.el.getValue());
@@ -80,7 +83,6 @@ Ext.extend(mixedimage.panel,Ext.Container,{
         
     }
     ,onBrowserSelect:function(data,field){ 
-        //var value = field.getValue();
         var value = data.url;
         this.setValue(value);
     }
@@ -356,6 +358,53 @@ Ext.reg('mixedimage-window-getfromurl', mixedimage.window);
 
 //////////////////////////////////////////////////////////
 
+mixedimage.windowCrop = function (config) {
+    config = config || {}; 
+ 
+    config.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues()||{}); 
+
+    Ext.applyIf(config, {
+         url: MODx.config.assets_url+'components/mixedimage/connector.php'  
+        ,fields: this.getFields(config)
+        ,keys: this.getKeys(config)
+        ,width: 400
+        ,layout: 'anchor'
+        ,autoHeight: false 
+        ,baseParams:this.getBaseParams(config) 
+    });
+    mixedimage.window.superclass.constructor.call(this, config);
+};
+
+
+Ext.extend(mixedimage.windowCrop, MODx.Window, {
+
+    getKeys: function (config) {
+        return [{
+            key: Ext.EventObject.ENTER,
+            shift: true,
+            fn: this.submit,
+            scope: this
+        }];
+    },
+
+    getFields: function (config) {
+        return [{ 
+            html: '<img id="image-' + config.window.id + '" src="/'+config.window.ctx_path + config.window.value + '" />'
+        },{ 
+            html: '<div class="crop-sizes"><span id="crop-dataWidth"></span>x<span id="crop-dataHeight"></span></div>'
+        }];
+    },
+
+    getBaseParams:function(config){    
+        return config;
+    }
+
+});
+Ext.reg('mixedimage-window-editimage', mixedimage.windowCrop);
+
+
+//////////////////////////////////////////////////////////
+
 
 mixedimage.trigger = function(config){
     config = config||{};
@@ -417,9 +466,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     }
     ,onTriggerClick: function(event, el){
         // Проверяем какой триггер нажат.
-        f=this['handleTrigger__'+el.getAttribute('trigger')];
-        if(typeof(f)=='function')f.call(this,this,el);
-        if(typeof(f)=='object'&&typeof(f.fn)=='function'){
+        f = this['handleTrigger__'+el.getAttribute('trigger')];
+        if(typeof(f) == 'function')f.call(this,this,el);
+        if(typeof(f) == 'object' && typeof(f.fn) == 'function'){
             f.fn.call(f.scope||this,this,el);
         }
     }
@@ -436,6 +485,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     }
     ,handleTrigger__url:function(field,el){
         this.getFromUrl(field,el);
+    }
+    ,handleTrigger__crop:function(field,el){
+        this.editImage(field,el);
     }
     ,clearField: function(){     
 
@@ -482,7 +534,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     ,getFromUrl: function(btn, e){  
 
         if (!this.window) {
-            this.window= MODx.load({
+            this.window = MODx.load({
                  xtype: 'mixedimage-window-getfromurl'
                 ,id: Ext.id()
                 ,title: _('mixedimage.window_url')
@@ -490,53 +542,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                 ,params: btn            
                 ,listeners: {
                     success: {
-                        fn: function (data) {  
-
-                            var value = data.a.result.message;
-
-                            var input = btn.input||Ext.getCmp('mixedimage_input'+btn.tvId);
-                            input.setValue(value);
-
-                            var tvfield = btn.tvfield||Ext.get('tv'+this.tvId);
-                            tvfield.dom.value = value;
-                            btn.el.dom.value = value;
-
-                            if(btn.showPreview === true){ 
-                                var d = btn.preview||Ext.get('tv-image-preview-'+btn.tvId);
-                                var content = '';
-                                if(!Ext.isEmpty(value)){ 
-                                    var file_info = this.getExtension(value);  
-
-                                    if(file_info.isVideo){
-
-                                        if(this.ctx_path){
-                                            var path = this.ctx_path;
-                                        }else{
-                                            var path = '';
-                                        }
-
-                                        this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                                                +'<video controls>'
-                                                +'<source src="../'+path+value+'" type="'+file_info.mime_type+'">'
-                                                + '</video>'
-                                            +'</tpl>', {
-                                            compiled: true
-                                        });
-
-                                    }else{
-                                        this.previewTpl=new Ext.XTemplate('<tpl for=".">'
-                                                +'<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source='+this.source+'" alt="" />'
-                                            +'</tpl>', {
-                                            compiled: true
-                                        });
-                                    } 
-                                }
-                                
-                                content = this.previewTpl.apply({width:200,height:100,value:value});  
-                                d.update(content);
-                            } 
-
-                            MODx.fireResourceFormChange();  
+                        fn: function (data) {   
+                            var value = data.a.result.message; 
+                            btn.setValueInput(value);    
                             this.window.hide();
                         }, scope: this
                     }
@@ -550,6 +558,160 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
         this.window.reset();
         this.window.setValues({active: true});
         this.window.show(e.target);
+    }
+    ,editImage: function(field, e){  
+
+        if (!this.windowCrop) {
+            var cropper;
+ 
+            this.windowCrop = MODx.load({
+                 xtype: 'mixedimage-window-editimage'
+                ,id: Ext.id()
+                ,title: _('mixedimage.image_crop_title')
+                ,params: field    
+                ,window: this
+                ,buttons : [
+                    {
+                        text    : _('mixedimage.button_crop'),
+                        handler : function() {
+
+                            canvas = cropper.getCroppedCanvas({
+                                width:400,
+                                height:400
+                            }); 
+
+                            canvas.toBlob(function(blob){
+                                url = URL.createObjectURL(blob);
+                                var reader = new FileReader();
+                                reader.readAsDataURL(blob);
+                                reader.onloadend = function(){
+                                    var base64data = reader.result; 
+
+                                    Ext.Ajax.request({ 
+                                        url: MODx.config.assets_url+'components/mixedimage/connector.php'
+                                        ,params: { 
+                                             file: base64data
+                                            ,action: 'file/crop' 
+                                            ,ctx_path: field.ctx_path
+                                            ,value: field.value
+                                            ,source: field.source
+                                        }
+                                        ,success: function(data){       
+                                            field.setValueInput(data.responseText);
+                                            MODx.fireResourceFormChange();        
+                                        }
+                                        ,failure: function(data) {
+                                            MODx.msg.alert('Error on cropped');              
+                                        }
+                                    });
+                                };
+                            });
+
+                            this.windowCrop.hide(); 
+
+                        }
+                        , scope: this
+                    }
+                ]
+                ,width: 700 
+                ,height: 600        
+                ,listeners: {
+                    success: {
+                        fn: function (data) {  
+                   
+                        }, scope: this
+                    }
+                    ,failure: function(fp, o) {  
+                        MODx.msg.alert('Error', o.result.message);
+                    }
+                    ,show: function(fp, o) { 
+                        var image = document.getElementById("image-" + fp.window.id);
+                        var dataHeight = document.getElementById('crop-dataHeight');
+                        var dataWidth = document.getElementById('crop-dataWidth');
+                        var ratio = '';
+
+                        if(field.crop_ratio) {
+                            var ratioArray = (field.crop_ratio).split('/');
+                            ratio = ratioArray[0]/ratioArray[1];
+                        }  
+
+                        cropper = new Cropper(image, {
+                            aspectRatio: ratio,
+                            minCanvasWidth: 300,
+                            minCropBoxWidth: field.crop_width,
+                            minCropBoxHeight: field.crop_height,
+                            maxCanvasHeight: 500,
+                            crop(e) { 
+                                var data = e.detail;
+                                dataHeight.innerText = Math.round(data.height);
+                                dataWidth.innerText = Math.round(data.width);
+                            },
+                        });
+                    }
+                    ,hide: function(){
+                        cropper.destroy();
+                        cropper = null;
+                    }
+                }
+            });
+        }
+
+        this.windowCrop.reset();
+        this.windowCrop.setValues({active: true});
+        this.windowCrop.show(e.target);
+    }  
+    ,getPreview:function(){
+        this.preview = this.preview||Ext.get('tv-image-preview-'+this.tvId);
+        return this.preview;
+    }
+    ,setValueInput:function(value){
+        var input = this.input||Ext.getCmp('mixedimage_input'+this.tvId);
+        input.setValue(value);
+        var tvfield = this.tvfield||Ext.get('tv'+this.tvId);
+        tvfield.dom.value = value;
+        this.el.dom.value = value; 
+        this.updatePreview(value);
+    }
+    ,updatePreview:function(value){
+        if(this.showPreview === true){
+            var d = this.getPreview();
+            var content = '';
+            
+            if(!Ext.isEmpty(value)){
+                
+                var file_info = this.getExtension(value); 
+
+                if(file_info.isVideo){
+
+                    if(this.ctx_path){
+                        var path = this.ctx_path;
+                    }else{
+                        var path = '';
+                    }
+
+                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
+                            +'<video controls>'
+                            +'<source src="../'+path+value+'" type="'+file_info.mime_type+'">'
+                            + '</video>'
+                        +'</tpl>', {
+                        compiled: true
+                    });
+
+                }else{
+                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
+                            +'<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source='+this.source+'" alt="" />'
+                        +'</tpl>', {
+                        compiled: true
+                    });
+                } 
+
+                content = this.previewTpl.apply({width:200,height:100,value:value});  
+
+            }     
+            d.update(content);
+
+            MODx.fireResourceFormChange(); 
+        }
     }
     ,initDD: function () {
         if(!this._initializedDD) {

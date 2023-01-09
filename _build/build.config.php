@@ -2,7 +2,7 @@
 
     define('PKG_NAME', 'mixedImage');
     define('PKG_NAME_LOWER',str_replace(' ','',strtolower(PKG_NAME)));
-    define('PKG_VERSION','2.1.0');
+    define('PKG_VERSION','2.2.0');
     define('PKG_RELEASE','pl');
     define('PKG_AUTO_INSTALL', true); 
 

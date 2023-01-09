@@ -44,6 +44,9 @@
 		,openPath: '{$openPath}'
 		,isVideo: '{$isVideo}'
 		,current_mime: '{$current_mime}'
+		,crop_width: '{$crop_width}'
+		,crop_height: '{$crop_height}'
+		,crop_ratio: '{$crop_ratio}'
 		{literal}
 	});
 	{/literal}
