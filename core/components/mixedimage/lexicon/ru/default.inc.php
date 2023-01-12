@@ -21,7 +21,7 @@ $_lang['mixedimage.prefix_filename'] = 'Использовать префикс 
 $_lang['mixedimage.resize'] = 'Параметры для ресайза изображений';
 $_lang['mixedimage.resize_desc'] = 'Можно использовать параметры для phpthumb, например w=200&h=200&zc=1 <br> для наложения ватермарка: <br> <strong>fltr=wmt|Hello|60|C|ff0000| <br>fltr=wmi|/assets/wt.png|C|</strong>';
 $_lang['mixedimage.crop_ratio'] = 'Пропорции для кропа изображений';
-$_lang['mixedimage.crop_ratio_desc'] = 'Например: 1/1 или 16/9';
+$_lang['mixedimage.crop_ratio_desc'] = 'Например: 1/1 или 16/9 или 450/500';
 $_lang['mixedimage.crop_height'] = 'Высота для кропа';
 $_lang['mixedimage.crop_width'] = 'Ширина для кропа';
 $_lang['mixedimage.crop_suffix'] = 'Суффикс для обрезанного файла';
@@ -55,6 +55,7 @@ $_lang['mixedimage.trigger_btn_pc'] = 'C вашего компьютера';
 $_lang['mixedimage.trigger_btn_clear'] = 'Очистить';
 $_lang['mixedimage.trigger_btn_remove'] = 'Очистить и удалить файл с сервера';
 $_lang['mixedimage.trigger_btn_url'] = 'Со стороннего url';
+$_lang['mixedimage.trigger_btn_crop'] = 'Обрезать изображение';
 
 $_lang['mixedimage.triggerlist'] = 'Список кнопок';
 $_lang['mixedimage.trigger_btn_file_manager'] = 'Файловый менеджер';
