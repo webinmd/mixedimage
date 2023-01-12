@@ -63,6 +63,10 @@ Ext.extend(mixedimage.panel,Ext.Container,{
             ,ctx_path: config.ctx_path
             ,removeFile: config.removeFile
             ,triggerlist: config.triggerlist
+            ,crop_width: config.crop_width
+            ,crop_height: config.crop_height
+            ,crop_ratio: config.crop_ratio
+            ,crop_suffix: config.crop_suffix
             ,listeners:{
                 change:{fn:function(data){
                     this.setValue(data.el.getValue());
@@ -357,6 +361,57 @@ Ext.reg('mixedimage-window-getfromurl', mixedimage.window);
 //////////////////////////////////////////////////////////
 
 
+mixedimage.windowCrop = function (config) {
+    config = config || {}; 
+ 
+    config.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues()||{}); 
+
+    Ext.applyIf(config, {
+         url: MODx.config.assets_url+'components/mixedimage/connector.php'  
+        ,fields: this.getFields(config)
+        ,keys: this.getKeys(config)
+        ,width: 400
+        ,layout: 'anchor'
+        ,autoHeight: false 
+        ,baseParams:this.getBaseParams(config) 
+    });
+    mixedimage.window.superclass.constructor.call(this, config);
+};
+
+
+Ext.extend(mixedimage.windowCrop, MODx.Window, {
+
+    getKeys: function (config) {
+        return [{
+            key: Ext.EventObject.ENTER,
+            shift: true,
+            fn: this.submit,
+            scope: this
+        }];
+    },
+
+    getFields: function (config) {
+
+        var fieldValue = Ext.getCmp(config.window.id).value || config.window.value;
+
+        return [{ 
+            html: '<img id="image-' + config.window.id + '" src="/'+config.window.ctx_path + fieldValue + '" />'
+        },{ 
+            html: '<div class="crop-sizes"><span id="crop-dataWidth"></span>x<span id="crop-dataHeight"></span></div>'
+        }];
+    },
+
+    getBaseParams:function(config){    
+        return config;
+    }
+
+});
+Ext.reg('mixedimage-window-editimage', mixedimage.windowCrop);
+
+
+//////////////////////////////////////////////////////////
+
+
 mixedimage.trigger = function(config){
     config = config||{};
 
@@ -494,6 +549,61 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
 
                             var value = data.a.result.message;
 
+        if (!this.windowCrop) {
+            var cropper;
+
+            var winHeight = window.innerHeight - 100;
+            var winWidth = window.innerWidth - 100;
+            
+            if(winWidth > 1000) {
+                winWidth = 1000;
+            }
+ 
+            this.windowCrop = MODx.load({
+                 xtype: 'mixedimage-window-editimage'
+                ,id: Ext.id()
+                ,title: _('mixedimage.image_crop_title')
+                ,params: field    
+                ,window: this
+                ,buttons : [
+                    {
+                        text    : _('mixedimage.button_crop'),
+                        cls     : 'primary-button',
+                        handler : function() {
+
+                            canvas = cropper.getCroppedCanvas({
+                                width: field.crop_width,
+                                height: field.crop_height
+                            }); 
+
+                            canvas.toBlob(function(blob){
+                                url = URL.createObjectURL(blob);
+                                var reader = new FileReader();
+                                reader.readAsDataURL(blob);
+                                reader.onloadend = function(){
+                                    var base64data = reader.result; 
+
+                                    Ext.Ajax.request({ 
+                                        url: MODx.config.assets_url+'components/mixedimage/connector.php'
+                                        ,params: { 
+                                             file: base64data
+                                            ,action: 'file/crop' 
+                                            ,ctx_path: field.ctx_path
+                                            ,value: field.value
+                                            ,source: field.source
+                                            ,suffix: field.crop_suffix
+                                        }
+                                        ,success: function(data){       
+                                            field.setValueInput(data.responseText);
+                                            MODx.fireResourceFormChange();        
+                                        }
+                                        ,failure: function(data) {
+                                            MODx.msg.alert('Error on cropped');              
+                                        }
+                                    });
+                                };
+                            });
+
                             var input = btn.input||Ext.getCmp('mixedimage_input'+btn.tvId);
                             input.setValue(value);
 
@@ -501,6 +611,23 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                             tvfield.dom.value = value;
                             btn.el.dom.value = value;
 
+                        }
+                        , scope: this
+                    },
+                    {
+                        text    : _('cancel'), 
+                        handler : function() { 
+                            this.windowCrop.hide();  
+                        }
+                        , scope: this
+                    }
+                ]
+                ,width: winWidth 
+                ,height: winHeight       
+                ,listeners: {
+                    success: {
+                        fn: function (data) {  
+                        
                             if(btn.showPreview === true){ 
                                 var d = btn.preview||Ext.get('tv-image-preview-'+btn.tvId);
                                 var content = '';
@@ -538,6 +665,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
 
                             MODx.fireResourceFormChange();  
                             this.window.hide();
+
                         }, scope: this
                     }
                     ,failure: function(fp, o) {  
