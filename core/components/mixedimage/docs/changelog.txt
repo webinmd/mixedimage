@@ -3,6 +3,10 @@
 Extra: mixedImage -  Custom TV
 
 --------------------
+### 2.2.0
+* Crop image
+
+--------------------
 ### 2.1.0
 * Refactoring
 * Support MODx 3.0

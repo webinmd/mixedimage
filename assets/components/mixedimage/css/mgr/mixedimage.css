@@ -64,6 +64,7 @@
 .x-field-trigger-manager-class:before {content: '\f1c5' !important;}
 .x-field-trigger-pc-class:before {content: '\f108' !important;}
 .x-field-trigger-url-class:before {content: '\f0c1' !important;}
+.x-field-trigger-crop-class:before {content: '\f125' !important;}
 
 .mixedimage .x-form-field-wrap .x-field-combo-btns .x-form-trigger{
 	background-color: #fff;
@@ -91,7 +92,13 @@
 	background: #E4E9EE;
 }
 
-input[name="inopt_resize"]{
+input[name="inopt_resize"],
+input[name="inopt_triggerlist"]{
 	width: 100%;
 	max-width: 500px;
+}
+
+.crop-sizes{
+	text-align: right;
+	padding-top: 10px;
 }
