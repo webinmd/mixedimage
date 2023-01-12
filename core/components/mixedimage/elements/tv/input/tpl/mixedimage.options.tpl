@@ -182,6 +182,19 @@
             }]
         },{
             xtype: 'textfield',
+            fieldLabel: __('mixedimage.crop_suffix'),
+            id: 'inopt_crop_suffix{/literal}{$tv}{literal}', 
+            anchors: '98%',
+            name: 'inopt_crop_suffix',
+            value: params['crop_suffix'] || '',
+            listeners: oc
+        },{
+            xtype: MODx.expandHelp ? 'label' : 'hidden'
+            ,forId: 'inopt_crop_suffix{/literal}{$tv}{literal}'
+            ,html: __('mixedimage.crop_suffix_desc')
+            ,cls: 'desc-under'
+        },{
+            xtype: 'textfield',
             fieldLabel: __('mixedimage.triggerlist'),
             id: 'inopt_triggerlist{/literal}{$tv}{literal}', 
             anchors: '98%',

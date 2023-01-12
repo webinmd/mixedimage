@@ -576,8 +576,8 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                         handler : function() {
 
                             canvas = cropper.getCroppedCanvas({
-                                width:400,
-                                height:400
+                                width: field.crop_width,
+                                height: field.crop_height
                             }); 
 
                             canvas.toBlob(function(blob){
@@ -595,6 +595,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                                             ,ctx_path: field.ctx_path
                                             ,value: field.value
                                             ,source: field.source
+                                            ,suffix: field.crop_suffix
                                         }
                                         ,success: function(data){       
                                             field.setValueInput(data.responseText);
