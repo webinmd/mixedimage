@@ -62,8 +62,8 @@ $_lang['mixedimage.triggerlist'] = 'Trigger list';
 $_lang['mixedimage.trigger_btn_file_manager'] = 'File manager';
 $_lang['mixedimage.trigger_btn_file_desktop'] = 'From computer';
 $_lang['mixedimage.trigger_btn_file_url'] = 'From external url';
-
 $_lang['mixedimage.triggerlist_desc'] = 'Specify which of the trigger buttons will be displayed when rendering the field (clear,manager,pc,url)';
+
 // url
 $_lang['mixedimage.window_url'] = 'Provide a link';
 $_lang['mixedimage.link'] = 'Link';

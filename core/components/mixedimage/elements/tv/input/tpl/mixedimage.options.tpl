@@ -44,6 +44,8 @@
     };
     {literal}
 
+    console.log(params); 
+
     MODx.load({
         xtype: 'panel'
         ,layout: 'form'
@@ -136,62 +138,6 @@
             xtype: MODx.expandHelp ? 'label' : 'hidden'
             ,forId: 'inopt_resize{/literal}{$tv}{literal}'
             ,html: __('mixedimage.resize_desc')
-            ,cls: 'desc-under'
-        },{
-            xtype: 'textfield',
-            fieldLabel: __('mixedimage.crop_ratio'),
-            id: 'inopt_cropratio{/literal}{$tv}{literal}', 
-            anchors: '98%',
-            name: 'inopt_crop_ratio',
-            value: params['crop_ratio'] || '',
-            listeners: oc
-        },{
-            xtype: MODx.expandHelp ? 'label' : 'hidden'
-            ,forId: 'inopt_crop_ratio{/literal}{$tv}{literal}'
-            ,html: __('mixedimage.crop_ratio_desc')
-            ,cls: 'desc-under'
-        }, {
-            layout: 'column',
-            anchor: '30%',
-            items: [{
-                columnWidth: .5,
-                layout: 'form',  
-                labelAlign: 'top',
-                items: [{
-                    xtype: 'textfield',
-                    fieldLabel: __('mixedimage.crop_width'),
-                    id: 'inopt_crop_width{/literal}{$tv}{literal}', 
-                    anchors: '99%',
-                    name: 'inopt_crop_width',
-                    value: params['crop_width'] || '',
-                    listeners: oc,
-                }]
-            }, {
-                columnWidth: .5,
-                layout: 'form', 
-                labelAlign: 'top',
-                items: [{
-                    xtype: 'textfield',
-                    fieldLabel: __('mixedimage.crop_height'),
-                    id: 'inopt_crop_height{/literal}{$tv}{literal}', 
-                    anchors: '99%',
-                    name: 'inopt_crop_height',
-                    value: params['crop_height'] || '',
-                    listeners: oc
-                }],
-            }]
-        },{
-            xtype: 'textfield',
-            fieldLabel: __('mixedimage.crop_suffix'),
-            id: 'inopt_crop_suffix{/literal}{$tv}{literal}', 
-            anchors: '98%',
-            name: 'inopt_crop_suffix',
-            value: params['crop_suffix'] || '',
-            listeners: oc
-        },{
-            xtype: MODx.expandHelp ? 'label' : 'hidden'
-            ,forId: 'inopt_crop_suffix{/literal}{$tv}{literal}'
-            ,html: __('mixedimage.crop_suffix_desc')
             ,cls: 'desc-under'
         },{
             xtype: 'textfield',

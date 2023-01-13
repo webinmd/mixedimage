@@ -84,6 +84,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
         
     }
     ,onBrowserSelect:function(data,field){ 
+        //var value = field.getValue();
         var value = data.url;
         this.setValue(value);
     }
@@ -359,6 +360,7 @@ Ext.reg('mixedimage-window-getfromurl', mixedimage.window);
 
 //////////////////////////////////////////////////////////
 
+
 mixedimage.windowCrop = function (config) {
     config = config || {}; 
  
@@ -470,9 +472,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     }
     ,onTriggerClick: function(event, el){
         // Проверяем какой триггер нажат.
-        f = this['handleTrigger__'+el.getAttribute('trigger')];
-        if(typeof(f) == 'function')f.call(this,this,el);
-        if(typeof(f) == 'object' && typeof(f.fn) == 'function'){
+        f=this['handleTrigger__'+el.getAttribute('trigger')];
+        if(typeof(f)=='function')f.call(this,this,el);
+        if(typeof(f)=='object'&&typeof(f.fn)=='function'){
             f.fn.call(f.scope||this,this,el);
         }
     }
@@ -489,9 +491,6 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     }
     ,handleTrigger__url:function(field,el){
         this.getFromUrl(field,el);
-    }
-    ,handleTrigger__crop:function(field,el){
-        this.editImage(field,el);
     }
     ,clearField: function(){     
 
@@ -538,7 +537,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
     ,getFromUrl: function(btn, e){  
 
         if (!this.window) {
-            this.window = MODx.load({
+            this.window= MODx.load({
                  xtype: 'mixedimage-window-getfromurl'
                 ,id: Ext.id()
                 ,title: _('mixedimage.window_url')
@@ -546,24 +545,9 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                 ,params: btn            
                 ,listeners: {
                     success: {
-                        fn: function (data) {   
-                            var value = data.a.result.message; 
-                            btn.setValueInput(value);    
-                            this.window.hide();
-                        }, scope: this
-                    }
-                    ,failure: function(fp, o) {  
-                        MODx.msg.alert('Error', o.result.message);
-                    }
-                }
-            });
-        }
+                        fn: function (data) {  
 
-        this.window.reset();
-        this.window.setValues({active: true});
-        this.window.show(e.target);
-    }
-    ,editImage: function(field, e){  
+                            var value = data.a.result.message;
 
         if (!this.windowCrop) {
             var cropper;
@@ -620,8 +604,20 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                                 };
                             });
 
-                            this.windowCrop.hide(); 
+                            var input = btn.input||Ext.getCmp('mixedimage_input'+btn.tvId);
+                            input.setValue(value);
 
+                            var tvfield = btn.tvfield||Ext.get('tv'+this.tvId);
+                            tvfield.dom.value = value;
+                            btn.el.dom.value = value;
+
+                        }
+                        , scope: this
+                    },
+                    {
+                        text    : _('cancel'), 
+                        handler : function() { 
+                            this.windowCrop.hide();  
                         }
                         , scope: this
                     },
@@ -638,100 +634,57 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                 ,listeners: {
                     success: {
                         fn: function (data) {  
-                   
+                        
+                            if(btn.showPreview === true){ 
+                                var d = btn.preview||Ext.get('tv-image-preview-'+btn.tvId);
+                                var content = '';
+                                if(!Ext.isEmpty(value)){ 
+                                    var file_info = this.getExtension(value);  
+
+                                    if(file_info.isVideo){
+
+                                        if(this.ctx_path){
+                                            var path = this.ctx_path;
+                                        }else{
+                                            var path = '';
+                                        }
+
+                                        this.previewTpl = new Ext.XTemplate('<tpl for=".">'
+                                                +'<video controls>'
+                                                +'<source src="../'+path+value+'" type="'+file_info.mime_type+'">'
+                                                + '</video>'
+                                            +'</tpl>', {
+                                            compiled: true
+                                        });
+
+                                    }else{
+                                        this.previewTpl=new Ext.XTemplate('<tpl for=".">'
+                                                +'<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source='+this.source+'" alt="" />'
+                                            +'</tpl>', {
+                                            compiled: true
+                                        });
+                                    } 
+                                }
+                                
+                                content = this.previewTpl.apply({width:200,height:100,value:value});  
+                                d.update(content);
+                            } 
+
+                            MODx.fireResourceFormChange();  
+                            this.window.hide();
+
                         }, scope: this
                     }
                     ,failure: function(fp, o) {  
                         MODx.msg.alert('Error', o.result.message);
                     }
-                    ,show: function(fp, o) { 
-                        var image = document.getElementById("image-" + fp.window.id);
-                        var dataHeight = document.getElementById('crop-dataHeight');
-                        var dataWidth = document.getElementById('crop-dataWidth');
-                        var ratio = '';
-
-                        if(field.crop_ratio) {
-                            var ratioArray = (field.crop_ratio).split('/');
-                            ratio = ratioArray[0]/ratioArray[1];
-                        }  
-
-                        cropper = new Cropper(image, {
-                            aspectRatio: ratio,
-                            minCanvasWidth: 300,
-                            minCropBoxWidth: field.crop_width,
-                            minCropBoxHeight: field.crop_height,
-                            maxCanvasHeight: 500,
-                            crop(e) { 
-                                var data = e.detail;
-                                dataHeight.innerText = Math.round(data.height);
-                                dataWidth.innerText = Math.round(data.width);
-                            },
-                        });
-                    }
-                    ,hide: function(){
-                        cropper.destroy();
-                        cropper = null;
-                    }
                 }
             });
         }
 
-        this.windowCrop.reset();
-        this.windowCrop.setValues({active: true});
-        this.windowCrop.show(e.target);
-    }  
-    ,getPreview:function(){
-        this.preview = this.preview||Ext.get('tv-image-preview-'+this.tvId);
-        return this.preview;
-    }
-    ,setValueInput:function(value){
-        var input = this.input||Ext.getCmp('mixedimage_input'+this.tvId);
-        input.setValue(value);
-        var tvfield = this.tvfield||Ext.get('tv'+this.tvId);
-        tvfield.dom.value = value;
-        this.el.dom.value = value; 
-        this.updatePreview(value);
-    }
-    ,updatePreview:function(value){
-        if(this.showPreview === true){
-            var d = this.getPreview();
-            var content = '';
-            
-            if(!Ext.isEmpty(value)){
-                
-                var file_info = this.getExtension(value); 
-
-                if(file_info.isVideo){
-
-                    if(this.ctx_path){
-                        var path = this.ctx_path;
-                    }else{
-                        var path = '';
-                    }
-
-                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                            +'<video controls>'
-                            +'<source src="../'+path+value+'" type="'+file_info.mime_type+'">'
-                            + '</video>'
-                        +'</tpl>', {
-                        compiled: true
-                    });
-
-                }else{
-                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                            +'<img src="'+MODx.config.connectors_url+'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source='+this.source+'" alt="" />'
-                        +'</tpl>', {
-                        compiled: true
-                    });
-                } 
-
-                content = this.previewTpl.apply({width:200,height:100,value:value});  
-
-            }     
-            d.update(content);
-
-            MODx.fireResourceFormChange(); 
-        }
+        this.window.reset();
+        this.window.setValues({active: true});
+        this.window.show(e.target);
     }
     ,initDD: function () {
         if(!this._initializedDD) {
