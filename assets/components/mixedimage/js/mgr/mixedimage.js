@@ -66,6 +66,7 @@ Ext.extend(mixedimage.panel,Ext.Container,{
             ,crop_width: config.crop_width
             ,crop_height: config.crop_height
             ,crop_ratio: config.crop_ratio
+            ,crop_suffix: config.crop_suffix
             ,listeners:{
                 change:{fn:function(data){
                     this.setValue(data.el.getValue());
@@ -388,8 +389,11 @@ Ext.extend(mixedimage.windowCrop, MODx.Window, {
     },
 
     getFields: function (config) {
+
+        var fieldValue = Ext.getCmp(config.window.id).value || config.window.value;
+
         return [{ 
-            html: '<img id="image-' + config.window.id + '" src="/'+config.window.ctx_path + config.window.value + '" />'
+            html: '<img id="image-' + config.window.id + '" src="/'+config.window.ctx_path + fieldValue + '" />'
         },{ 
             html: '<div class="crop-sizes"><span id="crop-dataWidth"></span>x<span id="crop-dataHeight"></span></div>'
         }];
@@ -563,6 +567,13 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
 
         if (!this.windowCrop) {
             var cropper;
+
+            var winHeight = window.innerHeight - 100;
+            var winWidth = window.innerWidth - 100;
+            
+            if(winWidth > 1000) {
+                winWidth = 1000;
+            }
  
             this.windowCrop = MODx.load({
                  xtype: 'mixedimage-window-editimage'
@@ -573,6 +584,7 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
                 ,buttons : [
                     {
                         text    : _('mixedimage.button_crop'),
+                        cls     : 'primary-button',
                         handler : function() {
 
                             canvas = cropper.getCroppedCanvas({
@@ -612,10 +624,17 @@ Ext.extend(mixedimage.trigger,Ext.form.TriggerField,{
 
                         }
                         , scope: this
+                    },
+                    {
+                        text    : _('cancel'), 
+                        handler : function() { 
+                            this.windowCrop.hide();  
+                        }
+                        , scope: this
                     }
                 ]
-                ,width: 700 
-                ,height: 600        
+                ,width: winWidth 
+                ,height: winHeight       
                 ,listeners: {
                     success: {
                         fn: function (data) {  
