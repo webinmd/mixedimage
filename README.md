@@ -4,7 +4,7 @@ mixedImage - modx custom TV
 
 
 ### 2.2.0
-* Crop
+* Crop image
 
 ### 2.1.0
 * Refactoring
