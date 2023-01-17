@@ -26,15 +26,34 @@
     $plugin->set('category', 0);
 
 
+
+    // Add new events -----------------------------------------------------------------
+    $events = include $sources['data'] . 'transport.events.php';
+    if (!is_array($events)) {
+        $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in events.');
+    } else {
+        $attributes = array(
+            xPDOTransport::PRESERVE_KEYS => true,
+            xPDOTransport::UPDATE_OBJECT => true,
+        );
+        foreach ($events as $event) {
+            $vehicle = $builder->createVehicle($event, $attributes);
+            $builder->putVehicle($vehicle);
+        }
+        $modx->log(xPDO::LOG_LEVEL_INFO, 'Packaged in ' . count($events) . ' Plugins events.');
+    }
+    unset ($events, $event, $attributes);
+
+
     // Add plugin events -----------------------------------------------------------------
-    $events = include $sources['data'].'transport.plugin.events.php';
-    if (is_array($events) && !empty($events)) {
-        $plugin->addMany($events);
+    $pluginEvents = include $sources['data'].'transport.plugin.events.php';
+    if (is_array($pluginEvents) && !empty($pluginEvents)) {
+        $plugin->addMany($pluginEvents);
     } else {
         $modx->log(xPDO::LOG_LEVEL_ERROR,'Could not find plugin events!');
     }
-    $modx->log(xPDO::LOG_LEVEL_INFO,'Packaged in '.count($events).' Plugin Events.'); flush();
-    unset($events);
+    $modx->log(xPDO::LOG_LEVEL_INFO,'Packaged in '.count($pluginEvents).' Plugin Events.'); flush();
+    unset($pluginEvents);
 
 
     // Define vehicle attributes ----------------------------------------------------------

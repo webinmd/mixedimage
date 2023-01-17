@@ -38,6 +38,8 @@ class mixedimageCropProcessor extends modProcessor
 
         file_put_contents($image_cropped, $data);
 
+        $this->modx->invokeEvent('OnMixedImageCrop', ['image' => $image_cropped]);
+
         return $image_new;
     }
 
