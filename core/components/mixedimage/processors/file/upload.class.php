@@ -14,7 +14,7 @@ if (!class_exists('\MODX\Revolution\modX')) {
     require_once MODX_CORE_PATH.'model/modx/processors/browser/file/upload.class.php';
 } else {
     class_alias(\MODX\Revolution\Processors\Browser\File\Upload::class, \modBrowserFileUploadProcessor::class);
-} 
+}
 
 class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 {
@@ -90,7 +90,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
 
         if ($file_url) {
-            
+
             if(!$files = $this->downloadFromUrl($file_url, $path, $prefix)) {
                 return $this->failure($this->modx->lexicon('mixedimage.err_file_url_download'));
             }
@@ -159,7 +159,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             }
         }
 
-        // check if is external source 
+        // check if is external source
         if ($source_url = $this->source->getBaseUrl()) {
             if (!filter_var($source_url, FILTER_VALIDATE_URL) === false) {
                 $url = $source_url . $url;
@@ -177,8 +177,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     private function checkFileUrlExtension($file_url, $opts)
     {
         $file_ext = pathinfo($file_url, PATHINFO_EXTENSION);
-        $mime_arr = [];
-
         // Check the mine types
         if (!empty($opts['MIME'])) {
             $mime_arr = explode(",", $opts['MIME']);
@@ -187,11 +185,9 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             $mime_arr = explode(",", $option_upload_files);
         }
 
-        if (!in_array($file_ext, $mime_arr)) {
-            return false;
-        }
-
-        return true;
+        $file_ext = mb_strtolower($file_ext);
+        $mime_arr = array_map('mb_strtolower', $mime_arr);
+        return in_array($file_ext, $mime_arr);
     }
 
 
@@ -227,7 +223,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             return false;
         }
 
-        $bases = $this->source->getBases($path); 
+        $bases = $this->source->getBases($path);
 
         //Local path of image - where will we save the image
         $file_output = fopen($bases['pathAbsoluteWithPath'] . $files[0]['name'], 'wb');
@@ -244,7 +240,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         if ($resultStatus != 200) {
             return false;
         }
-        //\\ end download file 
+        //\\ end download file
 
         return $files;
     }
@@ -334,7 +330,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             '{h}' => date('H'), // Hour
             '{i}' => date('i'), // Minute
             '{s}' => date('s'), // Second
-        );  
+        );
 
         $tags = explode('$|$', '[[+' . implode(']]$|$[[+', array_keys($this->formdata)) . ']]');
         $str = str_replace($tags, array_values($this->formdata), $str);
