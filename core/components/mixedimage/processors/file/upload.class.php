@@ -30,6 +30,18 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             $this->formdata = $this->modx->fromJSON($this->properties['formdata']);
         }
 
+
+        // Временная директори, для сохранения изображения скаченного по URL
+        if ($this->getProperty('url')) {
+            $this->tempPath = MODX_CORE_PATH . 'cache/mixedimage/';
+            if (!file_exists($this->tempPath)) {
+                if (!mkdir($this->tempPath, 0777, true) && !is_dir($this->tempPath)) {
+                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $this->tempPath));
+                }
+            } else {
+                $this->clearTemp();
+            }
+        }
         return true;
     }
 
@@ -73,15 +85,15 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         $opts = unserialize($TV->input_properties);
         $path = $this->preparePath($opts['path']);
 
-        $checkedExt = false;
 
         // check extension for url file
         if ($file_url = $this->getProperty('url')) {
-            $checkedExt = $this->checkFileUrlExtension($file_url, $opts);
-        } else {
-            $checkedExt = $this->checkFilesExtension($opts);
+            if (!$this->downloadFromUrl($file_url)) {
+                return $this->failure($this->modx->lexicon('mixedimage.err_file_url_download'));
+            }
         }
 
+        $checkedExt = $this->checkFilesExtension($opts);
         if (!$checkedExt) {
             return $this->failure($this->modx->lexicon('mixedimage.err_file_mime'));
         }
@@ -91,37 +103,35 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         $prefix = (empty($opts['prefix'])) ? '' : $opts['prefix'];
 
 
-        if ($file_url) {
+        $files = $this->prepareFiles($prefix);
 
-            if (!$files = $this->downloadFromUrl($file_url, $path, $prefix)) {
-                return $this->failure($this->modx->lexicon('mixedimage.err_file_url_download'));
+
+        // Do the upload to container
+        $success = $this->source->uploadObjectsToContainer($path, $files);
+
+        if ($file_url) {
+            $this->clearTemp();
+        }
+
+
+        // Check for upload errors
+        if (empty($success)) {
+            $msg = '';
+            $errors = $this->source->getErrors();
+
+            // Remove 'directory already exists' error
+            if (isset($errors['name'])) {
+                unset($errors['name']);
             }
 
-        } else {
-
-            $files = $this->prepareFiles($prefix);
-
-            // Do the upload to container
-            $success = $this->source->uploadObjectsToContainer($path, $files);
-
-            // Check for upload errors
-            if (empty($success)) {
-                $msg = '';
-                $errors = $this->source->getErrors();
-
-                // Remove 'directory already exists' error
-                if (isset($errors['name'])) {
-                    unset($errors['name']);
+            if (count($errors) > 0) {
+                foreach ($errors as $k => $msg) {
+                    $this->modx->error->addField($k, $msg);
                 }
-
-                if (count($errors) > 0) {
-                    foreach ($errors as $k => $msg) {
-                        $this->modx->error->addField($k, $msg);
-                    }
-                    return $this->failure($msg);
-                }
+                return $this->failure($msg);
             }
         }
+
 
         $source_path = ($this->getProperty('ctx_path')) ? $this->getProperty('ctx_path') : '';
 
@@ -171,40 +181,15 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         return $this->success(stripslashes($url));
     }
 
-
-    /**
-     * Check mime type for uploading from url
-     */
-    private function checkFileUrlExtension($file_url, $opts)
-    {
-        $file_ext = pathinfo($file_url, PATHINFO_EXTENSION);
-        // Check the mine types
-        if (!empty($opts['MIME'])) {
-            $mime_arr = explode(",", $opts['MIME']);
-        } else {
-            $option_upload_files = $this->modx->getOption('upload_files');
-            $mime_arr = explode(",", $option_upload_files);
-        }
-
-        $file_ext = mb_strtolower($file_ext);
-        $mime_arr = array_map('mb_strtolower', $mime_arr);
-        return in_array($file_ext, $mime_arr);
-    }
-
-
     /**
      * Check mime type for uploading from form
      * array S_FILES
      */
     private function checkFilesExtension($opts)
     {
-        $mime_arr = [];
-
         if (!empty($opts['MIME'])) {
-
             $mime_arr = explode(",", $opts['MIME']);
-            $checkmime_files = $_FILES;
-
+            $checkmime_files = $this->files ? $this->files : $_FILES;
             foreach ($checkmime_files as &$file) {
                 $file_mime = $file['type'];
                 if (!in_array($file_mime, $mime_arr)) {
@@ -212,22 +197,34 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
                 }
             }
         }
-
         return true;
     }
 
+    /** @var string|null $tempPath */
+    protected $tempPath;
 
-    private function downloadFromUrl($file_url, $path, $prefix)
+    /** @var array|null $files */
+    protected $files;
+
+    private function clearTemp()
+    {
+        if ($this->tempPath && is_dir($this->tempPath)) {
+            /* @var modCacheManager $cacheManager */
+            $cacheManager = $this->modx->getCacheManager();
+            $cacheManager->deleteTree($this->tempPath);
+        }
+    }
+
+    /**
+     * Скачиваем файл и кладем его в папку для темпа, имя случайно чтобы нельзя было подобрать другое
+     * @param $file_url
+     * @return false|mixed
+     */
+    private function downloadFromUrl($file_url)
     {
 
-        if (!$files = $this->prepareFiles($prefix, $file_url)) {
-            return false;
-        }
-
-        $bases = $this->source->getBases($path);
-
-        //Local path of image - where will we save the image
-        $file_output = fopen($bases['pathAbsoluteWithPath'] . $files[0]['name'], 'wb');
+        $filePath = $this->tempPath . time() . rand(1, 10000);
+        $file_output = fopen($filePath, 'wb');
 
         //\\ Download and save image
         $ch = curl_init();
@@ -238,12 +235,24 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         $resultStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
+
         if ($resultStatus != 200) {
             return false;
         }
         //\\ end download file
+        $info = new SplFileInfo($file_url);
+        $filename = $info->getFilename();
+        $this->files = [
+            [
+                'name' => $filename,
+                'type' => mime_content_type($filePath),
+                'tmp_name' => $filePath,
+                'error' => false,
+                'size' => filesize($filePath),
+            ]
+        ];
 
-        return $files;
+        return true;
     }
 
 
@@ -272,7 +281,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     /**
      * Prepare file name (prevent accidental overwrites)
      */
-    private function prepareFiles($prefix, $file_url = false)
+    private function prepareFiles($prefix)
     {
 
         $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false); // modx 2
@@ -281,21 +290,13 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         // add fix for russian filename
         setlocale(LC_ALL, 'ru_RU.utf8');
 
-        $files = [];
-
-        if ($file_url) {
-            $files[0]['name'] = $file_url;
-        } else {
-            $files = $_FILES;
-        }
-
+        $files = is_array($this->files) ? $this->files : $_FILES;
         foreach ($files as &$file) {
             $pathInfo = pathinfo($file['name']);
             $ext = $pathInfo['extension'];
 
             $filename = ($this->getProperty('prefixFilename') == 'true') ? $prefix : $prefix . $pathInfo['filename'];
             $filename = $this->parsePlaceholders($filename);
-
             if ($mixedimage_translit || $system_translit) {
                 $filename = modResource::filterPathSegment($this->modx, $filename);
                 $ext = strtolower($ext);
@@ -303,7 +304,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
             $file['name'] = $filename . '.' . $ext;
         }
-
         return $files;
     }
 
