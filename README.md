@@ -5,6 +5,10 @@ mixedImage - modx custom TV
 
 ### 2.2.0
 * Crop image
+* Fix checking mime type - By [webnitros](https://github.com/webnitros)
+* Fix get tv id in migx field - By [webnitros](https://github.com/webnitros)
+* Changed download function - By [webnitros](https://github.com/webnitros)
+
 
 ### 2.1.0
 * Refactoring

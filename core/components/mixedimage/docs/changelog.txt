@@ -5,6 +5,10 @@ Extra: mixedImage -  Custom TV
 --------------------
 ### 2.2.0
 * Crop image
+* Fix checking mime type 
+* Fix get tv id in migx field 
+* Changed download function
+
 
 --------------------
 ### 2.1.0
