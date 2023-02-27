@@ -18,5 +18,4 @@ if (!file_exists($options_desc_tpl)) {
 }
 $modx->smarty->assign("options_desc_tpl", $options_desc_tpl);
 
-
 return $modx->smarty->fetch($root.'tpl/mixedimage.options.tpl');

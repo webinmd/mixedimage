@@ -4,6 +4,7 @@
     <li><span>manager</span>  - allows you to select a file from the MODx file managerx</li>
     <li><span>pc</span>  - allows you to upload a file immediately from the user's computer, bypassing the MODx file manager</li>
     <li><span>url</span> - allows you to download a file from a link</li>
+    <li><span>crop</span> - allows you to crop the image in the modal window</li>
 </ul>
 
 <br><br>

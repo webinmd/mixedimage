@@ -14,13 +14,18 @@ $_lang['mixedimage.show_value_desc'] = 'Display the URL to the file on TV';
 $_lang['mixedimage.show_preview'] = 'Show preview';
 $_lang['mixedimage.show_preview_desc'] = 'Display an thumbnail preview of image files or video player';
 
-
 $_lang['mixedimage.remove_file'] = 'Remove file';
 $_lang['mixedimage.remove_file_desc'] = 'Atention! When you click the Clear button, it completely removes the file from the server';
 
 $_lang['mixedimage.prefix_filename'] = 'Use prefix as the file name';
 $_lang['mixedimage.resize'] = 'Resize';
 $_lang['mixedimage.resize_desc'] = 'Set parametrs for phpthumb, example: w=200&h=200&zc=1 <br> for watermark: <br> <strong>fltr=wmt|Hello|60|C|ff0000| <br>fltr=wmi|/assets/wt.png|C|</strong>';
+$_lang['mixedimage.crop_ratio'] = 'Image crop proportions';
+$_lang['mixedimage.crop_ratio_desc'] = 'Example: 1/1 or 16/9 or 450/800';
+$_lang['mixedimage.crop_height'] = 'Crop height';
+$_lang['mixedimage.crop_width'] = 'Crop width';
+$_lang['mixedimage.crop_suffix'] = 'Suffix for cropped file';
+$_lang['mixedimage.crop_suffix_desc'] = 'If left blank, the file will be overwritten';
 
 // TV Render
 $_lang['mixedimage.upload_file'] = 'Upload File...';
@@ -51,18 +56,23 @@ $_lang['mixedimage.trigger_btn_pc'] = 'From your computer';
 $_lang['mixedimage.trigger_btn_clear'] = 'Clear';
 $_lang['mixedimage.trigger_btn_remove'] = 'Clear and remove file from the server';
 $_lang['mixedimage.trigger_btn_url'] = 'From external url';
+$_lang['mixedimage.trigger_btn_crop'] = 'Crop image';
 
 $_lang['mixedimage.triggerlist'] = 'Trigger list';
 $_lang['mixedimage.trigger_btn_file_manager'] = 'File manager';
 $_lang['mixedimage.trigger_btn_file_desktop'] = 'From computer';
-$_lang['mixedimage.trigger_btn_file_url'] = 'From external url'; 
+$_lang['mixedimage.trigger_btn_file_url'] = 'From external url';
 
-$_lang['mixedimage.triggerlist_desc'] = 'Specify which of the trigger buttons will be displayed when rendering the field (clear,manager,pc,url)'; 
+$_lang['mixedimage.triggerlist_desc'] = 'Specify which of the trigger buttons will be displayed when rendering the field (clear,manager,pc,url)';
 // url
-$_lang['mixedimage.window_url'] = 'Provide a link'; 
-$_lang['mixedimage.link'] = 'Link';  
-$_lang['mixedimage.url_empty'] = 'Provide a link';  
-$_lang['mixedimage.err_file_url_download'] = 'Error loading file from url';  
+$_lang['mixedimage.window_url'] = 'Provide a link';
+$_lang['mixedimage.link'] = 'Link';
+$_lang['mixedimage.url_empty'] = 'Provide a link';
+$_lang['mixedimage.err_file_url_download'] = 'Error loading file from url';
 
 // success
 $_lang['mixedimage.success_removed'] = 'File success removed';
+
+// crop
+$_lang['mixedimage.image_crop_title'] = 'Edit image';
+$_lang['mixedimage.button_crop'] = 'Crop';

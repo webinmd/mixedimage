@@ -3,7 +3,12 @@
 mixedImage - modx custom TV  
 
 
-## version 2.-.-
+### 2.2.0
+* Crop image
+* Fix checking mime type - By [webnitros](https://github.com/webnitros)
+* Fix get tv id in migx field - By [webnitros](https://github.com/webnitros)
+* Changed download function - By [webnitros](https://github.com/webnitros)
+
 
 ### 2.1.0
 * Refactoring
@@ -18,40 +23,33 @@ By [shatov](https://github.com/shatov)
 
 
 ### 2.0.8
- 
 * Исправлено отображение в MIGX CMP
 
 
 ### 2.0.7
- 
 * Добавлена поддержка Видео предпросмотра 
 
 
 ### 2.0.6
-
 By [DeNomad](https://github.com/DeNomad)
 * Добавлена поддержка Drag&Drop для input 
 
 
 ### 2.0.5
- 
 * Исправлен баг с пустым полем триггеров, если обновлятся с версии 2.0.0
 * Добавлен плейсхоледр context в возможные префиксы к названию поля
 
 
 ### 2.0.4 
- 
 * Исправлен баг с загрузкой по url для migx полей
 
 
 ### 2.0.3 
-
 * Исправлен мини баг в css когда обрезались кнопки при настройках формы
 * Исправлен баг с загрузкой по url
 
 
 ### 2.0.2
-  
 * Возможность загружать файлы по внешней ссылке
 * Управление кнопками, теперь можно отключить любую кнопку при настройке TV поля:
   - clear
@@ -64,7 +62,6 @@ By [DeNomad](https://github.com/DeNomad)
 
 
 ### 2.0.1
-
 By [SintezCode](https://github.com/SintezCode) 
 * Переписана вся extjs часть для возможности использования Ext.extend и Ext.override
 * Триггеров теперь может быть сколько угодно, им можно задавать свою ширину и обработчики при вызове, расширении или переопределении.
