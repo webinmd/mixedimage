@@ -31,7 +31,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         }
 
 
-        // Временная директори, для сохранения изображения скаченного по URL
+        // Временная директория, для сохранения изображения скаченного по URL
         if ($this->getProperty('url')) {
             $this->tempPath = MODX_CORE_PATH . 'cache/mixedimage/';
             if (!file_exists($this->tempPath)) {
@@ -102,15 +102,16 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
         $this->source->createContainer($path, '');
         $prefix = (empty($opts['prefix'])) ? '' : $opts['prefix'];
 
-
         $files = $this->prepareFiles($prefix);
 
-
         // Do the upload to container
-        $success = $this->source->uploadObjectsToContainer($path, $files);
-
         if ($file_url) {
+            $bases = $this->source->getBases($path);
+            $fullPath = $bases['pathAbsolute'] . ltrim($path, '/');
+            $success = rename($files[0]['tmp_name'], $fullPath . $files[0]['name']);
             $this->clearTemp();
+        } else {
+            $success = $this->source->uploadObjectsToContainer($path, $files);
         }
 
 
@@ -216,7 +217,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
     }
 
     /**
-     * Скачиваем файл и кладем его в папку для темпа, имя случайно чтобы нельзя было подобрать другое
+     * Скачиваем файл и кладем его во временную папку, имя случайно чтобы нельзя было подобрать другое
      * @param $file_url
      * @return false|mixed
      */

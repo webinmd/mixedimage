@@ -555,7 +555,7 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                         }, scope: this
                     }
                     , failure: function (fp, o) {
-                        MODx.msg.alert('Error', o.result.message);
+                        MODx.msg.alert('Error', fp.a.result.message);
                     }
                 }
             });
