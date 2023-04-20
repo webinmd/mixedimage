@@ -5,9 +5,9 @@ Extra: mixedImage -  Custom TV
 --------------------
 ### 2.2.0
 * Crop image
-* Fix checking mime type 
-* Fix get tv id in migx field 
-* Changed download function
+* Fix checking mime type By [webnitros] https://github.com/webnitros
+* Fix get tv id in migx field By [webnitros]
+* Changed download functionBy [webnitros]
 
 
 --------------------

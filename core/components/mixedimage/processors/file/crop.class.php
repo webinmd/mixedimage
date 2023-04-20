@@ -20,29 +20,34 @@ class mixedimageCropProcessor extends modProcessor
     {
         $data = $this->properties['file'];
         $suffix = $this->properties['suffix'];
+        $old_value = $this->properties['value'];
         $image_array_1 = explode(";", $data);
         $image_array_2 = explode(",", $image_array_1[1]);
         $data = base64_decode($image_array_2[1]);
 
-        $name_array = explode(".", $this->properties['value']);
+        $name_array = explode(".", $old_value);
+        $fileinfo = pathinfo($old_value);
 
-        // check if was cropped
-        if(mb_strlen($suffix) > 0) {
-            if (stripos($name_array[0], $suffix) != false) {
+        if (mb_strlen($suffix) > 0) {
+            if ($suffix == 'time()') {
+                $suffix = "_" . time();
+            } elseif (stripos($name_array[0], $suffix) !== false) {
                 $suffix = '';
             }
         }
 
-        $image_new = $name_array[0] . $suffix . '.png';
+        $image_new = $name_array[0] . $suffix . '.' . $fileinfo['extension'];
         $image_cropped = MODX_BASE_PATH . $this->properties['ctx_path'] . $image_new;
 
         file_put_contents($image_cropped, $data);
 
-        $this->modx->invokeEvent('OnMixedImageCrop', ['image' => $image_cropped]);
+        $this->modx->invokeEvent('OnMixedImageCrop', [
+            'image' => $image_cropped,
+            'tvId' => $this->properties['tvId']
+        ]);
 
         return $image_new;
     }
-
 }
 
 return 'mixedimageCropProcessor';

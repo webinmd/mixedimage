@@ -56,6 +56,7 @@ if (!class_exists('MixedImageInputRender')) {
 			$this->setPlaceholder('crop_height', $opts['crop_height']);
 			$this->setPlaceholder('crop_ratio', $opts['crop_ratio']);
 			$this->setPlaceholder('crop_suffix', $opts['crop_suffix']);
+			$this->setPlaceholder('crop_options', $opts['crop_options']);
 
 			$tv = $this->tv;
 
