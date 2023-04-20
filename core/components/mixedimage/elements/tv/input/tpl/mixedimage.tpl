@@ -48,6 +48,7 @@
 		,crop_height: '{$crop_height}'
 		,crop_ratio: '{$crop_ratio}'
 		,crop_suffix: '{$crop_suffix}'
+		,crop_options: '{$crop_options}'
 		{literal}
 	});
 	{/literal}

@@ -93,7 +93,8 @@
 }
 
 input[name="inopt_resize"],
-input[name="inopt_triggerlist"]{
+input[name="inopt_triggerlist"],
+input[name="inopt_crop_options"]{
 	width: 100%;
 	max-width: 500px;
 }

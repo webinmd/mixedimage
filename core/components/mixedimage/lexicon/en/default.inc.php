@@ -25,7 +25,7 @@ $_lang['mixedimage.crop_ratio_desc'] = 'Example: 1/1 or 16/9 or 450/800';
 $_lang['mixedimage.crop_height'] = 'Crop height';
 $_lang['mixedimage.crop_width'] = 'Crop width';
 $_lang['mixedimage.crop_suffix'] = 'Suffix for cropped file';
-$_lang['mixedimage.crop_suffix_desc'] = 'If left blank, the file will be overwritten';
+$_lang['mixedimage.crop_suffix_desc'] = 'If left blank, the file will be overwritten. You can write <strong>time()</strong> to generate a new image each time';
 
 // TV Render
 $_lang['mixedimage.upload_file'] = 'Upload File...';
@@ -74,5 +74,8 @@ $_lang['mixedimage.err_file_url_download'] = 'Error loading file from url';
 $_lang['mixedimage.success_removed'] = 'File success removed';
 
 // crop
+$_lang['mixedimage.fieldset.crop'] = 'Crop';
 $_lang['mixedimage.image_crop_title'] = 'Edit image';
 $_lang['mixedimage.button_crop'] = 'Crop';
+$_lang['mixedimage.crop_options'] = 'Additional options';
+$_lang['mixedimage.crop_options_desc'] = 'Example: zoomOnWheel: false, viewMode: 1 <br> <a href="https://github.com/fengyuanchen/cropperjs/blob/main/README.md#options" target="_blank">Full list of options</a>';
