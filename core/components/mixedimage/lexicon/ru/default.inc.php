@@ -36,9 +36,7 @@ $_lang['mixedimage.clear_file'] = 'Удалить';
 $_lang['mixedimage.error_tvid_ns'] = 'mixedImage: modTemplateVar ID не найден';
 $_lang['mixedimage.error_tvid_invalid'] = 'mixedImage: TV id не верный';
 $_lang['mixedimage.err_file_mime'] = 'mixedImage: неверный MIME тип файла';
-
 $_lang['mixedimage.error_remove'] = 'Ошибка при удалении (смотрите console)';
-
 $_lang['mixedimage.err_file_ns'] = 'Ошибка: файл не был загружен';
 $_lang['mixedimage.err_save_resource'] = 'Перед добавлением новых элементов, вам необходимо сохранить этот ресурс!';
 
@@ -56,6 +54,8 @@ $_lang['mixedimage.trigger_btn_clear'] = 'Очистить';
 $_lang['mixedimage.trigger_btn_remove'] = 'Очистить и удалить файл с сервера';
 $_lang['mixedimage.trigger_btn_url'] = 'Со стороннего url';
 $_lang['mixedimage.trigger_btn_crop'] = 'Обрезать изображение';
+$_lang['mixedimage.remove_title'] = 'Удалить?';
+$_lang['mixedimage.remove_confirm'] = 'Файл будет безвозвратно удален с сервера!';
 
 $_lang['mixedimage.triggerlist'] = 'Список кнопок';
 $_lang['mixedimage.trigger_btn_file_manager'] = 'Файловый менеджер';
@@ -71,7 +71,7 @@ $_lang['mixedimage.url_empty'] = 'Укажите url';
 $_lang['mixedimage.err_file_url_download'] = 'Ошибка при загрузке файла из url';
 
 // success
-$_lang['mixedimage.success_removed'] = 'Файл безвозвратно удален';
+$_lang['mixedimage.success_removed'] = 'Файл удален';
 
 // crop
 $_lang['mixedimage.image_crop_title'] = 'Редактировать изображение';

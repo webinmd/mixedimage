@@ -67,6 +67,7 @@ Ext.extend(mixedimage.panel, Ext.Container, {
             , crop_height: config.crop_height
             , crop_ratio: config.crop_ratio
             , crop_suffix: config.crop_suffix
+            , crop_options: config.crop_options
             , listeners: {
                 change: {
                     fn: function (data) {
@@ -397,7 +398,7 @@ Ext.extend(mixedimage.windowCrop, MODx.Window, {
         return [{
             html: '<img id="image-' + config.window.id + '" src="/' + config.window.ctx_path + fieldValue + '" />'
         }, {
-            html: '<div class="crop-sizes"><span id="crop-dataWidth"></span>x<span id="crop-dataHeight"></span></div>'
+            html: '<div class="crop-sizes"><span id="crop-dataWidth-' + config.window.id + '"></span>x<span id="crop-dataHeight-' + config.window.id + '"></span></div>'
         }];
     },
 
@@ -498,26 +499,32 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
     , clearField: function () {
 
         if (this.removeFile) {
-            Ext.Ajax.request({
-                url: MODx.config.assets_url + 'components/mixedimage/connector.php'
-                , params: {
+
+            MODx.msg.confirm({
+                title: _('mixedimage.remove_title'),
+                text: _('mixedimage.remove_confirm'),
+                url: MODx.config.assets_url + 'components/mixedimage/connector.php',
+                params: {
                     file: this.value
                     , action: 'file/remove'
                     , source: this.source
+                },
+                listeners: {
+                    success: {
+                        fn: function () {
+                            this.setValue(''); 
+                            this.fireEvent('change', this);
+                            MODx.msg.alert('Success', _('mixedimage.success_removed'));
+                        }, scope: this
+                    }
                 }
-                , success: function (data) {
-                    MODx.msg.alert('Remove', _('mixedimage.success_removed'));
-                }
-                , failure: function (data) {
-                    MODx.msg.alert('Error', _('mixedimage.error_remove'));
-                }
-            });
+            }); 
+
+        } else {
+            this.setValue(''); 
+            this.fireEvent('change', this);
         }
-
-        this.setValue('');
-        this.fireEvent('change', this);
-    }
-
+    } 
     , getExtension: function (value) {
         var ext = value.split('.').pop();
         var isVideo = false;
@@ -612,6 +619,7 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                                             , value: field.value
                                             , source: field.source
                                             , suffix: field.crop_suffix
+                                            , tvId: field.tvId
                                         }
                                         , success: function (data) {
                                             field.setValueInput(data.responseText);
@@ -650,8 +658,8 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                     }
                     , show: function (fp, o) {
                         var image = document.getElementById("image-" + fp.window.id);
-                        var dataHeight = document.getElementById('crop-dataHeight');
-                        var dataWidth = document.getElementById('crop-dataWidth');
+                        var dataHeight = document.getElementById("crop-dataHeight-" + fp.window.id);
+                        var dataWidth = document.getElementById("crop-dataWidth-" + fp.window.id);
                         var ratio = '';
 
                         if (field.crop_ratio) {
@@ -659,7 +667,7 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                             ratio = ratioArray[0] / ratioArray[1];
                         }
 
-                        cropper = new Cropper(image, {
+                        const crop_options_default = {
                             aspectRatio: ratio,
                             minCanvasWidth: 300,
                             minCropBoxWidth: field.crop_width,
@@ -671,7 +679,20 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                                 dataHeight.innerText = Math.round(data.height);
                                 dataWidth.innerText = Math.round(data.width);
                             },
-                        });
+                        }
+
+                        let crop_options_config = {}
+
+                        if (field.crop_options) { 
+                            crop_options_config = Object.fromEntries(field.crop_options.split(',').map(i => i.split(':')));
+                        }
+
+                        const crop_options = {
+                            ...crop_options_default,
+                            ...crop_options_config
+                        }
+ 
+                        cropper = new Cropper(image, crop_options);
                     }
                     , hide: function () {
                         cropper.destroy();
