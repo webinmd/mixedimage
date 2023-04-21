@@ -57,6 +57,8 @@ $_lang['mixedimage.trigger_btn_clear'] = 'Clear';
 $_lang['mixedimage.trigger_btn_remove'] = 'Clear and remove file from the server';
 $_lang['mixedimage.trigger_btn_url'] = 'From external url';
 $_lang['mixedimage.trigger_btn_crop'] = 'Crop image';
+$_lang['mixedimage.remove_title'] = 'Remove?';
+$_lang['mixedimage.remove_confirm'] = 'The file will be removed from the server!';
 
 $_lang['mixedimage.triggerlist'] = 'Trigger list';
 $_lang['mixedimage.trigger_btn_file_manager'] = 'File manager';

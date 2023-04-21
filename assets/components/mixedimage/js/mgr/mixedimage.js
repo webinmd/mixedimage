@@ -499,26 +499,32 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
     , clearField: function () {
 
         if (this.removeFile) {
-            Ext.Ajax.request({
-                url: MODx.config.assets_url + 'components/mixedimage/connector.php'
-                , params: {
+
+            MODx.msg.confirm({
+                title: _('mixedimage.remove_title'),
+                text: _('mixedimage.remove_confirm'),
+                url: MODx.config.assets_url + 'components/mixedimage/connector.php',
+                params: {
                     file: this.value
                     , action: 'file/remove'
                     , source: this.source
+                },
+                listeners: {
+                    success: {
+                        fn: function () {
+                            this.setValue(''); 
+                            this.fireEvent('change', this);
+                            MODx.msg.alert('Success', _('mixedimage.success_removed'));
+                        }, scope: this
+                    }
                 }
-                , success: function (data) {
-                    MODx.msg.alert('Remove', _('mixedimage.success_removed'));
-                }
-                , failure: function (data) {
-                    MODx.msg.alert('Error', _('mixedimage.error_remove'));
-                }
-            });
+            }); 
+
+        } else {
+            this.setValue(''); 
+            this.fireEvent('change', this);
         }
-
-        this.setValue('');
-        this.fireEvent('change', this);
-    }
-
+    } 
     , getExtension: function (value) {
         var ext = value.split('.').pop();
         var isVideo = false;
