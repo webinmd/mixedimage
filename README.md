@@ -4,6 +4,11 @@ mixedImage - modx custom TV  [сhangelog](core/components/mixedimage/docs/change
 
 ![mixedImage](mixedimage2.png) 
 
+
+## Требования
+- PHP >= 7.0
+- MODX >= 2.8 
+
 -------------------------------------- 
 
 Добавляет новый тип TV поля: **Смешанная загрузка файла/Mixed Image Input**
