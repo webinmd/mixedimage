@@ -50,7 +50,7 @@ if (!class_exists('MixedImageInputRender')) {
 			$this->setPlaceholder('showValue', (($opts['showValue'] ?? '') === $this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('removeFile', ($opts['removeFile'] == $this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('onlyEdit', $this->modx->getOption('mixedimage.check_resid'));
-			$this->setPlaceholder('openPath', $opts['path']);
+			$this->setPlaceholder('openPath', $this->parsePlaceholders($opts['path']));
 			$this->setPlaceholder('triggerlist', $opts['triggerlist'] ?: 'clear,manager,pc');
 			$this->setPlaceholder('crop_width', $opts['crop_width']);
 			$this->setPlaceholder('crop_height', $opts['crop_height']);
@@ -100,6 +100,16 @@ if (!class_exists('MixedImageInputRender')) {
 		public function getLexiconTopics()
 		{
 			return array('mixedimage:default');
+		}
+
+		private function parsePlaceholders($str)
+		{
+			$bits = [
+				'{id}' => $this->modx->resource->get('id'),
+				'{pid}' => $this->modx->resource->get('parent')
+			];
+
+			return str_replace(array_keys($bits), $bits, $str);
 		}
 	}
 }

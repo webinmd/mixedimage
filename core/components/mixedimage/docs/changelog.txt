@@ -4,7 +4,9 @@ Extra: mixedImage -  Custom TV
 
 --------------------
 ### 2.3.0
+* Fix clearing value on open browser select https://github.com/webinmd/mixedimage/issues/39
 * Fix open path https://github.com/webinmd/mixedimage/issues/40
+* Fix parsing placeholders {id} and {pid} https://github.com/webinmd/mixedimage/issues/42
 
 
 --------------------
