@@ -3,6 +3,11 @@
 Extra: mixedImage -  Custom TV
 
 --------------------
+### 2.3.0
+* Fix open path https://github.com/webinmd/mixedimage/issues/40
+
+
+--------------------
 ### 2.2.0
 * Crop image
 * Fix checking mime type By [webnitros] https://github.com/webnitros

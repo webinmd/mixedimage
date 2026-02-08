@@ -32,6 +32,14 @@ Ext.extend(mixedimage.panel, Ext.Container, {
         return [this.getImageContainer(config), this.getTriggerField(config)];
     }
     , getImageContainer: function (config) {
+        
+        if (config.value?.trim()) {
+            const lastSlashIndex = config.value.lastIndexOf('/');
+            config.openPath = lastSlashIndex !== -1 
+                ? config.value.substring(0, lastSlashIndex) 
+                : '';
+        }
+
         return {
             xtype: 'container'
             , hidden: true
