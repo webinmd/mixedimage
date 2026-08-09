@@ -1,5 +1,58 @@
 mixedimage = {};
 
+mixedimage.isPreviewEnabled = function (showPreview) {
+    return showPreview === true || showPreview === 'true' || showPreview === 1 || showPreview === '1';
+};
+
+mixedimage.getFileExtensionInfo = function (value) {
+    var ext = value.split('.').pop();
+    var mime_type;
+    var isVideo = false;
+
+    if (ext === 'mp4') {
+        mime_type = 'video/mp4';
+        isVideo = true;
+    } else if (ext === 'ogg') {
+        mime_type = 'video/ogg';
+        isVideo = true;
+    }
+
+    return {
+        ext: ext,
+        mime_type: mime_type,
+        isVideo: isVideo
+    };
+};
+
+mixedimage.buildPreviewContent = function (config, value) {
+    if (Ext.isEmpty(value)) {
+        return '';
+    }
+
+    var fileInfo = mixedimage.getFileExtensionInfo(value);
+    var path = config.ctx_path || '';
+
+    if (fileInfo.isVideo) {
+        return '<video controls><source src="../' + path + value + '" type="' + fileInfo.mime_type + '"></video>';
+    }
+
+    return '<img src="' + MODx.config.connectors_url + 'system/phpthumb.php?w=200&h=100&f=png&src='
+        + value + '&source=' + config.source + '" alt="" />';
+};
+
+mixedimage.updatePreviewElement = function (tvId, config, value) {
+    if (!mixedimage.isPreviewEnabled(config.showPreview)) {
+        return;
+    }
+
+    var preview = Ext.get('tv-image-preview-' + tvId);
+    if (!preview) {
+        return;
+    }
+
+    preview.update(mixedimage.buildPreviewContent(config, value));
+};
+
 mixedimage.panel = function (config) {
     config = config || {};
 
@@ -22,6 +75,14 @@ mixedimage.panel = function (config) {
 
     mixedimage.panel.superclass.constructor.call(this, config);
 
+    this.on('afterrender', function () {
+        mixedimage.updatePreviewElement(this.tvId, {
+            showPreview: this.showPreview,
+            ctx_path: this.ctx_path,
+            source: this.source
+        }, this.value);
+    }, this);
+
     Ext.onReady(function () { this.loadFileForm(); }, this);
 
     this.on('onFileUploadSuccess', this.onFileUploadSuccess, this);
@@ -35,8 +96,8 @@ Ext.extend(mixedimage.panel, Ext.Container, {
 
         if (config.value?.trim()) {
             const lastSlashIndex = config.value.lastIndexOf('/');
-            config.openPath = lastSlashIndex !== -1 
-                ? config.value.substring(0, lastSlashIndex) 
+            config.openPath = lastSlashIndex !== -1
+                ? config.value.substring(0, lastSlashIndex)
                 : '';
         }
 
@@ -117,63 +178,12 @@ Ext.extend(mixedimage.panel, Ext.Container, {
         this.preview = this.preview || Ext.get('tv-image-preview-' + this.tvId);
         return this.preview;
     }
-    , getExtension: function (value) {
-        var ext = value.split('.').pop();
-        var isVideo = false;
-
-        if (ext == 'mp4') {
-            var mime_type = 'video/mp4';
-            isVideo = true;
-        }
-        if (ext == 'ogg') {
-            var mime_type = 'video/ogg';
-            isVideo = true;
-        }
-
-        return {
-            ext: ext,
-            mime_type: mime_type,
-            isVideo: isVideo
-        }
-    }
     , updatePreview: function (value) {
-        if (this.showPreview === true) {
-            var d = this.getPreview();
-            var content = '';
-
-            if (!Ext.isEmpty(value)) {
-
-                var file_info = this.getExtension(value);
-
-                if (file_info.isVideo) {
-
-                    if (this.ctx_path) {
-                        var path = this.ctx_path;
-                    } else {
-                        var path = '';
-                    }
-
-                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                        + '<video controls>'
-                        + '<source src="../' + path + value + '" type="' + file_info.mime_type + '">'
-                        + '</video>'
-                        + '</tpl>', {
-                        compiled: true
-                    });
-
-                } else {
-                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                        + '<img src="' + MODx.config.connectors_url + 'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source=' + this.source + '" alt="" />'
-                        + '</tpl>', {
-                        compiled: true
-                    });
-                }
-
-                content = this.previewTpl.apply({ width: 200, height: 100, value: value });
-
-            }
-            d.update(content);
-        }
+        mixedimage.updatePreviewElement(this.tvId, {
+            showPreview: this.showPreview,
+            ctx_path: this.ctx_path,
+            source: this.source
+        }, value);
     }
     , loadFileForm: function () {
         this.uploadFormInputId = 'mixedimage_fileform' + this.tvId;
@@ -524,37 +534,21 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                 listeners: {
                     success: {
                         fn: function () {
-                            this.setValue(''); 
+                            this.setValue('');
                             this.fireEvent('change', this);
                             MODx.msg.alert('Success', _('mixedimage.success_removed'));
                         }, scope: this
                     }
                 }
-            }); 
+            });
 
         } else {
-            this.setValue(''); 
+            this.setValue('');
             this.fireEvent('change', this);
         }
-    } 
+    }
     , getExtension: function (value) {
-        var ext = value.split('.').pop();
-        var isVideo = false;
-
-        if (ext == 'mp4') {
-            var mime_type = 'video/mp4';
-            isVideo = true;
-        }
-        if (ext == 'ogg') {
-            var mime_type = 'video/ogg';
-            isVideo = true;
-        }
-
-        return {
-            ext: ext,
-            mime_type: mime_type,
-            isVideo: isVideo
-        }
+        return mixedimage.getFileExtensionInfo(value);
     }
     , getFromUrl: function (btn, e) {
 
@@ -695,7 +689,7 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
 
                         let crop_options_config = {}
 
-                        if (field.crop_options) { 
+                        if (field.crop_options) {
                             crop_options_config = Object.fromEntries(field.crop_options.split(',').map(i => i.split(':')));
                         }
 
@@ -703,7 +697,7 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                             ...crop_options_default,
                             ...crop_options_config
                         }
- 
+
                         cropper = new Cropper(image, crop_options);
                     }
                     , hide: function () {
@@ -731,43 +725,13 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
         this.updatePreview(value);
     }
     , updatePreview: function (value) {
-        if (this.showPreview === true) {
-            var d = this.getPreview();
-            var content = '';
+        mixedimage.updatePreviewElement(this.tvId, {
+            showPreview: this.showPreview,
+            ctx_path: this.ctx_path,
+            source: this.source
+        }, value);
 
-            if (!Ext.isEmpty(value)) {
-
-                var file_info = this.getExtension(value);
-
-                if (file_info.isVideo) {
-
-                    if (this.ctx_path) {
-                        var path = this.ctx_path;
-                    } else {
-                        var path = '';
-                    }
-
-                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                        + '<video controls>'
-                        + '<source src="../' + path + value + '" type="' + file_info.mime_type + '">'
-                        + '</video>'
-                        + '</tpl>', {
-                        compiled: true
-                    });
-
-                } else {
-                    this.previewTpl = new Ext.XTemplate('<tpl for=".">'
-                        + '<img src="' + MODx.config.connectors_url + 'system/phpthumb.php?w={width}&h={height}&f=png&src={value}&source=' + this.source + '" alt="" />'
-                        + '</tpl>', {
-                        compiled: true
-                    });
-                }
-
-                content = this.previewTpl.apply({ width: 200, height: 100, value: value });
-
-            }
-            d.update(content);
-
+        if (mixedimage.isPreviewEnabled(this.showPreview)) {
             MODx.fireResourceFormChange();
         }
     }

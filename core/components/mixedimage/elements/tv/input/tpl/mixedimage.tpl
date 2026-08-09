@@ -1,25 +1,25 @@
-<input type="hidden" id="tv{$tv->id}" name="tv{$tv->id}" value="{$tv->value|escape}" /> 
+<input type="hidden" id="tv{$tv->id}" name="tv{$tv->id}" value="{$tv->value|escape}" />
 <div id="mixedimage{$tv->id}" class="mixedimage"></div>
 
 {if $showPreview === "true"}
 	<div id="tv-image-preview-{$tv->id}" class="modx-tv-image-preview">
-		{if $isVideo} 
+		{if $isVideo}
 		    {if $tv->value}
 			    <video controls>
-				  <source src="../{$source_path}{$tv->value}" type="{$current_mime}"> 
+				  <source src="../{$source_path}{$tv->value}" type="{$current_mime}">
 					Your browser does not support the video tag.
-				</video> 
+				</video>
 			{/if}
 		{else}
 		    {if $tv->value}
-				<img src="{$_config.connectors_url}system/phpthumb.php?w=300&h=300&aoe=0&far=0&src={$tv->value}&source={$tv->source}" alt="" />
+				<img src="{$connectors_url}system/phpthumb.php?w=300&h=300&aoe=0&far=0&src={$tv->value|escape:'url'}&source={$ms_id}" alt="" />
 			{/if}
-		{/if} 
+		{/if}
 	</div>
 {/if}
 
 <script type="text/javascript">
- 
+
 	mixedimage{$tv->id} = MODx.load{literal}({
 		{/literal}
 		xtype: 'mixedimage-panel'
@@ -36,7 +36,7 @@
 		,acceptedMIMEtypes: {$MIME_TYPES}
 		,prefixFilename: {$prefixFilename}
 		,triggerlist: '{$triggerlist}'
-		,source: '{$tv->source}'
+		,source: {$ms_id}
 		,showPreview: {$showPreview}
 		,removeFile: {$removeFile}
 		,ctx_path: '{$source_path}'
@@ -53,7 +53,7 @@
 	});
 	{/literal}
 	var field = mixedimage{$tv->id}
-	MODx.makeDroppable(field, function(v){  
+	MODx.makeDroppable(field, function(v){
 		var newValue = v.replace('{$source_path}', '');
 		field.setValue(newValue);
 		field.fireEvent('select',{ relativeUrl:newValue });
