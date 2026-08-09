@@ -33,6 +33,7 @@
 		,p_alias: '{$p_alias}'
 		,tv_id: {$tv_id}
 		,ms_id: {$ms_id}
+		,jsonlex: {$jsonlex}
 		,acceptedMIMEtypes: {$MIME_TYPES}
 		,prefixFilename: {$prefixFilename}
 		,triggerlist: '{$triggerlist}'

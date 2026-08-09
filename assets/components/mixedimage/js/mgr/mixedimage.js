@@ -1,5 +1,44 @@
 mixedimage = {};
 
+mixedimage.isYesOption = function (value) {
+    return value === true || value === 'true' || value === 1 || value === '1';
+};
+
+mixedimage.getResourceFormData = function () {
+    var panel = Ext.getCmp('modx-panel-resource');
+
+    if (!panel) {
+        return '{}';
+    }
+
+    return Ext.util.JSON.encode(panel.getForm().getValues() || {});
+};
+
+mixedimage.getRemoveParams = function (field) {
+    return {
+        file: field.getValue(),
+        action: 'file/remove',
+        source: field.source,
+        tv_id: field.tv_id,
+        formdata: mixedimage.getResourceFormData(),
+        HTTP_MODAUTH: MODx.siteId
+    };
+};
+
+mixedimage.getPreviousFileValue = function (tvPanel) {
+    if (!tvPanel) {
+        return '';
+    }
+
+    var tvField = tvPanel.getTVField ? tvPanel.getTVField() : null;
+
+    if (tvField && tvField.dom) {
+        return tvField.dom.value || '';
+    }
+
+    return tvPanel.value || '';
+};
+
 mixedimage.panel = function (config) {
     config = config || {};
 
@@ -66,6 +105,7 @@ Ext.extend(mixedimage.panel, Ext.Container, {
             , id: 'mixedimage_input' + config.tvId
             , emptyText: ''
             , tvId: config.tvId
+            , tv_id: config.tv_id
             , source: config.source
             , showPreview: config.showPreview
             , ctx_path: config.ctx_path
@@ -247,7 +287,8 @@ Ext.extend(mixedimage.fileform, Ext.FormPanel, {
 
         var params = {};
         params.custompath = this.TV.getCustomPath() || '';
-        params.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues() || {});
+        params.formdata = mixedimage.getResourceFormData();
+        params.previous_value = mixedimage.getPreviousFileValue(this.TV);
 
         this.form.submit({
             waitMsg: 'Uploading...',
@@ -268,7 +309,8 @@ Ext.extend(mixedimage.fileform, Ext.FormPanel, {
         var params = {};
         Ext.apply(params, this.baseParams);
         params.custompath = this.TV.getCustomPath() || '';
-        params.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues() || {});
+        params.formdata = mixedimage.getResourceFormData();
+        params.previous_value = mixedimage.getPreviousFileValue(this.TV);
         params.HTTP_MODAUTH = MODx.siteId;
 
         FileAPI.upload({
@@ -310,7 +352,7 @@ Ext.reg('mixedimage-fileform', mixedimage.fileform);
 mixedimage.window = function (config) {
     config = config || {};
 
-    config.formdata = Ext.util.JSON.encode(Ext.getCmp('modx-panel-resource').getForm().getValues() || {});
+    config.formdata = mixedimage.getResourceFormData();
 
     Ext.applyIf(config, {
         url: MODx.config.assets_url + 'components/mixedimage/connector.php'
@@ -353,8 +395,8 @@ Ext.extend(mixedimage.window, MODx.Window, {
 
         return {
             action: 'file/upload'
-            , tv_id: fields.tvId
-            , tvId: fields.tv_id
+            , tv_id: fields.tv_id
+            , tvId: fields.tvId
             , prefixFilename: fields.prefixFilename
             , res_id: fields.res_id
             , res_alias: fields.res_alias
@@ -365,6 +407,7 @@ Ext.extend(mixedimage.window, MODx.Window, {
             , lex: fields.jsonlex
             , ctx_path: fields.ctx_path
             , formdata: config.formdata
+            , previous_value: fields.value || ''
         };
     }
 
@@ -509,34 +552,32 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
         this.editImage(field, el);
     }
     , clearField: function () {
+        if (Ext.isEmpty(this.getValue())) {
+            this.setValueInput('');
+            return;
+        }
 
-        if (this.removeFile) {
+        if (mixedimage.isYesOption(this.removeFile)) {
 
             MODx.msg.confirm({
                 title: _('mixedimage.remove_title'),
                 text: _('mixedimage.remove_confirm'),
                 url: MODx.config.assets_url + 'components/mixedimage/connector.php',
-                params: {
-                    file: this.value
-                    , action: 'file/remove'
-                    , source: this.source
-                },
+                params: mixedimage.getRemoveParams(this),
                 listeners: {
                     success: {
                         fn: function () {
-                            this.setValue(''); 
-                            this.fireEvent('change', this);
+                            this.setValueInput('');
                             MODx.msg.alert('Success', _('mixedimage.success_removed'));
                         }, scope: this
                     }
                 }
-            }); 
+            });
 
         } else {
-            this.setValue(''); 
-            this.fireEvent('change', this);
+            this.setValueInput('');
         }
-    } 
+    }
     , getExtension: function (value) {
         var ext = value.split('.').pop();
         var isVideo = false;
@@ -729,6 +770,7 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
         tvfield.dom.value = value;
         this.el.dom.value = value;
         this.updatePreview(value);
+        MODx.fireResourceFormChange();
     }
     , updatePreview: function (value) {
         if (this.showPreview === true) {

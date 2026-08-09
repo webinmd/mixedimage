@@ -9,6 +9,8 @@
  * @subpackage processors.browser.file
  */
 
+require_once dirname(__FILE__) . '/tvmediasource.class.php';
+
 if (!class_exists('\MODX\Revolution\modX')) {
     require_once MODX_CORE_PATH . 'model/modx/modprocessor.class.php';
     require_once MODX_CORE_PATH . 'model/modx/processors/browser/file/upload.class.php';
@@ -18,7 +20,6 @@ if (!class_exists('\MODX\Revolution\modX')) {
 
 class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 {
-
     public function initialize()
     {
         $this->setDefaultProperties(array(
@@ -26,8 +27,10 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             'path' => false
         ));
         $this->properties = $this->getProperties();
+        $this->formdata = [];
         if (isset($this->properties['formdata'])) {
-            $this->formdata = $this->modx->fromJSON($this->properties['formdata']);
+            $decoded = $this->modx->fromJSON($this->properties['formdata']);
+            $this->formdata = is_array($decoded) ? $decoded : [];
         }
 
 
@@ -56,7 +59,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
     public function process()
     {
-
         if (count($_FILES) < 1 && !$this->getProperty('url')) {
             return $this->failure($this->modx->lexicon('mixedimage.err_file_ns'));
         }
@@ -73,7 +75,7 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             return $this->failure($this->modx->lexicon('mixedimage.error_tvid_invalid') . "<br />\n[" . $this->getProperty('tv_id') . "]");
         }
 
-        $context_key = $this->formdata['context_key'];
+        $context_key = $this->formdata['context_key'] ?? 'web';
 
         // Initialize and check perms for this mediasource
         $this->source = $TV->getSource($context_key); //
@@ -143,7 +145,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
 
 
         if ($opts['resize']) {
-
             $params = explode("&", $opts['resize']);
 
             if (count($params) < 1) {
@@ -179,7 +180,33 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
             }
         }
 
-        return $this->success(stripslashes($url));
+        $storedUrl = stripslashes($url);
+        $this->removePreviousFileIfReplaced($storedUrl);
+
+        return $this->success($storedUrl);
+    }
+
+    private function removePreviousFileIfReplaced(string $newUrl): void
+    {
+        $previousValue = (string)$this->getProperty('previous_value');
+        if ($previousValue === '') {
+            return;
+        }
+
+        $media = new \MixedImage\Processors\File\MixedImageTvMediaSource($this);
+        $media->setSource($this->source);
+
+        $previousPath = $media->normalizeRelativePath($previousValue);
+        $newPath = $media->normalizeRelativePath($newUrl);
+
+        if ($previousPath === '' || $previousPath === $newPath) {
+            return;
+        }
+
+        $removed = $media->removeFileFromSource($previousPath);
+        if ($removed !== true) {
+            $this->modx->log(modX::LOG_LEVEL_WARN, 'mixedImage: could not remove previous file: ' . $removed);
+        }
     }
 
     /**
@@ -223,7 +250,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
      */
     private function downloadFromUrl($file_url)
     {
-
         $filePath = $this->tempPath . time() . rand(1, 10000);
         $file_output = fopen($filePath, 'wb');
 
@@ -262,7 +288,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
      */
     private function preparePath($pathStr)
     {
-
         if (!empty($_REQUEST['custompath'])) {
             return $_REQUEST['custompath'];
         }
@@ -284,7 +309,6 @@ class mixedimageBrowserFileUploadProcessor extends modBrowserFileUploadProcessor
      */
     private function prepareFiles($prefix)
     {
-
         $mixedimage_translit = (bool)$this->modx->getOption('mixedimage.translit', null, false); // modx 2
         $system_translit = (bool)$this->modx->getOption('upload_translit', null, false); // modx 3
 

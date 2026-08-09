@@ -48,7 +48,7 @@ if (!class_exists('MixedImageInputRender')) {
 			$this->setPlaceholder('prefixFilename', ($opts['prefixFilename'] == $this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('showPreview', ($opts['showPreview'] == $this->modx->lexicon('yes') ? 'true' : 'false'));
 			$this->setPlaceholder('showValue', (($opts['showValue'] ?? '') === $this->modx->lexicon('yes') ? 'true' : 'false'));
-			$this->setPlaceholder('removeFile', ($opts['removeFile'] == $this->modx->lexicon('yes') ? 'true' : 'false'));
+			$this->setPlaceholder('removeFile', $this->toJsBoolean($opts['removeFile'] ?? false));
 			$this->setPlaceholder('onlyEdit', $this->modx->getOption('mixedimage.check_resid'));
 			$this->setPlaceholder('openPath', $this->parsePlaceholders($opts['path']));
 			$this->setPlaceholder('triggerlist', $opts['triggerlist'] ?: 'clear,manager,pc');
@@ -100,6 +100,23 @@ if (!class_exists('MixedImageInputRender')) {
 		public function getLexiconTopics()
 		{
 			return array('mixedimage:default');
+		}
+
+		private function isYesOption($value)
+		{
+			if ($value === true || $value === 1 || $value === '1') {
+				return true;
+			}
+
+			$normalized = strtolower((string)$value);
+
+			return in_array($normalized, ['yes', 'true', 'on'], true)
+				|| (string)$value === (string)$this->modx->lexicon('yes');
+		}
+
+		private function toJsBoolean($value)
+		{
+			return $this->isYesOption($value) ? 'true' : 'false';
 		}
 
 		private function parsePlaceholders($str)
