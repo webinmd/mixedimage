@@ -40,6 +40,10 @@ $_lang['mixedimage.err_file_ns'] = 'mixedImage: No File was uploaded';
 $_lang['mixedimage.err_save_resource'] = 'Before adding new items, you need to save this resource!';
 $_lang['mixedimage.err_file_mime'] = 'mixedImage:  wrong file MIME type';
 $_lang['mixedimage.error_remove'] = 'mixedImage removing (view console)';
+$_lang['mixedimage.err_crop_invalid_data'] = 'mixedImage: invalid crop image data';
+$_lang['mixedimage.err_crop_value_ns'] = 'mixedImage: source file value is missing';
+$_lang['mixedimage.err_crop_write_failed'] = 'mixedImage: failed to save cropped image';
+$_lang['mixedimage.err_crop_save'] = 'Error saving cropped image';
 
 // Settings
 $_lang['setting_mixedimage.translit'] = 'Translit';
@@ -65,7 +69,7 @@ $_lang['mixedimage.trigger_btn_file_manager'] = 'File manager';
 $_lang['mixedimage.trigger_btn_file_desktop'] = 'From computer';
 $_lang['mixedimage.trigger_btn_file_url'] = 'From external url';
 
-$_lang['mixedimage.triggerlist_desc'] = 'Specify which of the trigger buttons will be displayed when rendering the field (clear,manager,pc,url)';
+$_lang['mixedimage.triggerlist_desc'] = 'Specify which of the trigger buttons will be displayed when rendering the field (clear,manager,pc,url,crop)';
 // url
 $_lang['mixedimage.window_url'] = 'Provide a link';
 $_lang['mixedimage.link'] = 'Link';
@@ -80,4 +84,4 @@ $_lang['mixedimage.fieldset.crop'] = 'Crop';
 $_lang['mixedimage.image_crop_title'] = 'Edit image';
 $_lang['mixedimage.button_crop'] = 'Crop';
 $_lang['mixedimage.crop_options'] = 'Additional options';
-$_lang['mixedimage.crop_options_desc'] = 'Example: zoomOnWheel: false, viewMode: 1 <br> <a href="https://github.com/fengyuanchen/cropperjs/blob/main/README.md#options" target="_blank">Full list of options</a>';
+$_lang['mixedimage.crop_options_desc'] = 'Format: key: value, key2: value2. Values true, false, null and numbers are parsed automatically. Example: zoomOnWheel: false, viewMode: 1 <br> <a href="https://github.com/fengyuanchen/cropperjs/blob/main/README.md#options" target="_blank">Full CropperJS options list</a>';

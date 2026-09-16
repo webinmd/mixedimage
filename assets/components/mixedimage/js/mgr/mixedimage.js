@@ -35,8 +35,8 @@ Ext.extend(mixedimage.panel, Ext.Container, {
 
         if (config.value?.trim()) {
             const lastSlashIndex = config.value.lastIndexOf('/');
-            config.openPath = lastSlashIndex !== -1 
-                ? config.value.substring(0, lastSlashIndex) 
+            config.openPath = lastSlashIndex !== -1
+                ? config.value.substring(0, lastSlashIndex)
                 : '';
         }
 
@@ -388,7 +388,7 @@ mixedimage.windowCrop = function (config) {
         , autoHeight: false
         , baseParams: this.getBaseParams(config)
     });
-    mixedimage.window.superclass.constructor.call(this, config);
+    mixedimage.windowCrop.superclass.constructor.call(this, config);
 };
 
 
@@ -420,6 +420,131 @@ Ext.extend(mixedimage.windowCrop, MODx.Window, {
 
 });
 Ext.reg('mixedimage-window-editimage', mixedimage.windowCrop);
+
+
+mixedimage.parseCropOptionValue = function (value) {
+    if (value === undefined || value === null) {
+        return value;
+    }
+
+    value = String(value).trim();
+
+    if (value === 'true') {
+        return true;
+    }
+    if (value === 'false') {
+        return false;
+    }
+    if (value === 'null') {
+        return null;
+    }
+    if (value !== '' && !isNaN(value)) {
+        return Number(value);
+    }
+
+    return value;
+};
+
+mixedimage.parseCropOptions = function (optionsString) {
+    if (!optionsString) {
+        return {};
+    }
+
+    var options = {};
+
+    optionsString.split(',').forEach(function (pair) {
+        var parts = pair.split(':');
+        if (parts.length < 2) {
+            return;
+        }
+
+        var key = parts.shift().trim();
+        var value = parts.join(':').trim();
+
+        if (key) {
+            options[key] = mixedimage.parseCropOptionValue(value);
+        }
+    });
+
+    return options;
+};
+
+mixedimage.getSourceMime = function (filePath) {
+    var ext = (filePath.split('.').pop() || '').toLowerCase();
+    var map = {
+        jpg: 'image/jpeg',
+        jpeg: 'image/jpeg',
+        png: 'image/png',
+        gif: 'image/gif',
+        webp: 'image/webp'
+    };
+
+    return map[ext] || 'image/png';
+};
+
+mixedimage.buildCropperOptions = function (field, dataWidthEl, dataHeightEl) {
+    var ratio = '';
+    if (field.crop_ratio) {
+        var ratioParts = String(field.crop_ratio).split('/');
+        if (ratioParts.length === 2 && ratioParts[1] != 0) {
+            ratio = ratioParts[0] / ratioParts[1];
+        }
+    }
+
+    var defaults = {
+        aspectRatio: ratio,
+        minCanvasWidth: 300,
+        minCropBoxWidth: parseInt(field.crop_width, 10) || 0,
+        minCropBoxHeight: parseInt(field.crop_height, 10) || 0,
+        zoomOnWheel: false,
+        viewMode: 1,
+        crop: function (e) {
+            var data = e.detail;
+            dataHeightEl.innerText = Math.round(data.height);
+            dataWidthEl.innerText = Math.round(data.width);
+        }
+    };
+
+    return Ext.apply(defaults, mixedimage.parseCropOptions(field.crop_options));
+};
+
+mixedimage.saveCroppedBlob = function (field, blob, onComplete) {
+    var reader = new FileReader();
+    reader.onloadend = function () {
+        Ext.Ajax.request({
+            url: MODx.config.assets_url + 'components/mixedimage/connector.php',
+            params: {
+                file: reader.result,
+                action: 'file/crop',
+                ctx_path: field.ctx_path,
+                value: field.getValue(),
+                source: field.source,
+                suffix: field.crop_suffix,
+                tvId: field.tvId,
+                HTTP_MODAUTH: MODx.siteId
+            },
+            success: function (response) {
+                var result = Ext.util.JSON.decode(response.responseText);
+
+                if (!result || !result.success) {
+                    MODx.msg.alert('Error', (result && result.message) || _('mixedimage.err_crop_save'));
+                    return;
+                }
+
+                field.setValueInput(result.message);
+                MODx.fireResourceFormChange();
+
+                if (typeof onComplete === 'function') {
+                    onComplete();
+                }
+            },
+            failure: function () {
+                MODx.msg.alert('Error', _('mixedimage.err_crop_save'));
+            }
+        });
+    };
+    reader.readAsDataURL(blob);
+};
 
 
 //////////////////////////////////////////////////////////
@@ -524,19 +649,19 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                 listeners: {
                     success: {
                         fn: function () {
-                            this.setValue(''); 
+                            this.setValue('');
                             this.fireEvent('change', this);
                             MODx.msg.alert('Success', _('mixedimage.success_removed'));
                         }, scope: this
                     }
                 }
-            }); 
+            });
 
         } else {
-            this.setValue(''); 
+            this.setValue('');
             this.fireEvent('change', this);
         }
-    } 
+    }
     , getExtension: function (value) {
         var ext = value.split('.').pop();
         var isVideo = false;
@@ -585,10 +710,9 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
         this.window.show(e.target);
     }
     , editImage: function (field, e) {
+        var triggerField = this;
 
         if (!this.windowCrop) {
-            var cropper;
-
             var winHeight = window.innerHeight - 100;
             var winWidth = window.innerWidth - 100;
 
@@ -607,108 +731,53 @@ Ext.extend(mixedimage.trigger, Ext.form.TriggerField, {
                         text: _('mixedimage.button_crop'),
                         cls: 'primary-button',
                         handler: function () {
-
-                            canvas = cropper.getCroppedCanvas({
-                                width: field.crop_width,
-                                height: field.crop_height,
+                            var win = triggerField.windowCrop;
+                            var mime = mixedimage.getSourceMime(triggerField.value);
+                            var canvas = win.cropper.getCroppedCanvas({
+                                width: parseInt(triggerField.crop_width, 10) || undefined,
+                                height: parseInt(triggerField.crop_height, 10) || undefined,
                                 maxWidth: 1000,
-                                maxHeight: 1000,
+                                maxHeight: 1000
                             });
 
                             canvas.toBlob(function (blob) {
-                                url = URL.createObjectURL(blob);
-                                var reader = new FileReader();
-                                reader.readAsDataURL(blob);
-                                reader.onloadend = function () {
-                                    var base64data = reader.result;
-
-                                    Ext.Ajax.request({
-                                        url: MODx.config.assets_url + 'components/mixedimage/connector.php'
-                                        , params: {
-                                            file: base64data
-                                            , action: 'file/crop'
-                                            , ctx_path: field.ctx_path
-                                            , value: field.value
-                                            , source: field.source
-                                            , suffix: field.crop_suffix
-                                            , tvId: field.tvId
-                                        }
-                                        , success: function (data) {
-                                            field.setValueInput(data.responseText);
-                                            MODx.fireResourceFormChange();
-                                        }
-                                        , failure: function (data) {
-                                            MODx.msg.alert('Error on cropped');
-                                        }
-                                    });
-                                };
-                            });
-
-                            this.windowCrop.hide();
-
+                                mixedimage.saveCroppedBlob(triggerField, blob, function () {
+                                    win.hide();
+                                });
+                            }, mime);
                         }
-                        , scope: this
                     },
                     {
                         text: _('cancel'),
                         handler: function () {
-                            this.windowCrop.hide();
+                            triggerField.windowCrop.hide();
                         }
-                        , scope: this
                     }
                 ]
                 , width: winWidth
                 , height: winHeight
                 , listeners: {
-                    success: {
-                        fn: function (data) {
+                    show: function (win) {
+                        var imageEl = document.getElementById('image-' + win.window.id);
+                        var dataHeightEl = document.getElementById('crop-dataHeight-' + win.window.id);
+                        var dataWidthEl = document.getElementById('crop-dataWidth-' + win.window.id);
 
-                        }, scope: this
+                        imageEl.src = '/' + win.window.ctx_path + win.window.value;
+
+                        if (win.cropper) {
+                            win.cropper.destroy();
+                        }
+
+                        win.cropper = new Cropper(
+                            imageEl,
+                            mixedimage.buildCropperOptions(win.window, dataWidthEl, dataHeightEl)
+                        );
                     }
-                    , failure: function (fp, o) {
-                        MODx.msg.alert('Error', o.result.message);
-                    }
-                    , show: function (fp, o) {
-                        var image = document.getElementById("image-" + fp.window.id);
-                        var dataHeight = document.getElementById("crop-dataHeight-" + fp.window.id);
-                        var dataWidth = document.getElementById("crop-dataWidth-" + fp.window.id);
-                        var ratio = '';
-
-                        if (field.crop_ratio) {
-                            var ratioArray = (field.crop_ratio).split('/');
-                            ratio = ratioArray[0] / ratioArray[1];
+                    , hide: function (win) {
+                        if (win.cropper) {
+                            win.cropper.destroy();
+                            win.cropper = null;
                         }
-
-                        const crop_options_default = {
-                            aspectRatio: ratio,
-                            minCanvasWidth: 300,
-                            minCropBoxWidth: field.crop_width,
-                            minCropBoxHeight: field.crop_height,
-                            zoomOnWheel: false,
-                            viewMode: 1,
-                            crop(e) {
-                                var data = e.detail;
-                                dataHeight.innerText = Math.round(data.height);
-                                dataWidth.innerText = Math.round(data.width);
-                            },
-                        }
-
-                        let crop_options_config = {}
-
-                        if (field.crop_options) { 
-                            crop_options_config = Object.fromEntries(field.crop_options.split(',').map(i => i.split(':')));
-                        }
-
-                        const crop_options = {
-                            ...crop_options_default,
-                            ...crop_options_config
-                        }
- 
-                        cropper = new Cropper(image, crop_options);
-                    }
-                    , hide: function () {
-                        cropper.destroy();
-                        cropper = null;
                     }
                 }
             });

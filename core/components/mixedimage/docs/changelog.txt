@@ -1,115 +1,170 @@
---------------------
+# Changelog
 
-Extra: mixedImage -  Custom TV
+All notable changes to this project will be documented in this file.
 
---------------------
-### 2.3.0
-* Fix clearing value on open browser select https://github.com/webinmd/mixedimage/issues/39
-* Fix open path https://github.com/webinmd/mixedimage/issues/40
-* Fix parsing placeholders {id} and {pid} https://github.com/webinmd/mixedimage/issues/42
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
 
---------------------
-### 2.2.0
-* Crop image
-* Fix checking mime type By [webnitros] https://github.com/webnitros
-* Fix get tv id in migx field By [webnitros]
-* Changed download functionBy [webnitros]
+### Added
+- Документация crop и события `OnMixedImageCrop` в README.
 
+### Changed
+- Рефакторинг crop-процессора и JS-хелперов CropperJS без смены UX редактора.
 
---------------------
-### 2.1.0
-* Refactoring
-* Support MODx 3.0
-* CSS Fix
-* Drag from tree
-  
---------------------
-# Version 2.0.9-beta  
-:: Fix Access Denied in MODx 2.8.0
-  
---------------------
-# Version 2.0.8-beta  
-:: Fix MIGX CMP  
+### Fixed
+- Согласование MIME blob и расширения файла при обрезке.
+- Повторное открытие окна crop обновляет изображение.
+- Парсинг `crop_options` с типами bool/number/null.
 
---------------------
-# Version 2.0.7-beta  
-:: Add video preview   
+## [2.3.0-pl] - 2026-02-09
 
---------------------
-# Version 2.0.6-beta  
--- By DeNomad
-:: Add drag&drop   
+### Fixed
+- Очистка значения при выборе в browser (#39).
+- Корректный `openPath` (#40).
+- Парсинг плейсхолдеров `{id}` и `{pid}` (#42).
 
---------------------
-# Version 2.0.5-beta  
-:: Bugfix  
+## [2.2.0-pl] - 2023-04-21
 
---------------------
-# Version 2.0.4-beta  
-:: Fix url upload on migx  
+### Added
+- Crop изображения (CropperJS, TV-опции, процессор `file/crop`, событие `OnMixedImageCrop`).
+- Диалог подтверждения при удалении файла.
 
---------------------
-# Version 2.0.3-beta  
-:: Fix css for modx-resource-main-right position
-:: Fix js bug on url upload
+### Fixed
+- Проверка MIME (by webnitros).
+- Получение TV id в MIGX (by webnitros).
 
---------------------
-# Version 2.0.2-beta 
-:: Add download by external url
-:: Move removing file in modx processor
-:: Control buttons for each tv field
-:: Fix css
+### Changed
+- Функция загрузки файла (by webnitros).
 
---------------------
-# Version 2.0.1-beta 
--- By SintezCode
-:: Rewrite extjs part for extending and overriding by another components.
-:: Triggers now may configured by triggerConfig.
-:: Triggers handlers may extending or overriding.
-:: Input width now depended by triggers count and its width.
-:: In css now not needed triggers width and positions
-:: Add ability to set custom upload path by another components or by extending or overriding
-:: Uploader now send all resource-panel fields in processor and may used to get upload path by placeholders or in snippet
+## [2.1.0-pl] - 2022-02-23
 
---------------------
-# Version 2.0.0-beta
-:: Change TV view
-:: Fix upload for unsaved resource
-:: Added file deletion
+### Added
+- Drag файлов из дерева ресурсов.
 
---------------------
-# Version 1.1.6-beta
-:: Fixed plugin event
+### Changed
+- Рефакторинг компонента.
+- Поддержка MODX 3.0.
 
---------------------
-# Version 1.1.5-beta
-:: Fixed media path on ajax request
-:: Fixed undefined in manager lexicon
+### Fixed
+- CSS.
 
---------------------
-# Version 1.1.4-beta
-:: Fixed {alias}
+## [2.0.9-beta] - 2020-10-30
 
---------------------
-# Version 1.1.3-beta
-:: Fixed for media source path in context
+### Fixed
+- Access Denied в MODX 2.8.0.
 
---------------------
-# Version 1.1.2-beta
-:: Fixed for media source path  (2)
+## [2.0.8-beta] - 2019-09-10
 
---------------------
-# Version 1.1.1-beta 
-:: legiero: Fixed css
-:: Fixed russian filename
+### Fixed
+- MIGX CMP (#8).
 
---------------------
-# Version 1.1.0-beta
- :: Add resize options
- :: Fixed for MIGX
- :: Fixed for media source path
+## [2.0.7-beta] - 2019-06-20
 
---------------------
-# Version 1.0.0-beta
- :: initial release
+### Added
+- Превью видео в админке и при загрузке по URL.
+
+## [2.0.6-beta] - 2019-04-04
+
+### Added
+- Drag and drop (by DeNomad).
+
+### Fixed
+- Инициализация drag&drop внутри MIGX.
+
+## [2.0.5-beta] - 2019-03-29
+
+### Fixed
+- Bugfix при обновлении с версии 2.0.0.
+
+## [2.0.4-beta] - 2019-03-07
+
+### Fixed
+- Загрузка по URL в MIGX.
+
+## [2.0.3-pl] - 2019-03-05
+
+### Fixed
+- CSS для `modx-resource-main-right`.
+- JS-баг при загрузке по URL.
+
+## [2.0.2-beta] - 2019-03-01
+
+### Added
+- Загрузка по внешнему URL.
+- Настраиваемые кнопки-триггеры для каждого TV.
+
+### Changed
+- Удаление файла перенесено в processor.
+
+### Fixed
+- CSS.
+
+## [2.0.1-beta] - 2018-06-11
+
+### Added
+- Кастомный путь загрузки через расширение компонента.
+- Отправка полей resource-panel в processor для плейсхолдеров пути.
+
+### Changed
+- Переписан ExtJS-слой для расширения и переопределения (by SintezCode).
+- Ширина поля зависит от числа триггеров.
+- Триггеры настраиваются через `triggerConfig`.
+
+## [2.0.0-beta] - 2018-01-08
+
+### Added
+- Физическое удаление файла при очистке поля.
+
+### Changed
+- Новый вид TV-поля.
+
+### Fixed
+- Загрузка для несохранённого ресурса.
+
+## [1.1.6-beta] - 2018-01-05
+
+### Fixed
+- Событие плагина.
+
+## [1.1.5-beta] - 2017-12-01
+
+### Fixed
+- Путь медиа в AJAX-запросе.
+- Undefined в lexicon менеджера.
+
+## [1.1.4-beta] - 2017-03-16
+
+### Fixed
+- Плейсхолдер `{alias}`.
+
+## [1.1.3-beta] - 2017-03-01
+
+### Fixed
+- Путь media source в контексте.
+
+## [1.1.2-beta] - 2017-02-20
+
+### Fixed
+- Путь media source (2).
+
+## [1.1.1-beta] - 2017-02-10
+
+### Fixed
+- CSS (by legiero).
+- Русские имена файлов.
+
+## [1.1.0-beta] - 2017-02-01
+
+### Added
+- Параметры ресайза изображений.
+
+### Fixed
+- MIGX.
+- Путь media source.
+
+## [1.0.0-beta] - 2017-01-05
+
+### Added
+- Первый релиз mixedImage TV.

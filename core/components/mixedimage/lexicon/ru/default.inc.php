@@ -39,6 +39,10 @@ $_lang['mixedimage.err_file_mime'] = 'mixedImage: неверный MIME тип �
 $_lang['mixedimage.error_remove'] = 'Ошибка при удалении (смотрите console)';
 $_lang['mixedimage.err_file_ns'] = 'Ошибка: файл не был загружен';
 $_lang['mixedimage.err_save_resource'] = 'Перед добавлением новых элементов, вам необходимо сохранить этот ресурс!';
+$_lang['mixedimage.err_crop_invalid_data'] = 'mixedImage: некорректные данные изображения для обрезки';
+$_lang['mixedimage.err_crop_value_ns'] = 'mixedImage: не указан исходный файл для обрезки';
+$_lang['mixedimage.err_crop_write_failed'] = 'mixedImage: не удалось сохранить обрезанное изображение';
+$_lang['mixedimage.err_crop_save'] = 'Ошибка при сохранении обрезанного изображения';
 
 // Settings
 $_lang['setting_mixedimage.translit'] = 'Транслитерация файлов';
@@ -62,7 +66,7 @@ $_lang['mixedimage.trigger_btn_file_manager'] = 'Файловый менедже
 $_lang['mixedimage.trigger_btn_file_desktop'] = 'С компьютера';
 $_lang['mixedimage.trigger_btn_file_url'] = 'С URL';
 
-$_lang['mixedimage.triggerlist_desc'] = 'Укажите какие из кнопок-триггеров будут выводиться при рендере поля, через запятую (clear,manager,pc,url)';
+$_lang['mixedimage.triggerlist_desc'] = 'Укажите какие из кнопок-триггеров будут выводиться при рендере поля, через запятую (clear,manager,pc,url,crop)';
 
 // url
 $_lang['mixedimage.window_url'] = 'Укажите ссылку';
@@ -78,4 +82,4 @@ $_lang['mixedimage.fieldset.crop'] = 'Crop';
 $_lang['mixedimage.image_crop_title'] = 'Редактировать изображение';
 $_lang['mixedimage.button_crop'] = 'Обрезать';
 $_lang['mixedimage.crop_options'] = 'Дополнительные опции';
-$_lang['mixedimage.crop_options_desc'] = 'Пример: zoomOnWheel: false, viewMode: 1 <br> <a href="https://github.com/fengyuanchen/cropperjs/blob/main/README.md#options" target="_blank">Полный список опций</a>';
+$_lang['mixedimage.crop_options_desc'] = 'Формат: key: value, key2: value2. Значения true, false, null и числа распознаются автоматически. Пример: zoomOnWheel: false, viewMode: 1 <br> <a href="https://github.com/fengyuanchen/cropperjs/blob/main/README.md#options" target="_blank">Полный список опций CropperJS</a>';
